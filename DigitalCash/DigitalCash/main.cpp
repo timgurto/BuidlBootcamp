@@ -1,5 +1,13 @@
 #define CATCH_CONFIG_MAIN
 
+#include "Coin.h"
 #include "catch.hpp"
 
-TEST_CASE("asdf") { CHECK(1 + 1 == 2); }
+TEST_CASE("Displaying coin for verification") { Coin{}; }
+
+// To do:
+// Asking user to verify
+// Defining the coin
+// Validating a coin
+// Serialising coins
+// Deserialising coins

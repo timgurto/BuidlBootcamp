@@ -1,3 +1,8 @@
 #pragma once
 
-class Coin {};
+#include <string>
+
+class Coin {
+ public:
+  Coin(const std::string&){};
+};

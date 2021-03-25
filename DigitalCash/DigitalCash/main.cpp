@@ -3,7 +3,11 @@
 #include "Coin.h"
 #include "catch.hpp"
 
-TEST_CASE("Displaying coin for verification") { Coin{}; }
+TEST_CASE("Displaying coin for verification") {
+  GIVEN("a new coin issued by the government") {
+    const auto newCoin = Coin{"Issued from government to Alice"};
+  }
+}
 
 // To do:
 // Asking user to verify

@@ -4,11 +4,16 @@
 #include "Transaction.h"
 #include "catch.hpp"
 
-TEST_CASE("Displaying coin for verification") {
+TEST_CASE("Coin initialisation") {
   GIVEN("a new coin issued by the government to Alice") {
     auto newCoin = Coin{};
-    auto txn = Transaction{"Government", "Alice", "Signed, Government"};
-    newCoin.addTxn(txn);
+    newCoin.addTxn({"Government", "Alice", "Signed, Government"});
+
+    WHEN("the coin's first transaction is fetched") {
+      const auto txn = newCoin.getFirstTxn();
+
+      THEN("it has the correct sender") { CHECK(txn.sender == "Government"); }
+    }
   }
 }
 

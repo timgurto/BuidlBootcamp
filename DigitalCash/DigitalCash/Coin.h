@@ -4,13 +4,12 @@
 
 class Coin {
  public:
-  Coin(std::ostream &outputStream, const std::string &)
-      : m_outputStream(outputStream) {}
+  Coin(std::ostream &outputStream, const std::string &firstTxn)
+      : m_outputStream(outputStream), m_firstTxn(firstTxn) {}
 
-  void showFirstTxn() const {
-    m_outputStream << "10 coins issued to Alice.  Signed, Government";
-  }
+  void showFirstTxn() const { m_outputStream << m_firstTxn; }
 
  private:
   std::ostream &m_outputStream;
+  std::string m_firstTxn;
 };

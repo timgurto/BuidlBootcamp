@@ -17,6 +17,11 @@ TEST_CASE("Coin initialisation") {
   }
 }
 
+TEST_CASE("Validating a transaction") {
+  CHECK(Transaction{"Alice", "Bob", "Signed, Alice"}.isSignatureValid());
+  CHECK_FALSE(Transaction{"Alice", "Bob", "Signed, Bob"}.isSignatureValid());
+}
+
 // To do:
 // Asking user to verify
 // Validating a coin

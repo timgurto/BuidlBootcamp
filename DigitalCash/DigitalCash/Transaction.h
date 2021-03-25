@@ -6,4 +6,9 @@ struct Transaction {
   std::string sender;
   std::string receiver;
   std::string signature;
+
+  bool isSignatureValid() {
+    const auto expectedSignature = "Signed, " + sender;
+    return signature == expectedSignature;
+  }
 };

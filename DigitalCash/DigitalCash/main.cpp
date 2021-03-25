@@ -6,6 +6,8 @@
 TEST_CASE("Displaying coin for verification") {
   GIVEN("a new coin issued by the government") {
     const auto newCoin = Coin{"Issued from government to Alice"};
+
+      THEN("the correct string is output to the user") {}
   }
 }
 

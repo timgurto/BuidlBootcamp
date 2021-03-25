@@ -22,8 +22,20 @@ TEST_CASE("Validating a transaction") {
   CHECK_FALSE(Transaction{"Alice", "Bob", "Signed, Bob"}.isSignatureValid());
 }
 
+TEST_CASE("Validating a coin") {
+  GIVEN("a freshly issued coin from the government") {
+    auto newCoin = Coin{};
+    newCoin.addTxn({"Government", "Alice", "Signed, Government"});
+    THEN("it is valid") { CHECK(newCoin.isValid()); }
+  }
+
+  GIVEN("a coin issued from elsewhere") {
+    auto newCoin = Coin{};
+    newCoin.addTxn({"Alice", "Bob", "Signed, Alice"});
+    THEN("it is not valid") { CHECK_FALSE(newCoin.isValid()); }
+  }
+}
+
 // To do:
-// Asking user to verify
-// Validating a coin
 // Serialising coins
 // Deserialising coins

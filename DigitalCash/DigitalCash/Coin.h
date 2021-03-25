@@ -4,7 +4,9 @@
 
 class Coin {
  public:
-  void addTxn(const Transaction &txn) { m_firstTxn = txn; }
+  void addTxn(const Transaction &txn) {
+    if (m_firstTxn.sender.empty()) m_firstTxn = txn;
+  }
   const Transaction &getFirstTxn() const { return m_firstTxn; }
 
   bool isValid() const {

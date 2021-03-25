@@ -25,9 +25,14 @@ TEST_CASE("Validating a transaction") {
 TEST_CASE("Validating a coin") {
   auto newCoin = Coin{};
 
-  GIVEN("a freshly issued coin from the government") {
+  GIVEN("a freshly issued coin from the government to Alice") {
     newCoin.addTxn({"Government", "Alice", "Signed, Government"});
-    THEN("it is valid") { CHECK(newCoin.isValid()); }
+    THEN("the coin is valid") { CHECK(newCoin.isValid()); }
+
+    WHEN("Alice then passes it to Bob") {
+      newCoin.addTxn({"Alice", "Bob", "Signed, Alice"});
+      THEN("the coin is valid") { CHECK(newCoin.isValid()); }
+    }
   }
 
   GIVEN("a coin issued from someone other than Government") {

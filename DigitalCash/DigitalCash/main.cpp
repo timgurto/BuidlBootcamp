@@ -4,16 +4,25 @@
 #include "catch.hpp"
 
 TEST_CASE("Displaying coin for verification") {
-  GIVEN("a new coin issued by the government") {
-    const auto newCoin = Coin{"Issued from government to Alice"};
+  auto outputCatcher = std::ostringstream{};
 
-      THEN("the correct string is output to the user") {}
+  GIVEN("a new coin issued by the government") {
+    const auto newCoin =
+        Coin{outputCatcher, "10 coins issued to Alice.  Signed, Government"};
+
+    WHEN("its first transaction is shown") {
+      newCoin.showFirstTxn();
+
+      THEN("the correct string is output to the user") {
+        CHECK(outputCatcher.str() ==
+              "10 coins issued to Alice.  Signed, Government");
+      }
+    }
   }
 }
 
 // To do:
 // Asking user to verify
-// Defining the coin
 // Validating a coin
 // Serialising coins
 // Deserialising coins

@@ -4,9 +4,9 @@
 
 class Coin {
  public:
-  Coin(std::ostream &outputStream, const std::string &firstTxn)
-      : m_outputStream(outputStream), m_firstTxn(firstTxn) {}
+  Coin(std::ostream &outputStream) : m_outputStream(outputStream) {}
 
+  void addTxn(const std::string &txn) { m_firstTxn = txn; }
   void showFirstTxn() const { m_outputStream << m_firstTxn; }
 
  private:

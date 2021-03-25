@@ -33,6 +33,11 @@ TEST_CASE("Validating a coin") {
       newCoin.addTxn({"Alice", "Bob", "Signed, Alice"});
       THEN("the coin is valid") { CHECK(newCoin.isValid()); }
     }
+
+    WHEN("Alice then passes it to Bob with a bad signature") {
+      newCoin.addTxn({"Alice", "Bob", "Signed, Bob"});
+      THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
+    }
   }
 
   GIVEN("a coin issued from someone other than Government") {
@@ -43,7 +48,7 @@ TEST_CASE("Validating a coin") {
   GIVEN("an invalidly signed issuance") {
     newCoin.addTxn({"Government", "Alice", "Signed, Alice"});
     THEN("the coin is invalid") {
-      THEN("it is not valid") { CHECK_FALSE(newCoin.isValid()); }
+      THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
   }
 }

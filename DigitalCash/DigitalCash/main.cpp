@@ -89,6 +89,11 @@ TEST_CASE("Transaction equality") {
 TEST_CASE("Serialising coins") {
   auto s = std::string{};
   s = Coin{};
+
+  SECTION("Const operation") {
+    const auto constCoin = Coin{};
+    std::string s = constCoin;
+  }
 }
 
 // To do:

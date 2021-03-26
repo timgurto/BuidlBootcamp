@@ -9,7 +9,7 @@ class Coin {
   bool operator==(const Coin &rhs) const;
   bool operator!=(const Coin &rhs) const { return !(*this == rhs); }
 
-  operator std::string() { return {}; }
+  operator std::string() const { return {}; }
 
   void addTxn(const Transaction &txn) { m_transactions.push_back(txn); }
 

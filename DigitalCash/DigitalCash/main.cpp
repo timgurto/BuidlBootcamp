@@ -44,6 +44,8 @@ TEST_CASE("Validating a coin") {
   }
 }
 
+TEST_CASE("Coin equality") { Coin{} == Coin{}; }
+
 // To do:
 // Serialising coins
 // Deserialising coins

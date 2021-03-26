@@ -6,6 +6,8 @@
 
 class Coin {
  public:
+  void operator==(const Coin &rhs) {}
+
   void addTxn(const Transaction &txn) { m_transactions.push_back(txn); }
 
   bool isValid() const;

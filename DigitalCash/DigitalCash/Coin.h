@@ -9,6 +9,7 @@ class Coin {
   void addTxn(const Transaction &txn) { m_transactions.push_back(txn); }
 
   bool isValid() const;
+  bool coinWasIssuedByTheGovernment() const;
 
  private:
   std::vector<Transaction> m_transactions;

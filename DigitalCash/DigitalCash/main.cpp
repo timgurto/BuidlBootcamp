@@ -72,6 +72,11 @@ TEST_CASE("Coin equality") {
   }
 }
 
+TEST_CASE("Transaction equality") {
+  CHECK(Transaction{} == Transaction{});
+  CHECK_FALSE(Transaction{} != Transaction{});
+}
+
 // To do:
 // Serialising coins
 // Deserialising coins

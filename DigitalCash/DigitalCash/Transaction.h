@@ -7,7 +7,8 @@ struct Transaction {
   std::string receiver;
   std::string signature;
 
-  bool operator!=(const Transaction& rhs) const { return true; }
+  bool operator==(const Transaction& rhs) const { return sender == rhs.sender; }
+  bool operator!=(const Transaction& rhs) const { return !(*this == rhs); }
 
   bool isSignatureValid() const {
     const auto expectedSignature = "Signed, " + sender;

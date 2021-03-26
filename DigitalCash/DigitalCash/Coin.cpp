@@ -1,5 +1,9 @@
 #include "Coin.h"
 
+bool Coin::operator==(const Coin &rhs) const {
+  return m_transactions.size() == rhs.m_transactions.size();
+}
+
 bool Coin::isValid() const {
   return coinWasIssuedByTheGovernment() && allTransactionsHaveValidSignatures();
 }

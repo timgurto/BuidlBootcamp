@@ -6,9 +6,7 @@
 
 class Coin {
  public:
-  bool operator==(const Coin &rhs) const {
-    return m_transactions.size() == rhs.m_transactions.size();
-  }
+  bool operator==(const Coin &rhs) const;
   bool operator!=(const Coin &rhs) const { return !(*this == rhs); }
 
   void addTxn(const Transaction &txn) { m_transactions.push_back(txn); }

@@ -49,7 +49,13 @@ TEST_CASE("Validating a coin") {
   }
 }
 
-TEST_CASE("Coin equality") { CHECK(Coin{} == Coin{}); }
+TEST_CASE("Coin equality") {
+  GIVEN("Two empty coins") {
+    const auto a = Coin{}, b = Coin{};
+
+    THEN("they are equal") { CHECK(a == b); }
+  }
+}
 
 // To do:
 // Serialising coins

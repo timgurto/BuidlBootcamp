@@ -8,7 +8,8 @@ struct Transaction {
   std::string signature;
 
   bool operator==(const Transaction& rhs) const {
-    return sender == rhs.sender && receiver == rhs.receiver;
+    return sender == rhs.sender && receiver == rhs.receiver &&
+           signature == rhs.signature;
   }
 
   bool operator!=(const Transaction& rhs) const { return !(*this == rhs); }

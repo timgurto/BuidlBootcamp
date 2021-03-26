@@ -79,6 +79,11 @@ TEST_CASE("Transaction equality") {
   SECTION("Receivers are compared") {
     CHECK(Transaction{{}, "Alice", {}} != Transaction{{}, "Bob", {}});
   }
+
+  SECTION("Signatures are compared") {
+    CHECK(Transaction{{}, {}, "Signed, Alice"} !=
+          Transaction{{}, {}, "Signed, Bob"});
+  }
 }
 
 // To do:

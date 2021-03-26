@@ -10,6 +10,7 @@ class Coin {
 
   bool isValid() const;
   bool coinWasIssuedByTheGovernment() const;
+  bool allTransactionsHaveValidSignatures() const;
 
  private:
   std::vector<Transaction> m_transactions;

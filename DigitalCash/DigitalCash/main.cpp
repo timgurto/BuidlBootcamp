@@ -86,6 +86,11 @@ TEST_CASE("Transaction equality") {
   }
 }
 
+TEST_CASE("Serialising coins") {
+  auto s = std::string{};
+  s = Coin{};
+}
+
 // To do:
 // Serialising coins
 // Deserialising coins

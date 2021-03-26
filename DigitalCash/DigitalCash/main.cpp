@@ -97,6 +97,16 @@ TEST_CASE("Serialising coins") {
     const auto constCoin = Coin{};
     constCoin.serialise();
   }
+
+  SECTION("Coins match after both conversions") {
+    auto govCoin = Coin{};
+    govCoin.addTxn({"Government", {}, {}});
+    CHECK(Coin::Deserialise(govCoin.serialise()) == govCoin);
+
+    auto bankCoin = Coin{};
+    bankCoin.addTxn({"Bank", {}, {}});
+    CHECK(Coin::Deserialise(bankCoin.serialise()) == bankCoin);
+  }
 }
 
 // To do:

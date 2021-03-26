@@ -39,7 +39,9 @@ TEST_CASE("Validating a coin") {
     }
   }
 
-  SECTION("An empty coin doesn't crash") { newCoin.isValid(); }
+  SECTION("An empty coin doesn't crash, and is valid") {
+    CHECK(newCoin.isValid());
+  }
 }
 
 // To do:

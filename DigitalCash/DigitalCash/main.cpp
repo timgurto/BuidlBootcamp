@@ -75,6 +75,10 @@ TEST_CASE("Coin equality") {
 TEST_CASE("Transaction equality") {
   CHECK(Transaction{} == Transaction{});
   CHECK_FALSE(Transaction{} != Transaction{});
+
+  SECTION("Receivers are compared") {
+    CHECK(Transaction{{}, "Alice", {}} != Transaction{{}, "Bob", {}});
+  }
 }
 
 // To do:

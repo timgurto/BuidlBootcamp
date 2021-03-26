@@ -38,6 +38,8 @@ TEST_CASE("Validating a coin") {
       THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
   }
+
+  SECTION("An empty coin doesn't crash") { newCoin.isValid(); }
 }
 
 // To do:

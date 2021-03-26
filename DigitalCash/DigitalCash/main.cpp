@@ -49,7 +49,7 @@ TEST_CASE("Validating a coin") {
   }
 }
 
-TEST_CASE("Coin equality") { Coin{} == Coin{}; }
+TEST_CASE("Coin equality") { CHECK(Coin{} == Coin{}); }
 
 // To do:
 // Serialising coins

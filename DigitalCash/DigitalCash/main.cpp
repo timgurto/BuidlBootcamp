@@ -99,13 +99,21 @@ TEST_CASE("Serialising coins") {
   }
 
   SECTION("Coins match after both conversions") {
+    auto compareCoinAfterSerialisation = [](const Coin &coin) {
+      const auto &original = coin;
+      const auto serialised = original.serialise();
+      const auto deserialised = Coin::Deserialise(serialised);
+
+      CHECK(original == deserialised);
+    };
+
     auto govCoin = Coin{};
     govCoin.addTxn({"Government", {}, {}});
-    CHECK(Coin::Deserialise(govCoin.serialise()) == govCoin);
+    compareCoinAfterSerialisation(govCoin);
 
     auto bankCoin = Coin{};
     bankCoin.addTxn({"Bank", {}, {}});
-    CHECK(Coin::Deserialise(bankCoin.serialise()) == bankCoin);
+    compareCoinAfterSerialisation(bankCoin);
   }
 }
 

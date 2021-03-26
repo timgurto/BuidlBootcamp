@@ -51,11 +51,17 @@ TEST_CASE("Validating a coin") {
 
 TEST_CASE("Coin equality") {
   GIVEN("Two empty coins") {
-    const auto a = Coin{}, b = Coin{};
+    auto a = Coin{}, b = Coin{};
 
     THEN("they are equal") {
       CHECK(a == b);
       CHECK_FALSE(a != b);
+    }
+
+    WHEN("one has a transaction from Alice to Bob") {
+      a.addTxn({"Alice", "Bob", "Signed, Bob"});
+
+      THEN("they are unequal") { CHECK(a != b); }
     }
   }
 }

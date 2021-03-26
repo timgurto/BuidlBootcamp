@@ -53,7 +53,10 @@ TEST_CASE("Coin equality") {
   GIVEN("Two empty coins") {
     const auto a = Coin{}, b = Coin{};
 
-    THEN("they are equal") { CHECK(a == b); }
+    THEN("they are equal") {
+      CHECK(a == b);
+      CHECK_FALSE(a != b);
+    }
   }
 }
 

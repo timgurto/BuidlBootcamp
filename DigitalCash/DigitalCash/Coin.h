@@ -6,6 +6,9 @@
 
 class Coin {
  public:
+  Coin() = default;
+  static Coin Deserialise(const std::string &serialisedCoin);
+
   bool operator==(const Coin &rhs) const;
   bool operator!=(const Coin &rhs) const { return !(*this == rhs); }
 
@@ -19,4 +22,6 @@ class Coin {
 
  private:
   std::vector<Transaction> m_transactions;
+
+  Coin(const std::string &serialisedCoin);
 };

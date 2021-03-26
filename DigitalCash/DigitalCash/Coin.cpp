@@ -9,6 +9,8 @@ bool Coin::operator==(const Coin &rhs) const {
   return true;
 }
 
+Coin Coin::Deserialise(const std::string &serialisedCoin) { return {}; }
+
 bool Coin::isValid() const {
   return coinWasIssuedByTheGovernment() && allTransactionsHaveValidSignatures();
 }

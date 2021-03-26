@@ -59,9 +59,15 @@ TEST_CASE("Coin equality") {
     }
 
     WHEN("one has a transaction from Alice to Bob") {
-      a.addTxn({"Alice", "Bob", "Signed, Bob"});
+      a.addTxn({"Alice", "Bob", "Signed, Alice"});
 
       THEN("they are unequal") { CHECK(a != b); }
+
+      AND_WHEN("the other has a transaction from Bob to Alice") {
+        b.addTxn({"Bob", "Alice", "Signed, Bob"});
+
+        THEN("they are unequal") { CHECK(a != b); }
+      }
     }
   }
 }

@@ -1,7 +1,12 @@
 #include "Coin.h"
 
 bool Coin::operator==(const Coin &rhs) const {
-  return m_transactions.size() == rhs.m_transactions.size();
+  if (m_transactions.size() != rhs.m_transactions.size()) return false;
+
+  for (auto i = 0; i != m_transactions.size(); ++i)
+    if (m_transactions[i] != rhs.m_transactions[i]) return false;
+
+  return true;
 }
 
 bool Coin::isValid() const {

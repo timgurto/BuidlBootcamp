@@ -42,6 +42,11 @@ TEST_CASE("Validating a coin") {
   SECTION("An empty coin doesn't crash, and is valid") {
     CHECK(newCoin.isValid());
   }
+
+  SECTION("Coin validation is a const operation") {
+    const auto constCoin = Coin{};
+    constCoin.isValid();
+  }
 }
 
 TEST_CASE("Coin equality") { Coin{} == Coin{}; }

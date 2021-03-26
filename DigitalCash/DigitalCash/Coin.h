@@ -7,12 +7,12 @@
 class Coin {
  public:
   Coin() = default;
+
   static Coin Deserialise(const std::string &serialisedCoin);
+  std::string serialise() const;
 
   bool operator==(const Coin &rhs) const;
   bool operator!=(const Coin &rhs) const { return !(*this == rhs); }
-
-  operator std::string() const { return {}; }
 
   void addTxn(const Transaction &txn) { m_transactions.push_back(txn); }
 

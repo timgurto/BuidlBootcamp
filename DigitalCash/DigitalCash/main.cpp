@@ -87,16 +87,15 @@ TEST_CASE("Transaction equality") {
 }
 
 TEST_CASE("Serialising coins") {
-  GIVEN("an empty coin is converted to a string") {
-    auto coin = Coin{};
-    std::string serialised = coin;
-
+  SECTION("functions exist") {
+    auto emptyCoin = Coin{};
+    auto serialised = emptyCoin.serialise();
     Coin::Deserialise(serialised);
   }
 
   SECTION("Const operation") {
     const auto constCoin = Coin{};
-    std::string s = constCoin;
+    constCoin.serialise();
   }
 }
 

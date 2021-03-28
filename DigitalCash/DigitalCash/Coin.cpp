@@ -3,12 +3,16 @@
 #include <sstream>
 
 bool Coin::operator==(const Coin &rhs) const {
-  if (m_transactions.size() != rhs.m_transactions.size()) return false;
+  if (!numberOfTransactionsMatch(*this, rhs)) return false;
 
   for (auto i = 0; i != m_transactions.size(); ++i)
     if (m_transactions[i] != rhs.m_transactions[i]) return false;
 
   return true;
+}
+
+bool Coin::numberOfTransactionsMatch(const Coin &lhs, const Coin &rhs) {
+  return lhs.m_transactions.size() == rhs.m_transactions.size();
 }
 
 Coin Coin::Deserialise(const std::string &serialisedCoin) {

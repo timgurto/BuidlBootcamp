@@ -118,8 +118,13 @@ TEST_CASE("Serialising coins") {
 
     // Different receiver
     auto issuedCoin = Coin{};
-    issuedCoin.addTxn({"Government", "Alice", {}});
+    issuedCoin.addTxn({{}, "Alice", {}});
     testSerialisationOf(issuedCoin);
+
+    // Different signature
+    auto signedCoin = Coin{};
+    signedCoin.addTxn({{}, {}, "Signed, Alice"});
+    testSerialisationOf(signedCoin);
   }
 }
 

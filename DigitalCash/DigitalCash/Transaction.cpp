@@ -11,12 +11,15 @@ bool Transaction::operator==(const Transaction& rhs) const {
 std::istream& operator>>(std::istream& lhs, Transaction& rhs) {
   std::getline(lhs, rhs.sender);
   std::getline(lhs, rhs.receiver);
+  std::getline(lhs, rhs.signature);
 
   return lhs;
 }
 
 std::ostream& operator<<(std::ostream& lhs, const Transaction& rhs) {
-  lhs << rhs.sender << std::endl << rhs.receiver;
+  lhs << rhs.sender << std::endl;
+  lhs << rhs.receiver << std::endl;
+  lhs << rhs.signature;
 
   return lhs;
 }

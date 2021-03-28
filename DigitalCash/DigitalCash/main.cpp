@@ -125,6 +125,12 @@ TEST_CASE("Serialising coins") {
     auto signedCoin = Coin{};
     signedCoin.addTxn({{}, {}, "Signed, Alice"});
     testSerialisationOf(signedCoin);
+
+    // Two transactions
+    auto transferredCoin = Coin{};
+    transferredCoin.addTxn({});
+    transferredCoin.addTxn({});
+    testSerialisationOf(transferredCoin);
   }
 }
 

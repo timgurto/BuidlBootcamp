@@ -6,3 +6,9 @@ std::istream& operator>>(std::istream& lhs, Transaction& rhs) {
 
   return lhs;
 }
+
+std::ostream& operator<<(std::ostream& lhs, const Transaction& rhs) {
+  lhs << rhs.sender << std::endl << rhs.receiver;
+
+  return lhs;
+}

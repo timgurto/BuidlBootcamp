@@ -33,8 +33,7 @@ std::string Coin::serialise() const {
   if (m_transactions.empty()) return {};
 
   auto oss = std::ostringstream{};
-  oss << m_transactions.front().sender << std::endl
-      << m_transactions.front().receiver;
+  oss << m_transactions.front();
   return oss.str();
 }
 

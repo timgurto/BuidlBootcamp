@@ -1,6 +1,6 @@
 #pragma once
 
-#include <istream>
+#include <iostream>
 #include <string>
 
 struct Transaction {
@@ -25,3 +25,4 @@ struct Transaction {
 };
 
 std::istream& operator>>(std::istream& lhs, Transaction& rhs);
+std::ostream& operator<<(std::ostream& lhs, const Transaction& rhs);

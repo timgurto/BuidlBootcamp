@@ -99,7 +99,7 @@ TEST_CASE("Serialising coins") {
   }
 
   SECTION("Coins match after both conversions") {
-    auto compareCoinAfterSerialisation = [](const Coin &coin) {
+    auto testSerialisationOf = [](const Coin &coin) {
       const auto &original = coin;
       const auto serialised = original.serialise();
       const auto deserialised = Coin::Deserialise(serialised);
@@ -109,11 +109,17 @@ TEST_CASE("Serialising coins") {
 
     auto govCoin = Coin{};
     govCoin.addTxn({"Government", {}, {}});
-    compareCoinAfterSerialisation(govCoin);
+    testSerialisationOf(govCoin);
 
+    // Different sender
     auto bankCoin = Coin{};
     bankCoin.addTxn({"Bank", {}, {}});
-    compareCoinAfterSerialisation(bankCoin);
+    testSerialisationOf(bankCoin);
+
+    // Different receiver
+    auto issuedCoin = Coin{};
+    issuedCoin.addTxn({"Government", "Alice", {}});
+    testSerialisationOf(issuedCoin);
   }
 }
 

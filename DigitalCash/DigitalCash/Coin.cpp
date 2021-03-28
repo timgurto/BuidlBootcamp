@@ -1,5 +1,7 @@
 #include "Coin.h"
 
+#include <sstream>
+
 bool Coin::operator==(const Coin &rhs) const {
   if (m_transactions.size() != rhs.m_transactions.size()) return false;
 
@@ -10,14 +12,25 @@ bool Coin::operator==(const Coin &rhs) const {
 }
 
 Coin Coin::Deserialise(const std::string &serialisedCoin) {
+  auto iss = std::istringstream{ serialisedCoin };
+
+  auto firstTransaction = Transaction{};
+  std::getline(iss, firstTransaction.sender);
+  std::getline(iss, firstTransaction.receiver);
+
   auto coin = Coin{};
-  coin.addTxn({serialisedCoin, {}, {}});
+  coin.addTxn(firstTransaction);
+
   return coin;
 }
 
 std::string Coin::serialise() const {
   if (m_transactions.empty()) return {};
-  return m_transactions.front().sender;
+
+  auto oss = std::ostringstream{};
+  oss << m_transactions.front().sender << std::endl
+      << m_transactions.front().receiver;
+  return oss.str();
 }
 
 bool Coin::isValid() const {

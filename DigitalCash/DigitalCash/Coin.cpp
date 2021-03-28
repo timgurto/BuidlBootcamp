@@ -24,8 +24,7 @@ Coin::Coin(const std::string &serialisedCoin) {
   auto iss = std::istringstream{serialisedCoin};
 
   auto firstTransaction = Transaction{};
-  std::getline(iss, firstTransaction.sender);
-  std::getline(iss, firstTransaction.receiver);
+  iss >> firstTransaction;
 
   addTxn(firstTransaction);
 }

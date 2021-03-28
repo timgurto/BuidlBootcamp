@@ -1,5 +1,6 @@
 #pragma once
 
+#include <istream>
 #include <string>
 
 struct Transaction {
@@ -22,3 +23,5 @@ struct Transaction {
     return signature == expectedSignature;
   }
 };
+
+std::istream& operator>>(std::istream& lhs, Transaction& rhs);

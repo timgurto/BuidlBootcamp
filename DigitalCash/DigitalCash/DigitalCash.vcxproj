@@ -112,6 +112,7 @@
   <ItemGroup>
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Transaction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coin.h" />

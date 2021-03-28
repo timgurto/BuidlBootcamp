@@ -12,16 +12,17 @@ bool Coin::operator==(const Coin &rhs) const {
 }
 
 Coin Coin::Deserialise(const std::string &serialisedCoin) {
-  auto iss = std::istringstream{ serialisedCoin };
+  return Coin{serialisedCoin};
+}
+
+Coin::Coin(const std::string &serialisedCoin) {
+  auto iss = std::istringstream{serialisedCoin};
 
   auto firstTransaction = Transaction{};
   std::getline(iss, firstTransaction.sender);
   std::getline(iss, firstTransaction.receiver);
 
-  auto coin = Coin{};
-  coin.addTxn(firstTransaction);
-
-  return coin;
+  addTxn(firstTransaction);
 }
 
 std::string Coin::serialise() const {

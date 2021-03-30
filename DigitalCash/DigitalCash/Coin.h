@@ -9,6 +9,8 @@ class Coin {
   Coin() = default;
 
   static Coin Deserialise(const std::string &serialisedCoin);
+  /**/ void readAndAddTransaction(std::istringstream &serialisedCoin);
+
   std::string serialise() const;
 
   bool operator==(const Coin &rhs) const;

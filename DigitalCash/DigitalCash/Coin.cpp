@@ -22,12 +22,13 @@ Coin Coin::Deserialise(const std::string &serialisedCoin) {
 
 Coin::Coin(const std::string &serialisedCoin) {
   auto iss = std::istringstream{serialisedCoin};
+  while (!iss.eof()) readAndAddTransaction(iss);
+}
 
-  while (!iss.eof()) {
-    auto nextTransaction = Transaction{};
-    iss >> nextTransaction;
-    addTxn(nextTransaction);
-  }
+void Coin::readAndAddTransaction(std::istringstream &serialisedCoin) {
+  auto nextTransaction = Transaction{};
+  serialisedCoin >> nextTransaction;
+  addTxn(nextTransaction);
 }
 
 std::string Coin::serialise() const {

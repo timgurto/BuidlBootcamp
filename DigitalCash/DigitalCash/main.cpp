@@ -136,6 +136,12 @@ TEST_CASE("Serialising coins") {
         coin.addTxn({"Alice", {}, {}});
       }
 
+      WHEN("it has three transactions") {
+        coin.addTxn({});
+        coin.addTxn({});
+        coin.addTxn({});
+      }
+
       // THEN the coin matches after being serialised and deserialised
       testSerialisationOf(coin);
     }

@@ -107,36 +107,38 @@ TEST_CASE("Serialising coins") {
       CHECK(original == deserialised);
     };
 
-    auto govCoin = Coin{};
-    govCoin.addTxn({"Government", {}, {}});
-    testSerialisationOf(govCoin);
+    GIVEN("a coin") {
+      auto coin = Coin{};
 
-    // Different sender
-    auto bankCoin = Coin{};
-    bankCoin.addTxn({"Bank", {}, {}});
-    testSerialisationOf(bankCoin);
+      WHEN("it has a simple transaction") {
+        coin.addTxn({"Government", {}, {}});
+      }
 
-    // Different receiver
-    auto issuedCoin = Coin{};
-    issuedCoin.addTxn({{}, "Alice", {}});
-    testSerialisationOf(issuedCoin);
+      WHEN("it has a transaction with a different sender") {
+        coin.addTxn({"Bank", {}, {}});
+      }
 
-    // Different signature
-    auto signedCoin = Coin{};
-    signedCoin.addTxn({{}, {}, "Signed, Alice"});
-    testSerialisationOf(signedCoin);
+      WHEN("it has a transaction with a different receiver") {
+        coin.addTxn({{}, "Alice", {}});
+      }
 
-    // Two transactions
-    auto transferredCoin = Coin{};
-    transferredCoin.addTxn({});
-    transferredCoin.addTxn({});
-    testSerialisationOf(transferredCoin);
+      WHEN("it has a transaction with a different signature") {
+        coin.addTxn({{}, {}, "Signed, Alice"});
+      }
 
-    // A second transaction with a sender
-    auto transferredCoinWithSender = Coin{};
-    transferredCoinWithSender.addTxn({});
-    transferredCoinWithSender.addTxn({"Alice", {}, {}});
-    testSerialisationOf(transferredCoinWithSender);
+      WHEN("it has two transactions") {
+        coin.addTxn({});
+        coin.addTxn({});
+      }
+
+      WHEN("It has two transactions, with the second being non-default") {
+        coin.addTxn({});
+        coin.addTxn({"Alice", {}, {}});
+      }
+
+      // THEN the coin matches after being serialised and deserialised
+      testSerialisationOf(coin);
+    }
   }
 }
 

@@ -34,9 +34,12 @@ std::string Coin::serialise() const {
   if (m_transactions.empty()) return {};
 
   auto oss = std::ostringstream{};
-  oss << m_transactions.front();
-  if (m_transactions.size() >= 2) oss << std::endl << m_transactions[1];
-  if (m_transactions.size() >= 3) oss << std::endl << m_transactions[2];
+
+  for (auto i = 0; i != m_transactions.size(); ++i) {
+    if (i != 0) oss << std::endl;
+    oss << m_transactions[i];
+  }
+
   return oss.str();
 }
 

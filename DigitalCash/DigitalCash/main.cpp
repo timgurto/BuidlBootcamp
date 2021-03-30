@@ -13,27 +13,27 @@ TEST_CASE("Validating a coin") {
   auto newCoin = Coin{};
 
   GIVEN("a freshly issued coin from the government to Alice") {
-    newCoin.addTxn({"Government", "Alice", "Signed, Government"});
+    newCoin.addTransaction({"Government", "Alice", "Signed, Government"});
     THEN("the coin is valid") { CHECK(newCoin.isValid()); }
 
     WHEN("Alice then passes it to Bob") {
-      newCoin.addTxn({"Alice", "Bob", "Signed, Alice"});
+      newCoin.addTransaction({"Alice", "Bob", "Signed, Alice"});
       THEN("the coin is valid") { CHECK(newCoin.isValid()); }
     }
 
     WHEN("Alice then passes it to Bob with a bad signature") {
-      newCoin.addTxn({"Alice", "Bob", "Signed, Bob"});
+      newCoin.addTransaction({"Alice", "Bob", "Signed, Bob"});
       THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
   }
 
   GIVEN("a coin issued from someone other than Government") {
-    newCoin.addTxn({"Alice", "Bob", "Signed, Alice"});
+    newCoin.addTransaction({"Alice", "Bob", "Signed, Alice"});
     THEN("the coin is invalid") { CHECK_FALSE(newCoin.isValid()); }
   }
 
   GIVEN("an invalidly signed issuance") {
-    newCoin.addTxn({"Government", "Alice", "Signed, Alice"});
+    newCoin.addTransaction({"Government", "Alice", "Signed, Alice"});
     THEN("the coin is invalid") {
       THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
@@ -59,12 +59,12 @@ TEST_CASE("Coin equality") {
     }
 
     WHEN("one has a transaction from Alice to Bob") {
-      a.addTxn({"Alice", "Bob", "Signed, Alice"});
+      a.addTransaction({"Alice", "Bob", "Signed, Alice"});
 
       THEN("they are unequal") { CHECK(a != b); }
 
       AND_WHEN("the other has a transaction from Bob to Alice") {
-        b.addTxn({"Bob", "Alice", "Signed, Bob"});
+        b.addTransaction({"Bob", "Alice", "Signed, Bob"});
 
         THEN("they are unequal") { CHECK(a != b); }
       }
@@ -111,35 +111,35 @@ TEST_CASE("Serialising coins") {
       auto coin = Coin{};
 
       WHEN("it has a simple transaction") {
-        coin.addTxn({"Government", {}, {}});
+        coin.addTransaction({"Government", {}, {}});
       }
 
       WHEN("it has a transaction with a different sender") {
-        coin.addTxn({"Bank", {}, {}});
+        coin.addTransaction({"Bank", {}, {}});
       }
 
       WHEN("it has a transaction with a different receiver") {
-        coin.addTxn({{}, "Alice", {}});
+        coin.addTransaction({{}, "Alice", {}});
       }
 
       WHEN("it has a transaction with a different signature") {
-        coin.addTxn({{}, {}, "Signed, Alice"});
+        coin.addTransaction({{}, {}, "Signed, Alice"});
       }
 
       WHEN("it has two transactions") {
-        coin.addTxn({});
-        coin.addTxn({});
+        coin.addTransaction({});
+        coin.addTransaction({});
       }
 
       WHEN("It has two transactions, with the second being non-default") {
-        coin.addTxn({});
-        coin.addTxn({"Alice", {}, {}});
+        coin.addTransaction({});
+        coin.addTransaction({"Alice", {}, {}});
       }
 
       WHEN("it has three transactions") {
-        coin.addTxn({});
-        coin.addTxn({});
-        coin.addTxn({});
+        coin.addTransaction({});
+        coin.addTransaction({});
+        coin.addTransaction({});
       }
 
       // THEN the coin matches after being serialised and deserialised

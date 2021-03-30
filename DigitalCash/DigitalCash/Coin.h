@@ -18,7 +18,7 @@ class Coin {
   /**/ static bool transactionsMatch(const Coin &lhs, const Coin &rhs);
   bool operator!=(const Coin &rhs) const { return !(*this == rhs); }
 
-  void addTxn(const Transaction &txn) { m_transactions.push_back(txn); }
+  void addTransaction(const Transaction &txn) { m_transactions.push_back(txn); }
 
   bool isValid() const;
   /**/ bool coinWasIssuedByTheGovernment() const;

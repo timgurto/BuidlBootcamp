@@ -23,12 +23,15 @@ Coin Coin::Deserialise(const std::string &serialisedCoin) {
 Coin::Coin(const std::string &serialisedCoin) {
   auto iss = std::istringstream{serialisedCoin};
 
-  auto firstTransaction = Transaction{};
-  iss >> firstTransaction;
+  auto transaction = Transaction{};
+  iss >> transaction;
 
-  addTxn(firstTransaction);
+  addTxn(transaction);
 
-  if (!iss.eof()) addTxn({});
+  if (!iss.eof()) {
+    iss >> transaction;
+    addTxn(transaction);
+  }
 }
 
 std::string Coin::serialise() const {
@@ -36,7 +39,7 @@ std::string Coin::serialise() const {
 
   auto oss = std::ostringstream{};
   oss << m_transactions.front();
-  if (m_transactions.size() > 1) oss << "" << std::endl;
+  if (m_transactions.size() > 1) oss <<std::endl<< m_transactions[1] << std::endl;
   return oss.str();
 }
 

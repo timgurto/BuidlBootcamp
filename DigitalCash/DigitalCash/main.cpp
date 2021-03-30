@@ -131,6 +131,12 @@ TEST_CASE("Serialising coins") {
     transferredCoin.addTxn({});
     transferredCoin.addTxn({});
     testSerialisationOf(transferredCoin);
+
+    // A second transaction with a sender
+    auto transferredCoinWithSender = Coin{};
+    transferredCoinWithSender.addTxn({});
+    transferredCoinWithSender.addTxn({"Alice", {}, {}});
+    testSerialisationOf(transferredCoinWithSender);
   }
 }
 

@@ -1,9 +1,19 @@
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_RUNNER
 
 #include "Coin.h"
 #include "Transaction.h"
 #include "catch.hpp"
 #include "cryptlib.h"
+
+int main(int argc, char *argv[]) {
+  cryptInit();
+
+  int result = Catch::Session().run(argc, argv);
+
+  cryptEnd();
+
+  return result;
+}
 
 struct User {
   std::string name;
@@ -156,9 +166,4 @@ TEST_CASE("Serialising coins") {
       testSerialisationOf(coin);
     }
   }
-}
-
-TEST_CASE("Cryptlib integration") {
-  cryptInit();
-  cryptEnd();
 }

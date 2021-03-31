@@ -3,6 +3,7 @@
 #include "Coin.h"
 #include "Transaction.h"
 #include "catch.hpp"
+#include "cryptlib.h"
 
 struct User {
   std::string name;
@@ -157,6 +158,7 @@ TEST_CASE("Serialising coins") {
   }
 }
 
-// To do:
-// Serialising coins
-// Deserialising coins
+TEST_CASE("Cryptlib integration") {
+  cryptInit();
+  cryptEnd();
+}

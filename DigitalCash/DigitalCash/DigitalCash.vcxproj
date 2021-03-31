@@ -118,10 +118,12 @@
   <ItemGroup>
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="test-crypto.cpp" />
     <ClCompile Include="Transaction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coin.h" />
+    <ClInclude Include="Crypto.h" />
     <ClInclude Include="Transaction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

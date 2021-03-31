@@ -4,36 +4,45 @@
 #include "Transaction.h"
 #include "catch.hpp"
 
+struct User {
+  std::string name;
+  std::string signature;
+};
+const auto government = User{"Government", "Signed, Government"};
+const auto alice = User{"Alice", "Signed, Alice"};
+const auto bob = User{"Bob", "Signed, Bob"};
+
 TEST_CASE("Validating a transaction") {
-  CHECK(Transaction{"Alice", "Bob", "Signed, Alice"}.isSignatureValid());
-  CHECK_FALSE(Transaction{"Alice", "Bob", "Signed, Bob"}.isSignatureValid());
+  CHECK(Transaction{alice.name, bob.name, alice.signature}.isSignatureValid());
+  CHECK_FALSE(
+      Transaction{alice.name, bob.name, bob.signature}.isSignatureValid());
 }
 
 TEST_CASE("Validating a coin") {
   auto newCoin = Coin{};
 
   GIVEN("a freshly issued coin from the government to Alice") {
-    newCoin.addTransaction({"Government", "Alice", "Signed, Government"});
+    newCoin.addTransaction({government.name, alice.name, government.signature});
     THEN("the coin is valid") { CHECK(newCoin.isValid()); }
 
     WHEN("Alice then passes it to Bob") {
-      newCoin.addTransaction({"Alice", "Bob", "Signed, Alice"});
+      newCoin.addTransaction({alice.name, bob.name, alice.signature});
       THEN("the coin is valid") { CHECK(newCoin.isValid()); }
     }
 
     WHEN("Alice then passes it to Bob with a bad signature") {
-      newCoin.addTransaction({"Alice", "Bob", "Signed, Bob"});
+      newCoin.addTransaction({alice.name, bob.name, bob.signature});
       THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
   }
 
   GIVEN("a coin issued from someone other than Government") {
-    newCoin.addTransaction({"Alice", "Bob", "Signed, Alice"});
+    newCoin.addTransaction({alice.name, bob.name, alice.signature});
     THEN("the coin is invalid") { CHECK_FALSE(newCoin.isValid()); }
   }
 
   GIVEN("an invalidly signed issuance") {
-    newCoin.addTransaction({"Government", "Alice", "Signed, Alice"});
+    newCoin.addTransaction({government.name, alice.name, alice.signature});
     THEN("the coin is invalid") {
       THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
@@ -59,12 +68,12 @@ TEST_CASE("Coin equality") {
     }
 
     WHEN("one has a transaction from Alice to Bob") {
-      a.addTransaction({"Alice", "Bob", "Signed, Alice"});
+      a.addTransaction({alice.name, bob.name, alice.signature});
 
       THEN("they are unequal") { CHECK(a != b); }
 
       AND_WHEN("the other has a transaction from Bob to Alice") {
-        b.addTransaction({"Bob", "Alice", "Signed, Bob"});
+        b.addTransaction({bob.name, alice.name, bob.signature});
 
         THEN("they are unequal") { CHECK(a != b); }
       }
@@ -81,8 +90,8 @@ TEST_CASE("Transaction equality") {
   }
 
   SECTION("Signatures are compared") {
-    CHECK(Transaction{{}, {}, "Signed, Alice"} !=
-          Transaction{{}, {}, "Signed, Bob"});
+    CHECK(Transaction{{}, {}, alice.signature} !=
+          Transaction{{}, {}, bob.signature});
   }
 }
 
@@ -111,7 +120,7 @@ TEST_CASE("Serialising coins") {
       auto coin = Coin{};
 
       WHEN("it has a simple transaction") {
-        coin.addTransaction({"Government", {}, {}});
+        coin.addTransaction({government.name, {}, {}});
       }
 
       WHEN("it has a transaction with a different sender") {
@@ -119,11 +128,11 @@ TEST_CASE("Serialising coins") {
       }
 
       WHEN("it has a transaction with a different receiver") {
-        coin.addTransaction({{}, "Alice", {}});
+        coin.addTransaction({{}, alice.name, {}});
       }
 
       WHEN("it has a transaction with a different signature") {
-        coin.addTransaction({{}, {}, "Signed, Alice"});
+        coin.addTransaction({{}, {}, alice.signature});
       }
 
       WHEN("it has two transactions") {
@@ -133,7 +142,7 @@ TEST_CASE("Serialising coins") {
 
       WHEN("It has two transactions, with the second being non-default") {
         coin.addTransaction({});
-        coin.addTransaction({"Alice", {}, {}});
+        coin.addTransaction({alice.name, {}, {}});
       }
 
       WHEN("it has three transactions") {

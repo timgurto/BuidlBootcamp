@@ -3,15 +3,9 @@
 #include "Coin.h"
 #include "Transaction.h"
 #include "catch.hpp"
-#include "cryptlib.h"
 
 int main(int argc, char *argv[]) {
-  cryptInit();
-
   int result = Catch::Session().run(argc, argv);
-
-  cryptEnd();
-
   return result;
 }
 

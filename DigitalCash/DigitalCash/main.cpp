@@ -2,6 +2,7 @@
 
 #include "Coin.h"
 #include "Transaction.h"
+#include "User.h"
 #include "catch.hpp"
 #include "osrng.h"
 
@@ -13,10 +14,6 @@ int main(int argc, char *argv[]) {
   return result;
 }
 
-struct User {
-  std::string name;
-  std::string signature;
-};
 const auto government = User{"Government", "Signed, Government"};
 const auto alice = User{"Alice", "Signed, Alice"};
 const auto bob = User{"Bob", "Signed, Bob"};

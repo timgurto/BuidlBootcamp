@@ -240,3 +240,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+DigitalCash/third-party/cryptopp/cryptlibd.lib
+DigitalCash/third-party/cryptopp/cryptlib.lib

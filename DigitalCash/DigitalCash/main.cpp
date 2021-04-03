@@ -4,13 +4,9 @@
 #include "Transaction.h"
 #include "User.h"
 #include "catch.hpp"
-#include "osrng.h"
 
 int main(int argc, char *argv[]) {
   int result = Catch::Session().run(argc, argv);
-
-  CryptoPP::AutoSeededRandomPool prng;
-
   return result;
 }
 

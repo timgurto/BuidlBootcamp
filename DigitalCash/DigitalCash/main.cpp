@@ -41,7 +41,7 @@ TEST_CASE("Validating a coin") {
 
     THEN("the coin is valid") { CHECK(newCoin.isValid()); }
 
-    WHEN("Alice then passes it to Bob") {
+    WHEN("Alice then passes it to Bob with her signature") {
       auto aliceToBob = Transaction{alice.name, bob.name};
       alice.sign(aliceToBob);
       newCoin.addTransaction(aliceToBob);
@@ -49,7 +49,7 @@ TEST_CASE("Validating a coin") {
       THEN("the coin is valid") { CHECK(newCoin.isValid()); }
     }
 
-    WHEN("Alice then passes it to Bob with a bad signature") {
+    WHEN("Alice then passes it to Bob without signing it") {
       newCoin.addTransaction({alice.name, bob.name});
       THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
@@ -62,9 +62,7 @@ TEST_CASE("Validating a coin") {
 
   GIVEN("an invalidly signed issuance") {
     newCoin.addTransaction({government.name, alice.name});
-    THEN("the coin is invalid") {
-      THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
-    }
+    THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
   }
 
   SECTION("An empty coin doesn't crash, and is valid") {

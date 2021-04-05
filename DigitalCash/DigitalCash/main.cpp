@@ -2,7 +2,7 @@
 
 #include "Coin.h"
 #include "Transaction.h"
-#include "User.h"
+#include "UserWithSigningAuthority.h"
 #include "catch.hpp"
 
 int main(int argc, char *argv[]) {
@@ -10,9 +10,10 @@ int main(int argc, char *argv[]) {
   return result;
 }
 
-const auto government = User{"Government", "Signed, Government"};
-const auto alice = User{"Alice", "Signed, Alice"};
-const auto bob = User{"Bob", "Signed, Bob"};
+const auto government =
+    UserWithSigningAuthority{"Government", "Signed, Government"};
+const auto alice = UserWithSigningAuthority{"Alice", "Signed, Alice"};
+const auto bob = UserWithSigningAuthority{"Bob", "Signed, Bob"};
 
 TEST_CASE("Validating a transaction") {
   CHECK(Transaction{alice.name, bob.name, alice.signature}.isSignatureValid());

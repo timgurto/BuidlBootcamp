@@ -15,13 +15,20 @@ const auto alice = UserWithSigningAuthority{"Alice"};
 const auto bob = UserWithSigningAuthority{"Bob"};
 
 TEST_CASE("Validating a transaction") {
-  auto validTransaction = Transaction{alice.name, bob.name};
-  alice.sign(validTransaction);
-  CHECK(validTransaction.isSignatureValid());
+  GIVEN("a transaction from Alice to Bob") {
+    auto transaction = Transaction{alice.name, bob.name};
 
-  auto invalidTransaction = Transaction{alice.name, bob.name};
-  bob.sign(invalidTransaction);
-  CHECK_FALSE(invalidTransaction.isSignatureValid());
+    WHEN("Alice signs it") {
+      alice.sign(transaction);
+
+      THEN("it is valid") { CHECK(transaction.isSignatureValid()); }
+    }
+
+    WHEN("Someone other than Alice signs it") {
+      bob.sign(transaction);
+      THEN("it is not valid") { CHECK_FALSE(transaction.isSignatureValid()); }
+    }
+  }
 }
 
 TEST_CASE("Validating a coin") {

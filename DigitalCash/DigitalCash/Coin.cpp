@@ -41,7 +41,7 @@ bool Coin::isValid() const {
 bool Coin::coinWasIssuedByTheGovernment() const {
   if (m_transactions.empty()) return true;
 
-  const auto issuer = m_transactions.front().sender;
+  const auto issuer = m_transactions.front().m_sender;
   return issuer == "Government";
 }
 

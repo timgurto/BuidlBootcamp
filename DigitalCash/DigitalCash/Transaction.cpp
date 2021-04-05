@@ -1,30 +1,33 @@
 #include "Transaction.h"
 
+Transaction::Transaction(const std::string& sender, const std::string& receiver)
+    : m_sender(sender), m_receiver(receiver) {}
+
 bool Transaction::operator==(const Transaction& rhs) const {
-  if (sender != rhs.sender) return false;
-  if (receiver != rhs.receiver) return false;
-  if (signature != rhs.signature) return false;
+  if (m_sender != rhs.m_sender) return false;
+  if (m_receiver != rhs.m_receiver) return false;
+  if (m_signature != rhs.m_signature) return false;
 
   return true;
 }
 
 std::istream& operator>>(std::istream& lhs, Transaction& rhs) {
-  std::getline(lhs, rhs.sender);
-  std::getline(lhs, rhs.receiver);
-  std::getline(lhs, rhs.signature);
+  std::getline(lhs, rhs.m_sender);
+  std::getline(lhs, rhs.m_receiver);
+  std::getline(lhs, rhs.m_signature);
 
   return lhs;
 }
 
 std::ostream& operator<<(std::ostream& lhs, const Transaction& rhs) {
-  lhs << rhs.sender << std::endl;
-  lhs << rhs.receiver << std::endl;
-  lhs << rhs.signature;
+  lhs << rhs.m_sender << std::endl;
+  lhs << rhs.m_receiver << std::endl;
+  lhs << rhs.m_signature;
 
   return lhs;
 }
 
 bool Transaction::isSignatureValid() const {
-  const auto expectedSignature = "Signed, " + sender;
-  return signature == expectedSignature;
+  const auto expectedSignature = "Signed, " + m_sender;
+  return m_signature == expectedSignature;
 }

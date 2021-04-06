@@ -127,6 +127,7 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Transaction.h" />
     <ClInclude Include="UserWithSigningAuthority.h" />
+    <ClInclude Include="WeakUser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,7 @@
 #include "Coin.h"
 #include "Transaction.h"
 #include "UserWithSigningAuthority.h"
+#include "WeakUser.h"
 #include "catch.hpp"
 
 int main(int argc, char *argv[]) {
@@ -10,22 +11,26 @@ int main(int argc, char *argv[]) {
   return result;
 }
 
-const auto government = UserWithSigningAuthority{"Government"};
-const auto alice = UserWithSigningAuthority{"Alice"};
-const auto bob = UserWithSigningAuthority{"Bob"};
+const auto authGovernment = UserWithSigningAuthority{"Government"};
+const auto authAlice = UserWithSigningAuthority{"Alice"};
+const auto authBob = UserWithSigningAuthority{"Bob"};
+
+const auto weakGovernment = WeakUser{"Government"};
+const auto weakAlice = WeakUser{"Alice"};
+const auto weakBob = WeakUser{"Bob"};
 
 TEST_CASE("Validating a transaction") {
   GIVEN("a transaction from Alice to Bob") {
-    auto transaction = Transaction{alice.name, bob.name};
+    auto transaction = Transaction{weakAlice.name, weakBob.name};
 
     WHEN("Alice signs it") {
-      alice.sign(transaction);
+      authAlice.sign(transaction);
 
       THEN("it is valid") { CHECK(transaction.isSignatureValid()); }
     }
 
     WHEN("Someone other than Alice signs it") {
-      bob.sign(transaction);
+      authBob.sign(transaction);
       THEN("it is not valid") { CHECK_FALSE(transaction.isSignatureValid()); }
     }
   }
@@ -35,33 +40,33 @@ TEST_CASE("Validating a coin") {
   auto newCoin = Coin{};
 
   GIVEN("a freshly issued coin from the government to Alice") {
-    auto issuance = Transaction{government.name, alice.name};
-    government.sign(issuance);
+    auto issuance = Transaction{weakGovernment.name, weakAlice.name};
+    authGovernment.sign(issuance);
     newCoin.addTransaction(issuance);
 
     THEN("the coin is valid") { CHECK(newCoin.isValid()); }
 
     WHEN("Alice then passes it to Bob with her signature") {
-      auto aliceToBob = Transaction{alice.name, bob.name};
-      alice.sign(aliceToBob);
+      auto aliceToBob = Transaction{weakAlice.name, weakBob.name};
+      authAlice.sign(aliceToBob);
       newCoin.addTransaction(aliceToBob);
 
       THEN("the coin is valid") { CHECK(newCoin.isValid()); }
     }
 
     WHEN("Alice then passes it to Bob without signing it") {
-      newCoin.addTransaction({alice.name, bob.name});
+      newCoin.addTransaction({weakAlice.name, weakBob.name});
       THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
   }
 
   GIVEN("a coin issued from someone other than Government") {
-    newCoin.addTransaction({alice.name, bob.name});
+    newCoin.addTransaction({weakAlice.name, weakBob.name});
     THEN("the coin is invalid") { CHECK_FALSE(newCoin.isValid()); }
   }
 
   GIVEN("an invalidly signed issuance") {
-    newCoin.addTransaction({government.name, alice.name});
+    newCoin.addTransaction({weakGovernment.name, weakAlice.name});
     THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
   }
 
@@ -85,12 +90,12 @@ TEST_CASE("Coin equality") {
     }
 
     WHEN("one has a transaction from Alice to Bob") {
-      a.addTransaction({alice.name, bob.name});
+      a.addTransaction({weakAlice.name, weakBob.name});
 
       THEN("they are unequal") { CHECK(a != b); }
 
       AND_WHEN("the other has a transaction from Bob to Alice") {
-        b.addTransaction({bob.name, alice.name});
+        b.addTransaction({weakBob.name, weakAlice.name});
 
         THEN("they are unequal") { CHECK(a != b); }
       }
@@ -108,10 +113,10 @@ TEST_CASE("Transaction equality") {
 
   SECTION("Signatures are compared") {
     auto transactionSignedByAlice = Transaction{};
-    alice.sign(transactionSignedByAlice);
+    authAlice.sign(transactionSignedByAlice);
 
     auto transactionSignedByBob = Transaction{};
-    bob.sign(transactionSignedByBob);
+    authBob.sign(transactionSignedByBob);
 
     CHECK(transactionSignedByAlice != transactionSignedByBob);
   }
@@ -142,20 +147,21 @@ TEST_CASE("Serialising coins") {
       auto coin = Coin{};
 
       WHEN("it has a simple transaction") {
-        coin.addTransaction({government.name, {}});
+        coin.addTransaction({weakGovernment.name, {}});
       }
 
       WHEN("it has a transaction with a different sender") {
-        coin.addTransaction({"Bank", {}});
+        const auto weakBank = WeakUser{"Bank"};
+        coin.addTransaction({weakBank.name, {}});
       }
 
       WHEN("it has a transaction with a different receiver") {
-        coin.addTransaction({{}, alice.name});
+        coin.addTransaction({{}, weakAlice.name});
       }
 
       WHEN("it has a transaction with a different signature") {
         auto signedTransaction = Transaction{};
-        alice.sign(signedTransaction);
+        authAlice.sign(signedTransaction);
         coin.addTransaction(signedTransaction);
       }
 
@@ -166,7 +172,7 @@ TEST_CASE("Serialising coins") {
 
       WHEN("It has two transactions, with the second being non-default") {
         coin.addTransaction({});
-        coin.addTransaction({alice.name, {}});
+        coin.addTransaction({authAlice.name, {}});
       }
 
       WHEN("it has three transactions") {

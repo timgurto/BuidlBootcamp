@@ -1,6 +1,6 @@
 #include "Transaction.h"
 
-Transaction::Transaction(const std::string& sender, const std::string& receiver)
+Transaction::Transaction(WeakUser sender, WeakUser receiver)
     : m_sender(sender), m_receiver(receiver) {}
 
 bool Transaction::operator==(const Transaction& rhs) const {

@@ -11,11 +11,9 @@ int main(int argc, char *argv[]) {
   return result;
 }
 
-const auto authGovernment = UserWithSigningAuthority{GOVERNMENT};
-const auto authAlice = UserWithSigningAuthority{1};
-const auto authBob = UserWithSigningAuthority{2};
+const auto authAlice = UserWithSigningAuthority{};
+const auto authBob = UserWithSigningAuthority{};
 
-const auto weakGovernment = authGovernment.getWeakVersion();
 const auto weakAlice = authAlice.getWeakVersion();
 const auto weakBob = authBob.getWeakVersion();
 
@@ -40,8 +38,9 @@ TEST_CASE("Validating a coin") {
   auto newCoin = Coin{};
 
   GIVEN("a freshly issued coin from the government to Alice") {
-    auto issuance = Transaction{weakGovernment, weakAlice};
-    authGovernment.sign(issuance);
+    auto issuance =
+        Transaction{UserWithSigningAuthority::WEAK_GOVERNMENT, weakAlice};
+    UserWithSigningAuthority::AUTH_GOVERNMENT.sign(issuance);
     newCoin.addTransaction(issuance);
 
     THEN("the coin is valid") { CHECK(newCoin.isValid()); }
@@ -66,7 +65,8 @@ TEST_CASE("Validating a coin") {
   }
 
   GIVEN("an invalidly signed issuance") {
-    newCoin.addTransaction({weakGovernment, weakAlice});
+    newCoin.addTransaction(
+        {UserWithSigningAuthority::WEAK_GOVERNMENT, weakAlice});
     THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
   }
 
@@ -147,11 +147,11 @@ TEST_CASE("Serialising coins") {
       auto coin = Coin{};
 
       WHEN("it has a simple transaction") {
-        coin.addTransaction({weakGovernment, {}});
+        coin.addTransaction({UserWithSigningAuthority::WEAK_GOVERNMENT, {}});
       }
 
       WHEN("it has a transaction with a different sender") {
-        const auto weakBank = UserWithSigningAuthority{3}.getWeakVersion();
+        const auto weakBank = UserWithSigningAuthority{}.getWeakVersion();
         coin.addTransaction({weakBank, {}});
       }
 

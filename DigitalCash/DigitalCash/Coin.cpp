@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+#include "UserWithSigningAuthority.h"
+
 bool Coin::operator==(const Coin &rhs) const {
   return m_transactions == rhs.m_transactions;
 }
@@ -42,7 +44,7 @@ bool Coin::coinWasIssuedByTheGovernment() const {
   if (m_transactions.empty()) return true;
 
   const auto issuer = m_transactions.front().m_sender;
-  return issuer == GOVERNMENT;
+  return issuer == UserWithSigningAuthority::WEAK_GOVERNMENT;
 }
 
 bool Coin::allTransactionsHaveValidSignatures() const {

@@ -1,9 +1,15 @@
 
 #include "UserWithSigningAuthority.h"
 
+#include <random>
+
 #include "Transaction.h"
 
-UserWithSigningAuthority::UserWithSigningAuthority(int id) : m_id(id) {}
+UserWithSigningAuthority UserWithSigningAuthority::AUTH_GOVERNMENT;
+WeakUser UserWithSigningAuthority::WEAK_GOVERNMENT =
+    AUTH_GOVERNMENT.getWeakVersion();
+
+UserWithSigningAuthority::UserWithSigningAuthority() : m_id(rand()) {}
 
 void UserWithSigningAuthority::sign(class Transaction& transaction) const {
   transaction.m_signature =

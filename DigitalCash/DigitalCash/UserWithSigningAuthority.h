@@ -8,9 +8,12 @@
 // transactions sent from that address.
 class UserWithSigningAuthority {
  public:
-  UserWithSigningAuthority(int id);
+  UserWithSigningAuthority();
   void sign(class Transaction& transaction) const;
   WeakUser getWeakVersion() const;
+
+  static UserWithSigningAuthority AUTH_GOVERNMENT;
+  static WeakUser WEAK_GOVERNMENT;
 
  private:
   int m_id;

@@ -28,6 +28,6 @@ std::ostream& operator<<(std::ostream& lhs, const Transaction& rhs) {
 }
 
 bool Transaction::isSignatureValid() const {
-  const auto expectedSignature = "Signed, " + m_sender;
+  const auto expectedSignature = m_sender + m_receiver + m_sender;
   return m_signature == expectedSignature;
 }

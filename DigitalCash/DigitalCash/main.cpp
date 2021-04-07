@@ -186,3 +186,32 @@ TEST_CASE("Serialising coins") {
     }
   }
 }
+
+TEST_CASE("Signatures are based on the underlying transaction") {
+  GIVEN("Two transactions with different senders") {
+    auto fromAlice = Transaction{weakAlice.name, {}};
+    auto fromBob = Transaction{weakBob.name, {}};
+
+    WHEN("Alice signs both") {
+      authAlice.sign(fromAlice);
+      authAlice.sign(fromBob);
+
+      THEN("their signatures are different") {
+        CHECK(fromAlice.m_signature != fromBob.m_signature);
+      }
+    }
+  }
+  GIVEN("Two transactions with different recipients") {
+    auto toAlice = Transaction{{}, weakAlice.name};
+    auto toBob = Transaction{{}, weakBob.name};
+
+    WHEN("Alice signs both") {
+      authAlice.sign(toAlice);
+      authAlice.sign(toBob);
+
+      THEN("their signatures are different") {
+        CHECK(toAlice.m_signature != toBob.m_signature);
+      }
+    }
+  }
+}

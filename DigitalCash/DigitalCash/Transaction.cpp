@@ -1,7 +1,11 @@
 #include "Transaction.h"
 
-Transaction::Transaction(WeakUser sender, WeakUser receiver)
-    : m_sender(sender), m_receiver(receiver) {}
+Transaction::Transaction(PublicKey sender, PublicKey receiver)
+    : m_sender(sender), m_receiver(receiver) {
+  auto msgStream = std::ostringstream{};
+  msgStream << sender << std::endl << receiver;
+  m_message = msgStream.str();
+}
 
 bool Transaction::operator==(const Transaction& rhs) const {
   if (m_sender != rhs.m_sender) return false;
@@ -25,6 +29,5 @@ std::ostream& operator<<(std::ostream& lhs, const Transaction& rhs) {
 }
 
 bool Transaction::isSignatureValid() const {
-  const auto expectedSignature = m_sender + m_receiver + m_sender;
-  return m_signature == expectedSignature;
+  return m_sender.verifySignatureForMessage(m_message);
 }

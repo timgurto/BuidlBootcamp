@@ -3,7 +3,6 @@
 #include "Coin.h"
 #include "Transaction.h"
 #include "UserWithSigningAuthority.h"
-#include "WeakUser.h"
 #include "catch.hpp"
 
 int main(int argc, char *argv[]) {

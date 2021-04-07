@@ -3,17 +3,20 @@
 
 #include <random>
 
+#include "CryptoHelpers.h"
 #include "Transaction.h"
 
 UserWithSigningAuthority UserWithSigningAuthority::AUTH_GOVERNMENT;
-WeakUser UserWithSigningAuthority::WEAK_GOVERNMENT =
+PublicKey UserWithSigningAuthority::WEAK_GOVERNMENT =
     AUTH_GOVERNMENT.getWeakVersion();
 
-UserWithSigningAuthority::UserWithSigningAuthority() : m_id(rand()) {}
+UserWithSigningAuthority::UserWithSigningAuthority()
+    : m_keys(KeyPair::Generate()) {}
 
 void UserWithSigningAuthority::sign(class Transaction& transaction) const {
-  transaction.m_signature =
-      transaction.m_sender + transaction.m_receiver + m_id;
+  transaction.m_signature = m_keys.sign(transaction.m_message);
 }
 
-WeakUser UserWithSigningAuthority::getWeakVersion() const { return m_id; }
+PublicKey UserWithSigningAuthority::getWeakVersion() const {
+  return m_keys.getPublicKey();
+}

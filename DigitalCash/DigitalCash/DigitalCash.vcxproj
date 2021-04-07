@@ -119,15 +119,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="CryptoHelpers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Transaction.cpp" />
     <ClCompile Include="UserWithSigningAuthority.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coin.h" />
+    <ClInclude Include="CryptoHelpers.h" />
     <ClInclude Include="Transaction.h" />
     <ClInclude Include="UserWithSigningAuthority.h" />
-    <ClInclude Include="WeakUser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

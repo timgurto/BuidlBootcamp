@@ -11,9 +11,9 @@ int main(int argc, char *argv[]) {
   return result;
 }
 
-const auto authGovernment = UserWithSigningAuthority{"Government"};
-const auto authAlice = UserWithSigningAuthority{"Alice"};
-const auto authBob = UserWithSigningAuthority{"Bob"};
+const auto authGovernment = UserWithSigningAuthority{GOVERNMENT};
+const auto authAlice = UserWithSigningAuthority{1};
+const auto authBob = UserWithSigningAuthority{2};
 
 const auto weakGovernment = authGovernment.getWeakVersion();
 const auto weakAlice = authAlice.getWeakVersion();
@@ -151,7 +151,7 @@ TEST_CASE("Serialising coins") {
       }
 
       WHEN("it has a transaction with a different sender") {
-        const auto weakBank = UserWithSigningAuthority{"Bank"}.getWeakVersion();
+        const auto weakBank = UserWithSigningAuthority{3}.getWeakVersion();
         coin.addTransaction({weakBank, {}});
       }
 

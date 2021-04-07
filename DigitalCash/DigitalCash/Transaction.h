@@ -17,7 +17,7 @@ class Transaction {
 
   WeakUser m_sender;
   WeakUser m_receiver;
-  std::string m_signature;
+  int m_signature;
 };
 
 std::istream& operator>>(std::istream& lhs, Transaction& rhs);

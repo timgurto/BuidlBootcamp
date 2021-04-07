@@ -8,10 +8,10 @@
 // transactions sent from that address.
 class UserWithSigningAuthority {
  public:
-  UserWithSigningAuthority(const std::string& name);
+  UserWithSigningAuthority(int id);
   void sign(class Transaction& transaction) const;
   WeakUser getWeakVersion() const;
 
  private:
-  std::string m_name;
+  int m_id;
 };

@@ -1,5 +1,7 @@
 #include "CryptoHelpers.h"
 
+CryptoPP::AutoSeededRandomPool KeyPair::rng;
+
 bool PublicKey::operator==(const PublicKey &rhs) const { return {}; }
 
 bool PublicKey::operator!=(const PublicKey &rhs) const { return {}; }
@@ -20,4 +22,6 @@ Signature KeyPair::sign(const std::string &message) const { return {}; }
 
 KeyPair KeyPair::Generate() { return {}; }
 
-KeyPair::KeyPair() {}
+KeyPair::KeyPair() {
+  m_privateKey.Initialize(rng, CryptoPP::ASN1::secp256k1());
+}

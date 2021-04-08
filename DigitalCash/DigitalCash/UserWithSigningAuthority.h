@@ -16,7 +16,5 @@ class UserWithSigningAuthority {
   static PublicKey weakGovernment();
 
  private:
-  int m_id;
-
   KeyPair m_keys;
 };

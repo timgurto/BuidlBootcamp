@@ -31,4 +31,7 @@ class KeyPair {
 
  private:
   KeyPair();
+
+  static CryptoPP::AutoSeededRandomPool rng;
+  CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PrivateKey m_privateKey;
 };

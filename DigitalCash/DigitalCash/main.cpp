@@ -10,13 +10,13 @@ int main(int argc, char *argv[]) {
   return result;
 }
 
-const auto authAlice = UserWithSigningAuthority{};
-const auto authBob = UserWithSigningAuthority{};
 
-const auto weakAlice = authAlice.getWeakVersion();
-const auto weakBob = authBob.getWeakVersion();
 
 TEST_CASE("Validating a transaction") {
+  const auto authAlice = UserWithSigningAuthority{};
+  const auto authBob = UserWithSigningAuthority{};
+  const auto weakAlice = authAlice.getWeakVersion();
+  const auto weakBob = authBob.getWeakVersion();
   GIVEN("a transaction from Alice to Bob") {
     auto transaction = Transaction{weakAlice, weakBob};
 
@@ -34,12 +34,17 @@ TEST_CASE("Validating a transaction") {
 }
 
 TEST_CASE("Validating a coin") {
+  const auto authAlice = UserWithSigningAuthority{};
+  const auto authBob = UserWithSigningAuthority{};
+  const auto weakAlice = authAlice.getWeakVersion();
+  const auto weakBob = authBob.getWeakVersion();
+
   auto newCoin = Coin{};
 
   GIVEN("a freshly issued coin from the government to Alice") {
     auto issuance =
-        Transaction{UserWithSigningAuthority::WEAK_GOVERNMENT, weakAlice};
-    UserWithSigningAuthority::AUTH_GOVERNMENT.sign(issuance);
+        Transaction{UserWithSigningAuthority::weakGovernment(), weakAlice};
+    UserWithSigningAuthority::authGovernment().sign(issuance);
     newCoin.addTransaction(issuance);
 
     THEN("the coin is valid") { CHECK(newCoin.isValid()); }
@@ -65,7 +70,7 @@ TEST_CASE("Validating a coin") {
 
   GIVEN("an invalidly signed issuance") {
     newCoin.addTransaction(
-        {UserWithSigningAuthority::WEAK_GOVERNMENT, weakAlice});
+        {UserWithSigningAuthority::weakGovernment(), weakAlice});
     THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
   }
 
@@ -80,6 +85,11 @@ TEST_CASE("Validating a coin") {
 }
 
 TEST_CASE("Coin equality") {
+  const auto authAlice = UserWithSigningAuthority{};
+  const auto authBob = UserWithSigningAuthority{};
+  const auto weakAlice = authAlice.getWeakVersion();
+  const auto weakBob = authBob.getWeakVersion();
+
   GIVEN("Two empty coins") {
     auto a = Coin{}, b = Coin{};
 
@@ -103,6 +113,11 @@ TEST_CASE("Coin equality") {
 }
 
 TEST_CASE("Transaction equality") {
+  const auto authAlice = UserWithSigningAuthority{};
+  const auto authBob = UserWithSigningAuthority{};
+  const auto weakAlice = authAlice.getWeakVersion();
+  const auto weakBob = authBob.getWeakVersion();
+
   CHECK(Transaction{} == Transaction{});
   CHECK_FALSE(Transaction{} != Transaction{});
 
@@ -143,10 +158,13 @@ TEST_CASE("Serialising coins") {
     };
 
     GIVEN("a coin") {
+      const auto authAlice = UserWithSigningAuthority{};
+      const auto weakAlice = authAlice.getWeakVersion();
+
       auto coin = Coin{};
 
       WHEN("it has a simple transaction") {
-        coin.addTransaction({UserWithSigningAuthority::WEAK_GOVERNMENT, {}});
+        coin.addTransaction({UserWithSigningAuthority::weakGovernment(), {}});
       }
 
       WHEN("it has a transaction with a different sender") {
@@ -187,6 +205,11 @@ TEST_CASE("Serialising coins") {
 }
 
 TEST_CASE("Signatures are based on the underlying transaction") {
+  const auto authAlice = UserWithSigningAuthority{};
+  const auto authBob = UserWithSigningAuthority{};
+  const auto weakAlice = authAlice.getWeakVersion();
+  const auto weakBob = authBob.getWeakVersion();
+
   GIVEN("Two transactions with different senders") {
     auto fromAlice = Transaction{weakAlice, {}};
     auto fromBob = Transaction{weakBob, {}};

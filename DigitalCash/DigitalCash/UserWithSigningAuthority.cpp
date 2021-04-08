@@ -6,12 +6,18 @@
 #include "CryptoHelpers.h"
 #include "Transaction.h"
 
-UserWithSigningAuthority UserWithSigningAuthority::AUTH_GOVERNMENT;
-PublicKey UserWithSigningAuthority::WEAK_GOVERNMENT =
-    AUTH_GOVERNMENT.getWeakVersion();
-
 UserWithSigningAuthority::UserWithSigningAuthority()
     : m_keys(KeyPair::Generate()) {}
+
+UserWithSigningAuthority& UserWithSigningAuthority::authGovernment() {
+  static UserWithSigningAuthority* pAuthGovernment =
+      new UserWithSigningAuthority;
+  return *pAuthGovernment;
+}
+
+PublicKey UserWithSigningAuthority::weakGovernment() {
+  return authGovernment().getWeakVersion();
+}
 
 void UserWithSigningAuthority::sign(class Transaction& transaction) const {
   transaction.m_signature = m_keys.sign(transaction.m_message);

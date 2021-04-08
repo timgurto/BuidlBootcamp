@@ -12,8 +12,8 @@ class UserWithSigningAuthority {
   void sign(class Transaction& transaction) const;
   PublicKey getWeakVersion() const;
 
-  static UserWithSigningAuthority AUTH_GOVERNMENT;
-  static PublicKey WEAK_GOVERNMENT;
+  static UserWithSigningAuthority& authGovernment();
+  static PublicKey weakGovernment();
 
  private:
   int m_id;

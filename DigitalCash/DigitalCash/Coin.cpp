@@ -44,7 +44,7 @@ bool Coin::coinWasIssuedByTheGovernment() const {
   if (m_transactions.empty()) return true;
 
   const auto issuer = m_transactions.front().m_sender;
-  return issuer == UserWithSigningAuthority::WEAK_GOVERNMENT;
+  return issuer == UserWithSigningAuthority::weakGovernment();
 }
 
 bool Coin::allTransactionsHaveValidSignatures() const {

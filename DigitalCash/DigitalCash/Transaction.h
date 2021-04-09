@@ -8,15 +8,15 @@
 class Transaction {
  public:
   Transaction() = default;
-  Transaction(PublicKey sender, PublicKey receiver);
+  Transaction(PublicKeyWrapper sender, PublicKeyWrapper receiver);
 
   bool operator==(const Transaction& rhs) const;
   bool operator!=(const Transaction& rhs) const { return !(*this == rhs); }
 
   bool isSignatureValid() const;
 
-  PublicKey m_sender;
-  PublicKey m_receiver;
+  PublicKeyWrapper m_sender;
+  PublicKeyWrapper m_receiver;
   std::string m_message;
   Signature m_signature;
 };

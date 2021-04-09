@@ -1,6 +1,6 @@
 #include "Transaction.h"
 
-Transaction::Transaction(PublicKey sender, PublicKey receiver)
+Transaction::Transaction(PublicKeyWrapper sender, PublicKeyWrapper receiver)
     : m_sender(sender), m_receiver(receiver) {
   auto msgStream = std::ostringstream{};
   msgStream << sender << std::endl << receiver;

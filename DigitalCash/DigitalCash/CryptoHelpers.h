@@ -12,16 +12,18 @@ using Signature = std::string;
 
 // A public key.  Enough to send this person money, or to verify that a
 // transaction was signed by him.
-class PublicKey {
+class PublicKeyWrapper {
  public:
-  PublicKey() =
+  PublicKeyWrapper() =
       default;  // Uninitialised is supported to accommodate simpler tests
-  PublicKey(const CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey
-                &rawPublicKey);
-  bool operator==(const PublicKey &rhs) const;
-  bool operator!=(const PublicKey &rhs) const;
-  friend std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs);
-  friend std::istream &operator>>(std::istream &lhs, PublicKey &rhs);
+  PublicKeyWrapper(
+      const CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey
+          &rawPublicKey);
+  bool operator==(const PublicKeyWrapper &rhs) const;
+  bool operator!=(const PublicKeyWrapper &rhs) const;
+  friend std::ostream &operator<<(std::ostream &lhs,
+                                  const PublicKeyWrapper &rhs);
+  friend std::istream &operator>>(std::istream &lhs, PublicKeyWrapper &rhs);
 
   bool verifySignatureForMessage(const std::string &message) const;
 
@@ -31,14 +33,14 @@ class PublicKey {
 };
 
 // A public-private key pair that can sign transactions
-class KeyPair {
+class PrivateKeyWrapper {
  public:
-  PublicKey getPublicKey() const;
+  PublicKeyWrapper getPublicKey() const;
   Signature sign(const std::string &message) const;
-  static KeyPair Generate();
+  static PrivateKeyWrapper Generate();
 
  private:
-  KeyPair();
+  PrivateKeyWrapper();
 
   static CryptoPP::AutoSeededRandomPool rng;
   CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PrivateKey m_privateKey;

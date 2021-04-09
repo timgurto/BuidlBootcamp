@@ -37,7 +37,7 @@ TEST_CASE_METHOD(AliceAndBob, "Validating a transaction") {
   }
 }
 
-TEST_CASE_METHOD(AliceAndBob, "Validating a coin") {
+TEST_CASE_METHOD(AliceAndBob, "Coin validity") {
   auto newCoin = Coin{};
 
   GIVEN("a freshly issued coin from the government to Alice") {

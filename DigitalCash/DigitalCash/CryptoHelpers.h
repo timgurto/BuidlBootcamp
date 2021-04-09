@@ -14,12 +14,20 @@ using Signature = std::string;
 // transaction was signed by him.
 class PublicKey {
  public:
+  PublicKey() =
+      default;  // Uninitialised is supported to accommodate simpler tests
+  PublicKey(const CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey
+                &rawPublicKey);
   bool operator==(const PublicKey &rhs) const;
   bool operator!=(const PublicKey &rhs) const;
   friend std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs);
   friend std::istream &operator>>(std::istream &lhs, PublicKey &rhs);
 
   bool verifySignatureForMessage(const std::string &message) const;
+
+ private:
+  bool m_isEmpty = true;
+  CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey m_publicKey;
 };
 
 // A public-private key pair that can sign transactions

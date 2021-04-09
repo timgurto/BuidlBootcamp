@@ -222,3 +222,5 @@ TEST_CASE_METHOD(AliceAndBob,
     }
   }
 }
+
+// TODO: drop support for empty transactions/keys

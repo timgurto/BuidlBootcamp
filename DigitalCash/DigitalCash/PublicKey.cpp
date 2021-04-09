@@ -15,8 +15,13 @@ bool PublicKey::operator!=(const PublicKey &rhs) const {
   return !(*this == rhs);
 }
 
-bool PublicKey::verifySignatureForMessage(const std::string &message) const {
-  return true;
+bool PublicKey::verifySignatureForMessage(const std::string &signature,
+                                          const std::string &message) const {
+  auto verifier =
+      CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::Verifier{m_publicKey};
+  return verifier.VerifyMessage(
+      (const unsigned char *)&message[0], message.size(),
+      (const unsigned char *)&signature[0], signature.size());
 }
 
 std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs) {

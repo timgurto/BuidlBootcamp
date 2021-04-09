@@ -20,7 +20,8 @@ class PublicKey {
   friend std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs);
   friend std::istream &operator>>(std::istream &lhs, PublicKey &rhs);
 
-  bool verifySignatureForMessage(const std::string &message) const;
+  bool verifySignatureForMessage(const std::string &signature,
+                                 const std::string &message) const;
 
  private:
   bool m_isEmpty = true;

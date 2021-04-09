@@ -18,9 +18,10 @@ bool PublicKey::operator!=(const PublicKey &rhs) const {
 bool PublicKey::verifySignatureForMessage(const std::string &signature,
                                           const std::string &message) const {
   auto verifier = ECDSA::Verifier{m_publicKey};
-  return verifier.VerifyMessage(
-      (const unsigned char *)&message[0], message.size(),
-      (const unsigned char *)&signature[0], signature.size());
+  const auto messageAddress = (const unsigned char *)&message[0];
+  const auto signatureAddress = (unsigned char *)&signature[0];
+  return verifier.VerifyMessage(messageAddress, message.size(),
+                                signatureAddress, signature.size());
 }
 
 std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs) {

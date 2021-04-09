@@ -11,9 +11,10 @@ PublicKey PrivateKey::getPublicKey() const {
 Signature PrivateKey::sign(const std::string &message) const {
   auto signer = ECDSA::Signer{m_privateKey};
   std::string signature(signer.MaxSignatureLength(), '\0');
+  const auto messageAddress = (const unsigned char *)&message[0];
+  const auto signatureAddress = (unsigned char *)&signature[0];
   auto signatureLength =
-      signer.SignMessage(rng, (const unsigned char *)&message[0],
-                         message.size(), (unsigned char *)&signature[0]);
+      signer.SignMessage(rng, messageAddress, message.size(), signatureAddress);
   signature.resize(signatureLength);
   return signature;
 }

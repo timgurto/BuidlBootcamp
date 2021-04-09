@@ -8,7 +8,16 @@ PublicKey PrivateKey::getPublicKey() const {
   return publicKey;
 }
 
-Signature PrivateKey::sign(const std::string &message) const { return {}; }
+Signature PrivateKey::sign(const std::string &message) const {
+  auto signer =
+      CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::Signer{m_privateKey};
+  std::string signature(signer.MaxSignatureLength(), '\0');
+  auto signatureLength =
+      signer.SignMessage(rng, (const unsigned char *)&message[0],
+                         message.size(), (unsigned char *)&signature[0]);
+  signature.resize(signatureLength);
+  return signature;
+}
 
 PrivateKey PrivateKey::Generate() { return {}; }
 

@@ -16,7 +16,7 @@ bool PublicKey::operator!=(const PublicKey &rhs) const {
 }
 
 bool PublicKey::verifySignatureForMessage(const std::string &message) const {
-  return {};
+  return true;
 }
 
 std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs) {

@@ -3,14 +3,13 @@
 CryptoPP::AutoSeededRandomPool PrivateKey::rng;
 
 PublicKey PrivateKey::getPublicKey() const {
-  auto publicKey = ECDSAPublicKey{};
+  auto publicKey = ECDSA::PublicKey{};
   m_privateKey.MakePublicKey(publicKey);
   return publicKey;
 }
 
 Signature PrivateKey::sign(const std::string &message) const {
-  auto signer =
-      CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::Signer{m_privateKey};
+  auto signer = ECDSA::Signer{m_privateKey};
   std::string signature(signer.MaxSignatureLength(), '\0');
   auto signatureLength =
       signer.SignMessage(rng, (const unsigned char *)&message[0],

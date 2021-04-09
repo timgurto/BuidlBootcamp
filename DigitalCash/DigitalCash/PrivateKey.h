@@ -2,9 +2,6 @@
 
 #include "PublicKey.h"
 
-using ECDSAPrivateKey =
-    CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PrivateKey;
-
 // A public-private key pair that can sign transactions
 class PrivateKey {
  public:
@@ -16,5 +13,5 @@ class PrivateKey {
   PrivateKey();
 
   static CryptoPP::AutoSeededRandomPool rng;
-  ECDSAPrivateKey m_privateKey;
+  ECDSA::PrivateKey m_privateKey;
 };

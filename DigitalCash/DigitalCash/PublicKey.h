@@ -4,8 +4,7 @@
 #include "oids.h"
 #include "osrng.h"
 
-using ECDSAPublicKey =
-    CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey;
+using ECDSA = CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>;
 using Signature = std::string;
 
 // A public key.  Enough to send this person money, or to verify that a
@@ -14,7 +13,7 @@ class PublicKey {
  public:
   PublicKey() =
       default;  // Uninitialised is supported to accommodate simpler tests
-  PublicKey(const ECDSAPublicKey &rawPublicKey);
+  PublicKey(const ECDSA::PublicKey &rawPublicKey);
   bool operator==(const PublicKey &rhs) const;
   bool operator!=(const PublicKey &rhs) const;
   friend std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs);
@@ -25,5 +24,5 @@ class PublicKey {
 
  private:
   bool m_isEmpty = true;
-  ECDSAPublicKey m_publicKey;
+  ECDSA::PublicKey m_publicKey;
 };

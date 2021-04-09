@@ -1,6 +1,6 @@
 #include "PublicKey.h"
 
-PublicKey::PublicKey(const ECDSAPublicKey &rawPublicKey)
+PublicKey::PublicKey(const ECDSA::PublicKey &rawPublicKey)
     : m_publicKey(rawPublicKey) {
   m_isEmpty = false;
 }
@@ -17,8 +17,7 @@ bool PublicKey::operator!=(const PublicKey &rhs) const {
 
 bool PublicKey::verifySignatureForMessage(const std::string &signature,
                                           const std::string &message) const {
-  auto verifier =
-      CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::Verifier{m_publicKey};
+  auto verifier = ECDSA::Verifier{m_publicKey};
   return verifier.VerifyMessage(
       (const unsigned char *)&message[0], message.size(),
       (const unsigned char *)&signature[0], signature.size());

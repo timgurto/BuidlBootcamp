@@ -11,9 +11,9 @@ using Signature = std::string;
 // transaction was signed by him.
 class PublicKey {
  public:
-  PublicKey() =
-      default;  // Uninitialised is supported to accommodate simpler tests
   PublicKey(const ECDSA::PublicKey &rawPublicKey);
+  static PublicKey ToBeReadInto();
+
   bool operator==(const PublicKey &rhs) const;
   bool operator!=(const PublicKey &rhs) const;
   friend std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs);
@@ -23,6 +23,8 @@ class PublicKey {
                                  const std::string &message) const;
 
  private:
+  PublicKey() {}  // Used by ToBeReadInto()
+
   bool m_isEmpty = true;
   ECDSA::PublicKey m_publicKey;
 };

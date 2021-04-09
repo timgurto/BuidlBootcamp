@@ -10,16 +10,18 @@ int main(int argc, char *argv[]) {
   return result;
 }
 
-struct AliceAndBob {
+struct SampleUsers {
  public:
-  AliceAndBob()
-      : alice(authAlice.getWeakVersion()), bob(authBob.getWeakVersion()) {}
+  SampleUsers()
+      : alice(authAlice.getWeakVersion()),
+        bob(authBob.getWeakVersion()),
+        charlie(authCharlie.getWeakVersion()) {}
 
-  UserWithSigningAuthority authAlice, authBob;
-  PublicKey alice, bob;
+  UserWithSigningAuthority authAlice, authBob, authCharlie;
+  PublicKey alice, bob, charlie;
 };
 
-TEST_CASE_METHOD(AliceAndBob, "Validating a transaction") {
+TEST_CASE_METHOD(SampleUsers, "Validating a transaction") {
   GIVEN("a transaction from Alice to Bob") {
     auto transaction = Transaction{alice, bob};
 
@@ -36,7 +38,7 @@ TEST_CASE_METHOD(AliceAndBob, "Validating a transaction") {
   }
 }
 
-TEST_CASE_METHOD(AliceAndBob, "Coin validity") {
+TEST_CASE_METHOD(SampleUsers, "Coin validity") {
   auto newCoin = Coin{};
 
   GIVEN("a freshly issued coin from the government to Alice") {
@@ -81,7 +83,7 @@ TEST_CASE_METHOD(AliceAndBob, "Coin validity") {
   }
 }
 
-TEST_CASE_METHOD(AliceAndBob, "Coin equality") {
+TEST_CASE_METHOD(SampleUsers, "Coin equality") {
   GIVEN("Two empty coins") {
     auto a = Coin{}, b = Coin{};
 
@@ -104,26 +106,28 @@ TEST_CASE_METHOD(AliceAndBob, "Coin equality") {
   }
 }
 
-TEST_CASE_METHOD(AliceAndBob, "Transaction equality") {
-  CHECK(Transaction{} == Transaction{});
-  CHECK_FALSE(Transaction{} != Transaction{});
+TEST_CASE_METHOD(SampleUsers, "Transaction equality") {
+  SECTION("Equality operators") {
+    CHECK(Transaction{alice, bob} == Transaction{alice, bob});
+    CHECK_FALSE(Transaction{alice, bob} != Transaction{alice, bob});
+  }
 
   SECTION("Receivers are compared") {
-    CHECK(Transaction{{}, alice} != Transaction{{}, bob});
+    CHECK(Transaction{alice, bob} != Transaction{alice, charlie});
   }
 
   SECTION("Signatures are compared") {
-    auto transactionSignedByAlice = Transaction{};
+    auto transactionSignedByAlice = Transaction{alice, bob};
     authAlice.sign(transactionSignedByAlice);
 
-    auto transactionSignedByBob = Transaction{};
+    auto transactionSignedByBob = Transaction{alice, bob};
     authBob.sign(transactionSignedByBob);
 
     CHECK(transactionSignedByAlice != transactionSignedByBob);
   }
 }
 
-TEST_CASE("Serialising coins") {
+TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
   SECTION("functions exist") {
     auto emptyCoin = Coin{};
     auto serialised = emptyCoin.serialise();
@@ -145,44 +149,36 @@ TEST_CASE("Serialising coins") {
     };
 
     GIVEN("a coin") {
-      const auto authAlice = UserWithSigningAuthority{};
-      const auto alice = authAlice.getWeakVersion();
-
       auto coin = Coin{};
+      const auto government = UserWithSigningAuthority::weakGovernment();
 
       WHEN("it has a simple transaction") {
-        coin.addTransaction({UserWithSigningAuthority::weakGovernment(), {}});
+        coin.addTransaction({government, alice});
       }
 
       WHEN("it has a transaction with a different sender") {
-        const auto bank = UserWithSigningAuthority{}.getWeakVersion();
-        coin.addTransaction({bank, {}});
+        coin.addTransaction({bob, alice});
       }
 
       WHEN("it has a transaction with a different receiver") {
-        coin.addTransaction({{}, alice});
+        coin.addTransaction({government, bob});
       }
 
       WHEN("it has a transaction with a different signature") {
-        auto signedTransaction = Transaction{};
+        auto signedTransaction = Transaction{government, alice};
         authAlice.sign(signedTransaction);
         coin.addTransaction(signedTransaction);
       }
 
       WHEN("it has two transactions") {
-        coin.addTransaction({});
-        coin.addTransaction({});
-      }
-
-      WHEN("It has two transactions, with the second being non-default") {
-        coin.addTransaction({});
-        coin.addTransaction({alice, {}});
+        coin.addTransaction({government, alice});
+        coin.addTransaction({government, alice});
       }
 
       WHEN("it has three transactions") {
-        coin.addTransaction({});
-        coin.addTransaction({});
-        coin.addTransaction({});
+        coin.addTransaction({government, alice});
+        coin.addTransaction({government, alice});
+        coin.addTransaction({government, alice});
       }
 
       // THEN the coin matches after being serialised and deserialised
@@ -191,11 +187,11 @@ TEST_CASE("Serialising coins") {
   }
 }
 
-TEST_CASE_METHOD(AliceAndBob,
+TEST_CASE_METHOD(SampleUsers,
                  "Signatures are based on the underlying transaction") {
   GIVEN("Two transactions with different senders") {
-    auto fromAlice = Transaction{alice, {}};
-    auto fromBob = Transaction{bob, {}};
+    auto fromAlice = Transaction{alice, charlie};
+    auto fromBob = Transaction{bob, charlie};
 
     WHEN("Alice signs both") {
       authAlice.sign(fromAlice);
@@ -207,18 +203,16 @@ TEST_CASE_METHOD(AliceAndBob,
     }
   }
   GIVEN("Two transactions with different recipients") {
-    auto toAlice = Transaction{{}, alice};
-    auto toBob = Transaction{{}, bob};
+    auto toAlice = Transaction{alice, bob};
+    auto toCharlie = Transaction{alice, charlie};
 
     WHEN("Alice signs both") {
       authAlice.sign(toAlice);
-      authAlice.sign(toBob);
+      authAlice.sign(toCharlie);
 
       THEN("their signatures are different") {
-        CHECK(toAlice.m_signature != toBob.m_signature);
+        CHECK(toAlice.m_signature != toCharlie.m_signature);
       }
     }
   }
 }
-
-// TODO: drop support for empty transactions/keys

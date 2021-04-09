@@ -18,7 +18,7 @@ Coin::Coin(const std::string &serialisedCoin) {
 }
 
 void Coin::readAndAddTransaction(std::istringstream &serialisedCoin) {
-  auto nextTransaction = Transaction{};
+  auto nextTransaction = Transaction::ReadFrom(serialisedCoin);
   serialisedCoin >> nextTransaction;
   addTransaction(nextTransaction);
 }

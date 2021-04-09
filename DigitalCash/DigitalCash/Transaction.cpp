@@ -32,3 +32,11 @@ bool Transaction::isSignatureValid() const {
   if (m_signature.empty()) return false;
   return m_sender.verifySignatureForMessage(m_signature, m_message);
 }
+
+Transaction Transaction::ReadFrom(std::istream& input) { return {input}; }
+
+Transaction::Transaction(std::istream& input)
+    : m_sender(PublicKey::ToBeReadInto()),
+      m_receiver(PublicKey::ToBeReadInto()) {
+  input >> *this;
+}

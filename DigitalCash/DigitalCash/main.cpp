@@ -140,12 +140,14 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
   }
 
   SECTION("Coins match after both conversions") {
-    auto testSerialisationOf = [](const Coin &coin) {
-      const auto &original = coin;
-      const auto serialised = original.serialise();
-      const auto deserialised = Coin::Deserialise(serialised);
+    auto THEN_theCoinSerialisesAndDeserialisesCorrectly = [](const Coin &coin) {
+      THEN("the coin matches after being serialised and deserialised") {
+        const auto &original = coin;
+        const auto serialised = original.serialise();
+        const auto deserialised = Coin::Deserialise(serialised);
 
-      CHECK(original == deserialised);
+        CHECK(original == deserialised);
+      }
     };
 
     GIVEN("a coin") {
@@ -154,35 +156,44 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
 
       WHEN("it has a simple transaction") {
         coin.addTransaction({government, alice});
+
+        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
       }
 
       WHEN("it has a transaction with a different sender") {
         coin.addTransaction({bob, alice});
+
+        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
       }
 
       WHEN("it has a transaction with a different receiver") {
         coin.addTransaction({government, bob});
+
+        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
       }
 
       WHEN("it has a transaction with a different signature") {
         auto signedTransaction = Transaction{government, alice};
         authAlice.sign(signedTransaction);
         coin.addTransaction(signedTransaction);
+
+        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
       }
 
       WHEN("it has two transactions") {
         coin.addTransaction({government, alice});
         coin.addTransaction({government, alice});
+
+        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
       }
 
       WHEN("it has three transactions") {
         coin.addTransaction({government, alice});
         coin.addTransaction({government, alice});
         coin.addTransaction({government, alice});
-      }
 
-      // THEN the coin matches after being serialised and deserialised
-      testSerialisationOf(coin);
+        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
+      }
     }
   }
 }

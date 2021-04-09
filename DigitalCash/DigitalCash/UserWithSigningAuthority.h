@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "CryptoHelpers.h"
+#include "PrivateKey.h"
 
 // Represents an address that can hold coin, and the authority to sign
 // transactions sent from that address.

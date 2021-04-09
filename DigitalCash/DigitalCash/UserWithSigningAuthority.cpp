@@ -3,7 +3,6 @@
 
 #include <random>
 
-#include "CryptoHelpers.h"
 #include "Transaction.h"
 
 UserWithSigningAuthority::UserWithSigningAuthority()

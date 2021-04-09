@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "CryptoHelpers.h"
+#include "PublicKey.h"
 
 class Transaction {
  public:

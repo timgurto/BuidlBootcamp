@@ -27,7 +27,10 @@
     <ClCompile Include="UserWithSigningAuthority.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CryptoHelpers.cpp">
+    <ClCompile Include="PublicKey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrivateKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +44,10 @@
     <ClInclude Include="UserWithSigningAuthority.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CryptoHelpers.h">
+    <ClInclude Include="PrivateKey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PublicKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

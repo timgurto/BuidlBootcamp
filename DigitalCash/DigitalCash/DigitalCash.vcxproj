@@ -119,14 +119,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Coin.cpp" />
-    <ClCompile Include="CryptoHelpers.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PrivateKey.cpp" />
+    <ClCompile Include="PublicKey.cpp" />
     <ClCompile Include="Transaction.cpp" />
     <ClCompile Include="UserWithSigningAuthority.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coin.h" />
-    <ClInclude Include="CryptoHelpers.h" />
+    <ClInclude Include="PrivateKey.h" />
+    <ClInclude Include="PublicKey.h" />
     <ClInclude Include="Transaction.h" />
     <ClInclude Include="UserWithSigningAuthority.h" />
   </ItemGroup>

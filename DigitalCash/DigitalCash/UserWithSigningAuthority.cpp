@@ -7,7 +7,7 @@
 #include "Transaction.h"
 
 UserWithSigningAuthority::UserWithSigningAuthority()
-    : m_keys(PrivateKeyWrapper::Generate()) {}
+    : m_keys(PrivateKey::Generate()) {}
 
 UserWithSigningAuthority& UserWithSigningAuthority::authGovernment() {
   static UserWithSigningAuthority* pAuthGovernment =
@@ -15,7 +15,7 @@ UserWithSigningAuthority& UserWithSigningAuthority::authGovernment() {
   return *pAuthGovernment;
 }
 
-PublicKeyWrapper UserWithSigningAuthority::weakGovernment() {
+PublicKey UserWithSigningAuthority::weakGovernment() {
   return authGovernment().getWeakVersion();
 }
 
@@ -23,6 +23,6 @@ void UserWithSigningAuthority::sign(class Transaction& transaction) const {
   transaction.m_signature = m_keys.sign(transaction.m_message);
 }
 
-PublicKeyWrapper UserWithSigningAuthority::getWeakVersion() const {
+PublicKey UserWithSigningAuthority::getWeakVersion() const {
   return m_keys.getPublicKey();
 }

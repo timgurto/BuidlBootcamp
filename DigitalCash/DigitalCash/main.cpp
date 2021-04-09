@@ -17,7 +17,7 @@ struct AliceAndBob {
         weakBob(authBob.getWeakVersion()) {}
 
   UserWithSigningAuthority authAlice, authBob;
-  PublicKeyWrapper weakAlice, weakBob;
+  PublicKey weakAlice, weakBob;
 };
 
 TEST_CASE_METHOD(AliceAndBob, "Validating a transaction") {

@@ -10,11 +10,11 @@ class UserWithSigningAuthority {
  public:
   UserWithSigningAuthority();
   void sign(class Transaction& transaction) const;
-  PublicKeyWrapper getWeakVersion() const;
+  PublicKey getWeakVersion() const;
 
   static UserWithSigningAuthority& authGovernment();
-  static PublicKeyWrapper weakGovernment();
+  static PublicKey weakGovernment();
 
  private:
-  PrivateKeyWrapper m_keys;
+  PrivateKey m_keys;
 };

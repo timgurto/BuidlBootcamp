@@ -1,47 +1,42 @@
 #include "CryptoHelpers.h"
 
-CryptoPP::AutoSeededRandomPool PrivateKeyWrapper::rng;
+CryptoPP::AutoSeededRandomPool PrivateKey::rng;
 
-PublicKeyWrapper::PublicKeyWrapper(const ECDSAPublicKey &rawPublicKey)
+PublicKey::PublicKey(const ECDSAPublicKey &rawPublicKey)
     : m_publicKey(rawPublicKey) {
   m_isEmpty = false;
 }
 
-bool PublicKeyWrapper::operator==(const PublicKeyWrapper &rhs) const {
+bool PublicKey::operator==(const PublicKey &rhs) const {
   if (m_isEmpty != rhs.m_isEmpty) return false;
   if (m_isEmpty) return true;  // Both are empty
   return m_publicKey == rhs.m_publicKey;
 }
 
-bool PublicKeyWrapper::operator!=(const PublicKeyWrapper &rhs) const {
+bool PublicKey::operator!=(const PublicKey &rhs) const {
   return !(*this == rhs);
 }
 
-bool PublicKeyWrapper::verifySignatureForMessage(
-    const std::string &message) const {
+bool PublicKey::verifySignatureForMessage(const std::string &message) const {
   return {};
 }
 
-std::ostream &operator<<(std::ostream &lhs, const PublicKeyWrapper &rhs) {
+std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs) {
   return lhs;
 }
 
-std::istream &operator>>(std::istream &lhs, PublicKeyWrapper &rhs) {
-  return lhs;
-}
+std::istream &operator>>(std::istream &lhs, PublicKey &rhs) { return lhs; }
 
-PublicKeyWrapper PrivateKeyWrapper::getPublicKey() const {
+PublicKey PrivateKey::getPublicKey() const {
   auto publicKey = ECDSAPublicKey{};
   m_privateKey.MakePublicKey(publicKey);
   return publicKey;
 }
 
-Signature PrivateKeyWrapper::sign(const std::string &message) const {
-  return {};
-}
+Signature PrivateKey::sign(const std::string &message) const { return {}; }
 
-PrivateKeyWrapper PrivateKeyWrapper::Generate() { return {}; }
+PrivateKey PrivateKey::Generate() { return {}; }
 
-PrivateKeyWrapper::PrivateKeyWrapper() {
+PrivateKey::PrivateKey() {
   m_privateKey.Initialize(rng, CryptoPP::ASN1::secp256k1());
 }

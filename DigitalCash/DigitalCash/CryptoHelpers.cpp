@@ -2,9 +2,7 @@
 
 CryptoPP::AutoSeededRandomPool PrivateKeyWrapper::rng;
 
-PublicKeyWrapper::PublicKeyWrapper(
-    const CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey
-        &rawPublicKey)
+PublicKeyWrapper::PublicKeyWrapper(const ECDSAPublicKey &rawPublicKey)
     : m_publicKey(rawPublicKey) {
   m_isEmpty = false;
 }
@@ -33,8 +31,7 @@ std::istream &operator>>(std::istream &lhs, PublicKeyWrapper &rhs) {
 }
 
 PublicKeyWrapper PrivateKeyWrapper::getPublicKey() const {
-  auto publicKey =
-      CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey{};
+  auto publicKey = ECDSAPublicKey{};
   m_privateKey.MakePublicKey(publicKey);
   return publicKey;
 }

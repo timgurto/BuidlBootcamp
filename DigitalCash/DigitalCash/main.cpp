@@ -140,36 +140,36 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
   }
 
   SECTION("Coins match after both conversions") {
-    auto THEN_theCoinSerialisesAndDeserialisesCorrectly = [](const Coin &coin) {
-      THEN("the coin matches after being serialised and deserialised") {
-        const auto &original = coin;
-        const auto serialised = original.serialise();
-        const auto deserialised = Coin::Deserialise(serialised);
-
-        CHECK(original == deserialised);
-      }
-    };
-
     GIVEN("a coin") {
       auto coin = Coin{};
       const auto government = UserWithSigningAuthority::weakGovernment();
 
+      auto THEN_theCoinSerialisesAndDeserialisesCorrectly = [&coin]() {
+        THEN("the coin matches after being serialised and deserialised") {
+          const auto &original = coin;
+          const auto serialised = original.serialise();
+          const auto deserialised = Coin::Deserialise(serialised);
+
+          CHECK(original == deserialised);
+        }
+      };
+
       WHEN("it has a simple transaction") {
         coin.addTransaction({government, alice});
 
-        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
+        THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has a transaction with a different sender") {
         coin.addTransaction({bob, alice});
 
-        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
+        THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has a transaction with a different receiver") {
         coin.addTransaction({government, bob});
 
-        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
+        THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has a transaction with a different signature") {
@@ -177,14 +177,14 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
         authAlice.sign(signedTransaction);
         coin.addTransaction(signedTransaction);
 
-        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
+        THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has two transactions") {
         coin.addTransaction({government, alice});
         coin.addTransaction({government, alice});
 
-        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
+        THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has three transactions") {
@@ -192,7 +192,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
         coin.addTransaction({government, alice});
         coin.addTransaction({government, alice});
 
-        THEN_theCoinSerialisesAndDeserialisesCorrectly(coin);
+        THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
     }
   }

@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coin.h" />
+    <ClInclude Include="Hexer.h" />
     <ClInclude Include="PrivateKey.h" />
     <ClInclude Include="PublicKey.h" />
     <ClInclude Include="Transaction.h" />

@@ -50,5 +50,8 @@
     <ClInclude Include="PublicKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Hexer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

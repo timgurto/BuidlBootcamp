@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_RUNNER
 
 #include "Coin.h"
+#include "Hexer.h"
 #include "Transaction.h"
 #include "UserWithSigningAuthority.h"
 #include "catch.hpp"
@@ -226,4 +227,9 @@ TEST_CASE_METHOD(SampleUsers,
       }
     }
   }
+}
+
+TEST_CASE("Hexer") {
+  Hexer::convertBinaryToHex({});
+  Hexer::convertHexToBinary({});
 }

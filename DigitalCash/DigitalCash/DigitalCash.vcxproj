@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="Hexer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PrivateKey.cpp" />
     <ClCompile Include="PublicKey.cpp" />

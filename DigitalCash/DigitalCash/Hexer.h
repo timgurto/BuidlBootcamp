@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 // Provides functionality to convert between two string types:
 // 1. Binary data; this is how Crypto++ interfaces with strings.
 // 2. Hexadecimal, in which each binary character is represented by two
@@ -7,5 +9,5 @@
 class Hexer {
  public:
   static void convertBinaryToHex(int) {}
-  static void convertHexToBinary(int) {}
+  static std::string convertHexToBinary(const std::string& hex);
 };

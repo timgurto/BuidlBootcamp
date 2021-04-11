@@ -33,6 +33,9 @@
     <ClCompile Include="PrivateKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coin.h">

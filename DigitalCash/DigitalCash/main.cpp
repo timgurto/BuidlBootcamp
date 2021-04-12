@@ -6,6 +6,8 @@
 #include "UserWithSigningAuthority.h"
 #include "catch.hpp"
 
+using namespace std::string_literals;
+
 int main(int argc, char *argv[]) {
   int result = Catch::Session().run(argc, argv);
   return result;
@@ -232,6 +234,6 @@ TEST_CASE_METHOD(SampleUsers,
 TEST_CASE("Hexer") {
   Hexer::convertBinaryToHex({});
 
-  CHECK(Hexer::convertHexToBinary("00") == std::string{'\x00'});
-  CHECK(Hexer::convertHexToBinary("01") == std::string{"\x01"});
+  CHECK(Hexer::convertHexToBinary("00") == "\x00"s);
+  CHECK(Hexer::convertHexToBinary("01") == "\x01"s);
 }

@@ -12,9 +12,9 @@ std::string Hexer::convertHexToBinary(const std::string& hex) {
 
   if (hex.size() > 2) {
     iss.get();
-    iss.get();
+    const auto digit2 = iss.get() - '0';
 
-    ret.push_back('\0');
+    ret.push_back(digit2);
   }
 
   const auto digit1 = iss.get() - '0';

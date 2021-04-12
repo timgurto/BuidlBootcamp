@@ -237,6 +237,8 @@ TEST_CASE("Hexadecimal -> binary", "[hexer]") {
     CHECK(Hexer::convertHexToBinary("01") == "\x01"s);
   }
 
+  SECTION("Two digits") { CHECK(Hexer::convertHexToBinary("10") == "\x10"s); }
+
   SECTION("Bad input") { Hexer::convertHexToBinary({}); }
 }
 

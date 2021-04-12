@@ -1,3 +1,3 @@
 #include "Hexer.h"
 
-std::string Hexer::convertHexToBinary(const std::string& hex) { return {}; }
+std::string Hexer::convertHexToBinary(const std::string& hex) { return "\0"; }

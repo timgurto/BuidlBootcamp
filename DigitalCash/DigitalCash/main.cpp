@@ -246,6 +246,7 @@ TEST_CASE("Hexadecimal -> binary", "[hexer]") {
 
   SECTION("Multiple bytes") {
     CHECK(Hexer::convertHexToBinary("0000") == "\x00\x00"s);
+    CHECK(Hexer::convertHexToBinary("0001") == "\x00\x01"s);
   }
 
   SECTION("Bad input") { Hexer::convertHexToBinary({}); }

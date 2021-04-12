@@ -7,16 +7,21 @@ using namespace std::string_literals;
 std::string Hexer::convertHexToBinary(const std::string& hex) {
   if (hex.empty()) return {};
 
-  if (hex.size() > 2) return "\0\0"s;
-
   auto iss = std::istringstream{hex};
+  auto ret = std::string{};
+
+  if (hex.size() > 2) {
+    iss.get();
+    iss.get();
+
+    ret.push_back('\0');
+  }
 
   const auto digit1 = iss.get() - '0';
   const auto digit2 = iss.get() - '0';
 
-  auto binaryChar = digit1 * 16 + digit2;
+  auto binaryChar2 = digit1 * 16 + digit2;
 
-  auto ret = std::string{};
-  ret.push_back(binaryChar);
+  ret.push_back(binaryChar2);
   return ret;
 }

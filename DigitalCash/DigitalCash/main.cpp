@@ -231,15 +231,13 @@ TEST_CASE_METHOD(SampleUsers,
   }
 }
 
-TEST_CASE("Hexer") {
-  SECTION("Hexadecimal -> binary") {
-    SECTION("One hex digit") {
-      CHECK(Hexer::convertHexToBinary("00") == "\x00"s);
-      CHECK(Hexer::convertHexToBinary("01") == "\x01"s);
-    }
-
-    SECTION("Bad input") { Hexer::convertHexToBinary({}); }
+TEST_CASE("Hexadecimal -> binary", "[hexer]") {
+  SECTION("One hex digit") {
+    CHECK(Hexer::convertHexToBinary("00") == "\x00"s);
+    CHECK(Hexer::convertHexToBinary("01") == "\x01"s);
   }
 
-  SECTION("Binary -> hexadecimal") { Hexer::convertBinaryToHex({}); }
+  SECTION("Bad input") { Hexer::convertHexToBinary({}); }
 }
+
+TEST_CASE("Binary -> hexadecimal", "[hexer]") { Hexer::convertBinaryToHex({}); }

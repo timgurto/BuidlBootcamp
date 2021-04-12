@@ -11,17 +11,17 @@ std::string Hexer::convertHexToBinary(const std::string& hex) {
   auto ret = std::string{};
 
   if (hex.size() > 2) {
-    iss.get();
+    const auto digit1 = iss.get() - '0';
     const auto digit2 = iss.get() - '0';
 
-    ret.push_back(digit2);
+    auto binaryChar1 = digit1 * 16 + digit2;
+    ret.push_back(binaryChar1);
   }
 
   const auto digit1 = iss.get() - '0';
   const auto digit2 = iss.get() - '0';
 
   auto binaryChar2 = digit1 * 16 + digit2;
-
   ret.push_back(binaryChar2);
   return ret;
 }

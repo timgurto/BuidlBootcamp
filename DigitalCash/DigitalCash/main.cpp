@@ -232,6 +232,6 @@ TEST_CASE_METHOD(SampleUsers,
 TEST_CASE("Hexer") {
   Hexer::convertBinaryToHex({});
 
-  CHECK(Hexer::convertHexToBinary("00") == "\x00");
-  CHECK(Hexer::convertHexToBinary("01") == "\x01");
+  CHECK(Hexer::convertHexToBinary("00") == std::string{'\x00'});
+  CHECK(Hexer::convertHexToBinary("01") == std::string{"\x01"});
 }

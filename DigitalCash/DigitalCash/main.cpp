@@ -240,6 +240,8 @@ TEST_CASE("Hexadecimal -> binary", "[hexer]") {
   SECTION("Two digits") {
     CHECK(Hexer::convertHexToBinary("10") == "\x10"s);
     CHECK(Hexer::convertHexToBinary("20") == "\x20"s);
+
+    CHECK(Hexer::convertHexToBinary("11") == "\x11"s);
   }
 
   SECTION("Bad input") { Hexer::convertHexToBinary({}); }

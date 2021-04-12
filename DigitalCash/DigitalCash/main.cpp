@@ -232,8 +232,12 @@ TEST_CASE_METHOD(SampleUsers,
 }
 
 TEST_CASE("Hexer") {
-  Hexer::convertBinaryToHex({});
+  SECTION("Hexadecimal -> binary") {
+    SECTION("One hex digit") {
+      CHECK(Hexer::convertHexToBinary("00") == "\x00"s);
+      CHECK(Hexer::convertHexToBinary("01") == "\x01"s);
+    }
+  }
 
-  CHECK(Hexer::convertHexToBinary("00") == "\x00"s);
-  CHECK(Hexer::convertHexToBinary("01") == "\x01"s);
+  SECTION("Binary -> hexadecimal") { Hexer::convertBinaryToHex({}); }
 }

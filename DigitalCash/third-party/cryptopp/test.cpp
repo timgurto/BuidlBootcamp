@@ -1087,7 +1087,7 @@ NAMESPACE_END  // CryptoPP
 // a 'using namespace CryptoPP', it causes compile failures.
 // Also see http://github.com/weidai11/cryptopp/issues/442
 // and http://github.com/weidai11/cryptopp/issues/447.
-int CRYPTOPP_API main(int argc, char *argv[])
-{
-	return CryptoPP::Test::scoped_main(argc, argv);
-}
+//int CRYPTOPP_API main(int argc, char *argv[])
+//{
+//	return CryptoPP::Test::scoped_main(argc, argv);
+//}

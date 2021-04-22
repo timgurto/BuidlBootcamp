@@ -1,4 +1,4 @@
-#define CATCH_CONFIG_RUNNER
+#define CATCH_CONFIG_MAIN
 
 #include "Coin.h"
 #include "Hexer.h"
@@ -7,11 +7,6 @@
 #include "catch.hpp"
 
 using namespace std::string_literals;
-
-int main(int argc, char *argv[]) {
-  int result = Catch::Session().run(argc, argv);
-  return result;
-}
 
 struct SampleUsers {
  public:

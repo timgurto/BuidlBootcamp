@@ -1,7 +1,6 @@
 #define CATCH_CONFIG_MAIN
 
 #include "Coin.h"
-#include "Hexer.h"
 #include "Transaction.h"
 #include "UserWithSigningAuthority.h"
 #include "catch.hpp"
@@ -250,28 +249,3 @@ TEST_CASE_METHOD(SampleUsers,
     }
   }
 }
-
-TEST_CASE("Hexadecimal -> binary", "[hexer]") {
-  SECTION("One hex digit") {
-    CHECK(Hexer::convertHexToBinary("00") == "\x00"s);
-    CHECK(Hexer::convertHexToBinary("01") == "\x01"s);
-  }
-
-  SECTION("Two digits") {
-    CHECK(Hexer::convertHexToBinary("10") == "\x10"s);
-    CHECK(Hexer::convertHexToBinary("20") == "\x20"s);
-
-    CHECK(Hexer::convertHexToBinary("11") == "\x11"s);
-  }
-
-  SECTION("Multiple bytes") {
-    CHECK(Hexer::convertHexToBinary("0000") == "\x00\x00"s);
-    CHECK(Hexer::convertHexToBinary("0001") == "\x00\x01"s);
-    CHECK(Hexer::convertHexToBinary("0100") == "\x01\x00"s);
-    CHECK(Hexer::convertHexToBinary("1000") == "\x10\x00"s);
-  }
-
-  SECTION("Bad input") { Hexer::convertHexToBinary({}); }
-}
-
-TEST_CASE("Binary -> hexadecimal", "[hexer]") { Hexer::convertBinaryToHex({}); }

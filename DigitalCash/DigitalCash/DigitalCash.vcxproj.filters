@@ -33,9 +33,6 @@
     <ClCompile Include="PrivateKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Hexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\third-party\cryptopp\3way.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -642,9 +639,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PublicKey.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\third-party\cryptopp\3way.h">

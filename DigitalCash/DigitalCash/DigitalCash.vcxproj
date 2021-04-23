@@ -316,7 +316,6 @@
     <ClCompile Include="..\third-party\cryptopp\zinflate.cpp" />
     <ClCompile Include="..\third-party\cryptopp\zlib.cpp" />
     <ClCompile Include="Coin.cpp" />
-    <ClCompile Include="Hexer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PrivateKey.cpp" />
     <ClCompile Include="PublicKey.cpp" />
@@ -516,7 +515,6 @@
     <ClInclude Include="..\third-party\cryptopp\zinflate.h" />
     <ClInclude Include="..\third-party\cryptopp\zlib.h" />
     <ClInclude Include="Coin.h" />
-    <ClInclude Include="Hexer.h" />
     <ClInclude Include="PrivateKey.h" />
     <ClInclude Include="PublicKey.h" />
     <ClInclude Include="Transaction.h" />

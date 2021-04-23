@@ -13,6 +13,8 @@ Coin Coin::Deserialise(const std::string &serialisedCoin) {
 }
 
 Coin::Coin(const std::string &serialisedCoin) {
+  if (serialisedCoin.empty()) return;
+
   auto iss = std::istringstream{serialisedCoin};
   while (!iss.eof()) readAndAddTransaction(iss);
 }

@@ -45,7 +45,13 @@ bool PublicKey::verifySignatureForMessage(const std::string &signature,
 }
 
 std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs) {
+  lhs << rhs.toHexString();
   return lhs;
 }
 
-std::istream &operator>>(std::istream &lhs, PublicKey &rhs) { return lhs; }
+std::istream &operator>>(std::istream &lhs, PublicKey &rhs) {
+  auto hexString = ""s;
+  lhs >> hexString;
+  rhs.fromHexString(hexString);
+  return lhs;
+}

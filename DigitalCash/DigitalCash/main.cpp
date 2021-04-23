@@ -149,6 +149,30 @@ TEST_CASE("Public key streaming") {
   }
 }
 
+TEST_CASE_METHOD(SampleUsers, "Signature streaming") {
+  GIVEN("a signed transaction") {
+    auto signedTransaction = Transaction{alice, bob};
+    authAlice.sign(signedTransaction);
+    const auto originalSignature = signedTransaction.m_signature;
+
+    WHEN("the signature is streamed out") {
+      auto output = std::ostringstream{};
+      output << originalSignature;
+      auto serialised = output.str();
+
+      AND_WHEN("the result is streamed back in") {
+        auto input = std::istringstream{serialised};
+        auto deserialisedSignature = Signature{};
+        input >> deserialisedSignature;
+
+        THEN("it matches the original signature") {
+          CHECK(deserialisedSignature == originalSignature);
+        }
+      }
+    }
+  }
+}
+
 TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
   SECTION("functions exist") {
     auto emptyCoin = Coin{};

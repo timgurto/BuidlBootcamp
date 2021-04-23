@@ -35,13 +35,13 @@ void PublicKey::fromHexString(const std::string &hexString) {
   m_isEmpty = false;
 }
 
-bool PublicKey::verifySignatureForMessage(const std::string &signature,
+bool PublicKey::verifySignatureForMessage(const Signature &signature,
                                           const std::string &message) const {
   auto verifier = ECDSA::Verifier{m_publicKey};
   const auto messageAddress = (const unsigned char *)&message[0];
-  const auto signatureAddress = (unsigned char *)&signature[0];
+  const auto signatureAddress = (unsigned char *)&signature.firstChar();
   return verifier.VerifyMessage(messageAddress, message.size(),
-                                signatureAddress, signature.size());
+                                signature.address(), signature.size());
 }
 
 std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs) {

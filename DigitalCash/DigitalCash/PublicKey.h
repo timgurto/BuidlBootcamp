@@ -1,11 +1,11 @@
 #pragma once
 
+#include "Signature.h"
 #include "eccrypto.h"
 #include "oids.h"
 #include "osrng.h"
 
 using ECDSA = CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>;
-using Signature = std::string;
 
 // A public key.  Enough to send this person money, or to verify that a
 // transaction was signed by him.
@@ -22,7 +22,7 @@ class PublicKey {
   std::string toHexString() const;
   void fromHexString(const std::string &hexString);
 
-  bool verifySignatureForMessage(const std::string &signature,
+  bool verifySignatureForMessage(const Signature &signature,
                                  const std::string &message) const;
 
  private:

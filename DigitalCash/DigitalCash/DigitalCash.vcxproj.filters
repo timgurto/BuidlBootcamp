@@ -624,6 +624,9 @@
     <ClCompile Include="..\third-party\cryptopp\test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Signature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coin.h">
@@ -1212,6 +1215,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\third-party\cryptopp\zlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Signature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

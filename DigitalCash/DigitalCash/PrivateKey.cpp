@@ -16,7 +16,7 @@ Signature PrivateKey::sign(const std::string &message) const {
   auto signatureLength =
       signer.SignMessage(rng, messageAddress, message.size(), signatureAddress);
   signature.resize(signatureLength);
-  return signature;
+  return Signature{signature};
 }
 
 PrivateKey PrivateKey::Generate() { return {}; }

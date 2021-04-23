@@ -319,6 +319,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PrivateKey.cpp" />
     <ClCompile Include="PublicKey.cpp" />
+    <ClCompile Include="Signature.cpp" />
     <ClCompile Include="Transaction.cpp" />
     <ClCompile Include="UserWithSigningAuthority.cpp" />
   </ItemGroup>
@@ -517,6 +518,7 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="PrivateKey.h" />
     <ClInclude Include="PublicKey.h" />
+    <ClInclude Include="Signature.h" />
     <ClInclude Include="Transaction.h" />
     <ClInclude Include="UserWithSigningAuthority.h" />
   </ItemGroup>

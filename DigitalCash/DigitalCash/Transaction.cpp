@@ -29,7 +29,7 @@ std::ostream& operator<<(std::ostream& lhs, const Transaction& rhs) {
 }
 
 bool Transaction::isSignatureValid() const {
-  if (m_signature.empty()) return false;
+  if (!m_signature.exists()) return false;
   return m_sender.verifySignatureForMessage(m_signature, m_message);
 }
 

@@ -19,6 +19,9 @@ class PublicKey {
   friend std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs);
   friend std::istream &operator>>(std::istream &lhs, PublicKey &rhs);
 
+  std::string toHexString() const;
+  void fromHexString(const std::string &hexString);
+
   bool verifySignatureForMessage(const std::string &signature,
                                  const std::string &message) const;
 

@@ -125,6 +125,31 @@ TEST_CASE_METHOD(SampleUsers, "Transaction equality") {
   }
 }
 
+TEST_CASE("Public key streaming") {
+  GIVEN("a public key") {
+    const auto originalKey = UserWithSigningAuthority{}.getWeakVersion();
+
+    WHEN("it's converted to hex") {
+      const auto asHex = originalKey.toHexString();
+
+      THEN("the result is a hex string") {
+        CHECK(asHex.size() > 0);
+        CHECK((asHex[0] >= '0' && asHex[0] <= '9' ||
+               asHex[0] >= 'A' && asHex[0] <= 'F'));
+      }
+
+      AND_WHEN("it's converted back") {
+        auto newKey = PublicKey::ToBeReadInto();
+        newKey.fromHexString(asHex);
+
+        THEN("the new key matches the original") {
+          CHECK(newKey == originalKey);
+        }
+      }
+    }
+  }
+}
+
 TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
   SECTION("functions exist") {
     auto emptyCoin = Coin{};

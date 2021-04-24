@@ -1,5 +1,9 @@
 #include "Signature.h"
 
+#include <hex.h>
+
+using namespace std::string_literals;
+
 Signature::Signature(const std::string &sig) : m_signature(sig) {}
 
 bool Signature::operator==(const Signature &rhs) const {
@@ -24,11 +28,20 @@ const char &Signature::firstChar() const { return m_signature[0]; }
 size_t Signature::size() const { return m_signature.size(); }
 
 std::istream &operator>>(std::istream &lhs, Signature &rhs) {
-  lhs >> rhs.m_signature;
+  auto hex = ""s;
+  lhs >> hex;
+  CryptoPP::StringSource ss(
+      hex, true,
+      new CryptoPP::HexDecoder(new CryptoPP::StringSink(rhs.m_signature)));
   return lhs;
 }
 
 std::ostream &operator<<(std::ostream &lhs, const Signature &rhs) {
-  lhs << rhs.m_signature;
+  auto hex = ""s;
+  CryptoPP::StringSource ss(
+      rhs.m_signature, true,
+      new CryptoPP::HexEncoder(new CryptoPP::StringSink(hex)));
+
+  lhs << hex;
   return lhs;
 }

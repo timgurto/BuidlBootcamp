@@ -1,10 +1,13 @@
 #include "Transaction.h"
 
+using namespace std::string_literals;
+
 Transaction::Transaction(PublicKey sender, PublicKey receiver)
     : m_sender(sender), m_receiver(receiver) {
   auto msgStream = std::ostringstream{};
   msgStream << sender << std::endl << receiver;
   m_message = msgStream.str();
+  m_signature = Signature{"unsigned"s};
 }
 
 bool Transaction::operator==(const Transaction& rhs) const {

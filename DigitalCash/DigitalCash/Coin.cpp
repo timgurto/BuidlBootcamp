@@ -13,10 +13,12 @@ Coin Coin::Deserialise(const std::string &serialisedCoin) {
 }
 
 Coin::Coin(const std::string &serialisedCoin) {
-  if (serialisedCoin.empty()) return;
+  auto numTransactions = 0;
 
   auto iss = std::istringstream{serialisedCoin};
-  while (!iss.eof()) readAndAddTransaction(iss);
+  iss >> numTransactions;
+
+  for (auto i = 0; i != numTransactions; ++i) readAndAddTransaction(iss);
 }
 
 void Coin::readAndAddTransaction(std::istringstream &serialisedCoin) {
@@ -25,14 +27,12 @@ void Coin::readAndAddTransaction(std::istringstream &serialisedCoin) {
 }
 
 std::string Coin::serialise() const {
-  if (m_transactions.empty()) return {};
-
   auto oss = std::ostringstream{};
 
-  for (auto i = 0; i != m_transactions.size(); ++i) {
-    if (i != 0) oss << std::endl;
-    oss << m_transactions[i];
-  }
+  oss << m_transactions.size() << std::endl;
+
+  for (const auto &transaction : m_transactions)
+    oss << transaction << std::endl;
 
   return oss.str();
 }

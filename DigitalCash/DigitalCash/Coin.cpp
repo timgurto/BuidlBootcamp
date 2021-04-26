@@ -21,6 +21,15 @@ Coin::Coin(const std::string &serialisedCoin) {
   for (auto i = 0; i != numTransactions; ++i) readAndAddTransaction(iss);
 }
 
+Coin::Coin(const PublicKey &issuee) {
+  auto issuanceTransaction =
+      Transaction(UserWithSigningAuthority::weakGovernment(), issuee);
+  UserWithSigningAuthority::authGovernment().sign(issuanceTransaction);
+  addTransaction(issuanceTransaction);
+}
+
+Coin Coin::IssueTo(const PublicKey &issuee) { return {issuee}; }
+
 void Coin::readAndAddTransaction(std::istringstream &serialisedCoin) {
   auto nextTransaction = Transaction::ReadFrom(serialisedCoin);
   addTransaction(nextTransaction);

@@ -8,6 +8,8 @@ class Coin {
  public:
   Coin() = default;
 
+  static Coin IssueTo(const PublicKey &issuee);
+
   static Coin Deserialise(const std::string &serialisedCoin);
   /**/ void readAndAddTransaction(std::istringstream &serialisedCoin);
 
@@ -27,4 +29,5 @@ class Coin {
   std::vector<Transaction> m_transactions;
 
   Coin(const std::string &serialisedCoin);
+  Coin(const PublicKey &issuee);
 };

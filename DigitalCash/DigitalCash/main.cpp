@@ -39,10 +39,7 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
   auto newCoin = Coin{};
 
   GIVEN("a freshly issued coin from the government to Alice") {
-    auto issuance =
-        Transaction{UserWithSigningAuthority::weakGovernment(), alice};
-    UserWithSigningAuthority::authGovernment().sign(issuance);
-    newCoin.addTransaction(issuance);
+    newCoin = Coin::IssueTo(alice);
 
     THEN("the coin is valid") { CHECK(newCoin.isValid()); }
 

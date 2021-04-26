@@ -38,7 +38,8 @@ std::string Coin::serialise() const {
 }
 
 bool Coin::isValid() const {
-  return coinWasIssuedByTheGovernment() && allTransactionsHaveValidSignatures();
+  return coinWasIssuedByTheGovernment() &&
+         allTransactionsHaveValidSignatures() && eachSpenderWasTheOwner();
 }
 
 bool Coin::coinWasIssuedByTheGovernment() const {
@@ -52,5 +53,16 @@ bool Coin::coinWasIssuedByTheGovernment() const {
 bool Coin::allTransactionsHaveValidSignatures() const {
   for (const auto &txn : m_transactions)
     if (!txn.isSignatureValid()) return false;
+  return true;
+}
+
+bool Coin::eachSpenderWasTheOwner() const {
+  auto ownerAtThatPoint = UserWithSigningAuthority::weakGovernment();
+
+  for (const auto &txn : m_transactions) {
+    if (txn.m_sender != ownerAtThatPoint) return false;
+    ownerAtThatPoint = txn.m_receiver;
+  }
+
   return true;
 }

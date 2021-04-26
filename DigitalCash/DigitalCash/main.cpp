@@ -58,6 +58,18 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
       newCoin.addTransaction({alice, bob});
       THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
+
+    SECTION("Each sender is the previous receiver") {
+      WHEN(
+          "Bob (who doesn't own it) tries passing it to Charlie with his "
+          "signature") {
+        auto bobToCharlie = Transaction{bob, charlie};
+        authBob.sign(bobToCharlie);
+        newCoin.addTransaction(bobToCharlie);
+
+        THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
+      }
+    }
   }
 
   GIVEN("a coin issued from someone other than Government") {

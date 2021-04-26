@@ -21,6 +21,7 @@ class Coin {
   bool isValid() const;
   /**/ bool coinWasIssuedByTheGovernment() const;
   /**/ bool allTransactionsHaveValidSignatures() const;
+  /**/ bool eachSpenderWasTheOwner() const;
 
  private:
   std::vector<Transaction> m_transactions;

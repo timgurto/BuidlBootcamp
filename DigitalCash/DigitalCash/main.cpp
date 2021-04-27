@@ -36,7 +36,7 @@ TEST_CASE_METHOD(SampleUsers, "Validating a transaction") {
 }
 
 TEST_CASE_METHOD(SampleUsers, "Coin validity") {
-  auto newCoin = Coin{};
+  auto newCoin = Coin::CreateEmptyForTesting();
 
   GIVEN("a freshly issued coin from the government to Alice") {
     newCoin = Coin::CreateByIssuingTo(alice);
@@ -85,14 +85,14 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
   }
 
   SECTION("Coin validation is a const operation") {
-    const auto constCoin = Coin{};
+    const auto constCoin = Coin::CreateEmptyForTesting();
     constCoin.isValid();
   }
 }
 
 TEST_CASE_METHOD(SampleUsers, "Coin equality") {
   GIVEN("Two empty coins") {
-    auto a = Coin{}, b = Coin{};
+    auto a = Coin::CreateEmptyForTesting(), b = Coin::CreateEmptyForTesting();
 
     THEN("they are equal") {
       CHECK(a == b);
@@ -185,19 +185,19 @@ TEST_CASE_METHOD(SampleUsers, "Signature streaming") {
 
 TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
   SECTION("functions exist") {
-    auto emptyCoin = Coin{};
+    auto emptyCoin = Coin::CreateEmptyForTesting();
     auto serialised = emptyCoin.serialise();
     Coin::CreateByDeserialising(serialised);
   }
 
   SECTION("Const operation") {
-    const auto constCoin = Coin{};
+    const auto constCoin = Coin::CreateEmptyForTesting();
     constCoin.serialise();
   }
 
   SECTION("Coins match after both conversions") {
     GIVEN("a coin") {
-      auto coin = Coin{};
+      auto coin = Coin::CreateEmptyForTesting();
       const auto government = UserWithSigningAuthority::weakGovernment();
 
       auto THEN_theCoinSerialisesAndDeserialisesCorrectly = [&coin]() {
@@ -283,3 +283,6 @@ TEST_CASE_METHOD(SampleUsers,
     }
   }
 }
+
+// TODO
+// Message = previous signature and next recipient (public key)

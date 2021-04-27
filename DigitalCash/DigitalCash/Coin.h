@@ -7,10 +7,8 @@
 class Coin {
  public:
   static Coin CreateByIssuingTo(const PublicKey &issuee);
-
   static Coin CreateByDeserialising(const std::string &serialisedCoin);
   /**/ void readAndAddTransaction(std::istringstream &serialisedCoin);
-
   static Coin CreateEmptyForTesting() { return {}; }
 
   std::string serialise() const;
@@ -28,7 +26,7 @@ class Coin {
  private:
   std::vector<Transaction> m_transactions;
 
-  Coin() = default;
-  Coin(const std::string &serialisedCoin);
-  Coin(const PublicKey &issuee);
+  Coin() = default;                         // CreateEmptyForTesting
+  Coin(const std::string &serialisedCoin);  // CreateByDeserialising
+  Coin(const PublicKey &issuee);            // CreateByIssuingTo
 };

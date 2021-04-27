@@ -19,7 +19,7 @@ PublicKey UserWithSigningAuthority::weakGovernment() {
 }
 
 void UserWithSigningAuthority::sign(class Transfer& transaction) const {
-  transaction.m_signature = m_keys.sign(transaction.m_message);
+  transaction.m_signature = m_keys.sign(transaction.generateMessage());
 }
 
 PublicKey UserWithSigningAuthority::getWeakVersion() const {

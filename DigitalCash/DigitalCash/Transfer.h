@@ -15,11 +15,13 @@ class Transfer {
 
   bool isSignatureValid() const;
 
+  using Message = std::string;
+  Message generateMessage() const;
+
   static Transfer ReadFrom(std::istream& input);
 
   PublicKey m_sender;
   PublicKey m_receiver;
-  std::string m_message;
   Signature m_signature;
 
  private:

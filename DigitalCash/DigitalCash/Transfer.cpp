@@ -4,9 +4,6 @@ using namespace std::string_literals;
 
 Transfer::Transfer(PublicKey sender, PublicKey receiver)
     : m_sender(sender), m_receiver(receiver) {
-  auto msgStream = std::ostringstream{};
-  msgStream << sender << std::endl << receiver;
-  m_message = msgStream.str();
   m_signature = Signature{"unsigned"s};
 }
 
@@ -33,7 +30,13 @@ std::ostream& operator<<(std::ostream& lhs, const Transfer& rhs) {
 
 bool Transfer::isSignatureValid() const {
   if (!m_signature.exists()) return false;
-  return m_sender.verifySignatureForMessage(m_signature, m_message);
+  return m_sender.verifySignatureForMessage(m_signature, generateMessage());
+}
+
+Transfer::Message Transfer::generateMessage() const {
+  auto oss = std::ostringstream{};
+  oss << m_sender << std::endl << m_receiver;
+  return oss.str();
 }
 
 Transfer Transfer::ReadFrom(std::istream& input) { return {input}; }

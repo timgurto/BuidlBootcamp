@@ -3,7 +3,7 @@
 
 #include <random>
 
-#include "Transaction.h"
+#include "Transfer.h"
 
 UserWithSigningAuthority::UserWithSigningAuthority()
     : m_keys(PrivateKey::Generate()) {}
@@ -18,7 +18,7 @@ PublicKey UserWithSigningAuthority::weakGovernment() {
   return authGovernment().getWeakVersion();
 }
 
-void UserWithSigningAuthority::sign(class Transaction& transaction) const {
+void UserWithSigningAuthority::sign(class Transfer& transaction) const {
   transaction.m_signature = m_keys.sign(transaction.m_message);
 }
 

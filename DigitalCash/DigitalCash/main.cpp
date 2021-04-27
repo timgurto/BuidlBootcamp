@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 
 #include "Coin.h"
-#include "Transaction.h"
+#include "Transfer.h"
 #include "UserWithSigningAuthority.h"
 #include "catch.hpp"
 
@@ -20,7 +20,7 @@ struct SampleUsers {
 
 TEST_CASE_METHOD(SampleUsers, "Validating a transaction") {
   GIVEN("a transaction from Alice to Bob") {
-    auto transaction = Transaction{alice, bob};
+    auto transaction = Transfer{alice, bob};
 
     WHEN("Alice signs it") {
       authAlice.sign(transaction);
@@ -44,7 +44,7 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
     THEN("the coin is valid") { CHECK(newCoin.isValid()); }
 
     WHEN("Alice then passes it to Bob with her signature") {
-      auto aliceToBob = Transaction{alice, bob};
+      auto aliceToBob = Transfer{alice, bob};
       authAlice.sign(aliceToBob);
       newCoin.addTransaction(aliceToBob);
 
@@ -60,7 +60,7 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
       WHEN(
           "Bob (who doesn't own it) tries passing it to Charlie with his "
           "signature") {
-        auto bobToCharlie = Transaction{bob, charlie};
+        auto bobToCharlie = Transfer{bob, charlie};
         authBob.sign(bobToCharlie);
         newCoin.addTransaction(bobToCharlie);
 
@@ -115,19 +115,19 @@ TEST_CASE_METHOD(SampleUsers, "Coin equality") {
 
 TEST_CASE_METHOD(SampleUsers, "Transaction equality") {
   SECTION("Equality operators") {
-    CHECK(Transaction{alice, bob} == Transaction{alice, bob});
-    CHECK_FALSE(Transaction{alice, bob} != Transaction{alice, bob});
+    CHECK(Transfer{alice, bob} == Transfer{alice, bob});
+    CHECK_FALSE(Transfer{alice, bob} != Transfer{alice, bob});
   }
 
   SECTION("Receivers are compared") {
-    CHECK(Transaction{alice, bob} != Transaction{alice, charlie});
+    CHECK(Transfer{alice, bob} != Transfer{alice, charlie});
   }
 
   SECTION("Signatures are compared") {
-    auto transactionSignedByAlice = Transaction{alice, bob};
+    auto transactionSignedByAlice = Transfer{alice, bob};
     authAlice.sign(transactionSignedByAlice);
 
-    auto transactionSignedByBob = Transaction{alice, bob};
+    auto transactionSignedByBob = Transfer{alice, bob};
     authBob.sign(transactionSignedByBob);
 
     CHECK(transactionSignedByAlice != transactionSignedByBob);
@@ -161,7 +161,7 @@ TEST_CASE("Public key streaming") {
 
 TEST_CASE_METHOD(SampleUsers, "Signature streaming") {
   GIVEN("a signed transaction") {
-    auto signedTransaction = Transaction{alice, bob};
+    auto signedTransaction = Transfer{alice, bob};
     authAlice.sign(signedTransaction);
     const auto originalSignature = signedTransaction.m_signature;
 
@@ -229,7 +229,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
       }
 
       WHEN("it has a transaction with a different signature") {
-        auto signedTransaction = Transaction{government, alice};
+        auto signedTransaction = Transfer{government, alice};
         authAlice.sign(signedTransaction);
         coin.addTransaction(signedTransaction);
 
@@ -257,8 +257,8 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
 TEST_CASE_METHOD(SampleUsers,
                  "Signatures are based on the underlying transaction") {
   GIVEN("Two transactions with different senders") {
-    auto fromAlice = Transaction{alice, charlie};
-    auto fromBob = Transaction{bob, charlie};
+    auto fromAlice = Transfer{alice, charlie};
+    auto fromBob = Transfer{bob, charlie};
 
     WHEN("Alice signs both") {
       authAlice.sign(fromAlice);
@@ -270,8 +270,8 @@ TEST_CASE_METHOD(SampleUsers,
     }
   }
   GIVEN("Two transactions with different recipients") {
-    auto toAlice = Transaction{alice, bob};
-    auto toCharlie = Transaction{alice, charlie};
+    auto toAlice = Transfer{alice, bob};
+    auto toCharlie = Transfer{alice, charlie};
 
     WHEN("Alice signs both") {
       authAlice.sign(toAlice);

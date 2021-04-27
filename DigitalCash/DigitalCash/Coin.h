@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Transaction.h"
+#include "Transfer.h"
 
 class Coin {
  public:
@@ -16,7 +16,7 @@ class Coin {
   bool operator==(const Coin &rhs) const;
   bool operator!=(const Coin &rhs) const { return !(*this == rhs); }
 
-  void addTransaction(const Transaction &txn) { m_transactions.push_back(txn); }
+  void addTransaction(const Transfer &txn) { m_transfers.push_back(txn); }
 
   bool isValid() const;
   /**/ bool coinWasIssuedByTheGovernment() const;
@@ -24,7 +24,7 @@ class Coin {
   /**/ bool eachSpenderWasTheOwner() const;
 
  private:
-  std::vector<Transaction> m_transactions;
+  std::vector<Transfer> m_transfers;
 
   Coin() = default;                         // CreateEmptyForTesting
   Coin(const std::string &serialisedCoin);  // CreateByDeserialising

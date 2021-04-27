@@ -21,9 +21,6 @@
     <ClCompile Include="Coin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Transaction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UserWithSigningAuthority.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -627,12 +624,12 @@
     <ClCompile Include="Signature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Transfer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Transaction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UserWithSigningAuthority.h">
@@ -1218,6 +1215,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Signature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transfer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

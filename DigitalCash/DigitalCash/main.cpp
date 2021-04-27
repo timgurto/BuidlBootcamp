@@ -39,7 +39,7 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
   auto newCoin = Coin{};
 
   GIVEN("a freshly issued coin from the government to Alice") {
-    newCoin = Coin::IssueTo(alice);
+    newCoin = Coin::CreateByIssuingTo(alice);
 
     THEN("the coin is valid") { CHECK(newCoin.isValid()); }
 
@@ -76,6 +76,7 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
 
   GIVEN("an invalidly signed issuance") {
     newCoin.addTransaction({UserWithSigningAuthority::weakGovernment(), alice});
+
     THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
   }
 
@@ -186,7 +187,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
   SECTION("functions exist") {
     auto emptyCoin = Coin{};
     auto serialised = emptyCoin.serialise();
-    Coin::Deserialise(serialised);
+    Coin::CreateByDeserialising(serialised);
   }
 
   SECTION("Const operation") {
@@ -203,7 +204,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
         THEN("the coin matches after being serialised and deserialised") {
           const auto &original = coin;
           const auto serialised = original.serialise();
-          const auto deserialised = Coin::Deserialise(serialised);
+          const auto deserialised = Coin::CreateByDeserialising(serialised);
 
           CHECK(original == deserialised);
         }

@@ -8,7 +8,7 @@ bool Coin::operator==(const Coin &rhs) const {
   return m_transactions == rhs.m_transactions;
 }
 
-Coin Coin::Deserialise(const std::string &serialisedCoin) {
+Coin Coin::CreateByDeserialising(const std::string &serialisedCoin) {
   return Coin{serialisedCoin};
 }
 
@@ -28,7 +28,7 @@ Coin::Coin(const PublicKey &issuee) {
   addTransaction(issuanceTransaction);
 }
 
-Coin Coin::IssueTo(const PublicKey &issuee) { return {issuee}; }
+Coin Coin::CreateByIssuingTo(const PublicKey &issuee) { return {issuee}; }
 
 void Coin::readAndAddTransaction(std::istringstream &serialisedCoin) {
   auto nextTransaction = Transaction::ReadFrom(serialisedCoin);

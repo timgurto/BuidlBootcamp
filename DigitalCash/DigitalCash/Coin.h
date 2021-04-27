@@ -8,9 +8,9 @@ class Coin {
  public:
   Coin() = default;
 
-  static Coin IssueTo(const PublicKey &issuee);
+  static Coin CreateByIssuingTo(const PublicKey &issuee);
 
-  static Coin Deserialise(const std::string &serialisedCoin);
+  static Coin CreateByDeserialising(const std::string &serialisedCoin);
   /**/ void readAndAddTransaction(std::istringstream &serialisedCoin);
 
   std::string serialise() const;

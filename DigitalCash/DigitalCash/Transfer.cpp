@@ -1,5 +1,7 @@
 #include "Transfer.h"
 
+#include "UserWithSigningAuthority.h"
+
 using namespace std::string_literals;
 
 Transfer::Transfer(const Transfer* previousTransfer, PublicKey receiver)
@@ -7,6 +9,8 @@ Transfer::Transfer(const Transfer* previousTransfer, PublicKey receiver)
   if (previousTransfer) {
     m_signatureOfPreviousTransfer = previousTransfer->m_signature;
     m_sender = previousTransfer->m_receiver;
+  } else {
+    m_sender = UserWithSigningAuthority::weakGovernment();
   }
 
   m_signature = Signature{"unsigned"s};

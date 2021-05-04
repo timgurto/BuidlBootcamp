@@ -19,6 +19,8 @@ class PublicKey {
   friend std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs);
   friend std::istream &operator>>(std::istream &lhs, PublicKey &rhs);
 
+  bool isEmpty() const { return m_isEmpty; }
+
   std::string toHexString() const;
   void fromHexString(const std::string &hexString);
 

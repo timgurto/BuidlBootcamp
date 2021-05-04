@@ -30,13 +30,13 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
     WHEN("Alice then passes it to Bob with her signature") {
       auto aliceToBob = Transfer{lastTransfer, bob};
       authAlice.sign(aliceToBob);
-      newCoin.addTransaction(aliceToBob);
+      newCoin.appendTransfer(aliceToBob);
 
       THEN("the coin is valid") { CHECK(newCoin.isValid()); }
     }
 
     WHEN("Alice then passes it to Bob without signing it") {
-      newCoin.addTransaction({lastTransfer, bob});
+      newCoin.appendTransfer({lastTransfer, bob});
       THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
     }
 
@@ -46,7 +46,7 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
           "signature") {
         auto bobToCharlie = Transfer{lastTransfer, charlie};
         authBob.sign(bobToCharlie);
-        newCoin.addTransaction(bobToCharlie);
+        newCoin.appendTransfer(bobToCharlie);
 
         THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
       }
@@ -54,12 +54,12 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
   }
 
   GIVEN("a coin issued from someone other than Government") {
-    newCoin.addTransaction(Transfer{nullptr, bob});
+    newCoin.appendTransfer(Transfer{nullptr, bob});
     THEN("the coin is invalid") { CHECK_FALSE(newCoin.isValid()); }
   }
 
   GIVEN("an invalidly signed issuance") {
-    newCoin.addTransaction({nullptr, alice});
+    newCoin.appendTransfer({nullptr, alice});
 
     THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
   }
@@ -85,12 +85,12 @@ TEST_CASE_METHOD(SampleUsers, "Coin equality") {
 
     WHEN("one has a transaction from Alice to Bob") {
       auto firstTransfer = Transfer{nullptr, bob};
-      a.addTransaction(firstTransfer);
+      a.appendTransfer(firstTransfer);
 
       THEN("they are unequal") { CHECK(a != b); }
 
       AND_WHEN("the other has a transaction from Bob to Alice") {
-        b.addTransaction({&firstTransfer, alice});
+        b.appendTransfer({&firstTransfer, alice});
 
         THEN("they are unequal") { CHECK(a != b); }
       }
@@ -196,13 +196,13 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
       };
 
       WHEN("it has a simple transaction") {
-        coin.addTransaction({nullptr, alice});
+        coin.appendTransfer({nullptr, alice});
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has a transaction with a different receiver") {
-        coin.addTransaction({nullptr, bob});
+        coin.appendTransfer({nullptr, bob});
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
@@ -210,31 +210,31 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
       WHEN("it has a transaction with a different signature") {
         auto signedTransaction = Transfer{nullptr, alice};
         authAlice.sign(signedTransaction);
-        coin.addTransaction(signedTransaction);
+        coin.appendTransfer(signedTransaction);
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has two transactions") {
         const auto firstTransfer = Transfer{nullptr, alice};
-        coin.addTransaction(firstTransfer);
-        coin.addTransaction({&firstTransfer, bob});
+        coin.appendTransfer(firstTransfer);
+        coin.appendTransfer({&firstTransfer, bob});
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has two transactions with a different sender for the second") {
         const auto firstTransfer = Transfer{nullptr, charlie};
-        coin.addTransaction(firstTransfer);
-        coin.addTransaction({&firstTransfer, bob});
+        coin.appendTransfer(firstTransfer);
+        coin.appendTransfer({&firstTransfer, bob});
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has three transactions") {
-        coin.addTransaction({nullptr, alice});
-        coin.addTransaction({nullptr, alice});
-        coin.addTransaction({nullptr, alice});
+        coin.appendTransfer({nullptr, alice});
+        coin.appendTransfer({nullptr, alice});
+        coin.appendTransfer({nullptr, alice});
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }

@@ -24,14 +24,14 @@ Coin::Coin(const std::string &serialisedCoin) {
 Coin::Coin(const PublicKey &issuee) {
   auto issuanceTransaction = Transfer(nullptr, issuee);
   UserWithSigningAuthority::authGovernment().sign(issuanceTransaction);
-  addTransaction(issuanceTransaction);
+  appendTransfer(issuanceTransaction);
 }
 
 Coin Coin::CreateByIssuingTo(const PublicKey &issuee) { return {issuee}; }
 
 void Coin::readAndAddTransaction(std::istringstream &serialisedCoin) {
   auto nextTransaction = Transfer::ReadFrom(serialisedCoin);
-  addTransaction(nextTransaction);
+  appendTransfer(nextTransaction);
 }
 
 std::string Coin::serialise() const {

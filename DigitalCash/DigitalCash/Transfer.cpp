@@ -4,14 +4,17 @@
 
 using namespace std::string_literals;
 
+static PublicKey getSenderFromPreviousTransfer(
+    const Transfer* previousTransfer) {
+  if (!previousTransfer) return UserWithSigningAuthority::weakGovernment();
+  return previousTransfer->m_receiver;
+}
+
 Transfer::Transfer(const Transfer* previousTransfer, PublicKey receiver)
-    : m_receiver(receiver), m_sender(PublicKey::ToBeReadInto()) {
-  if (previousTransfer) {
+    : m_receiver(receiver),
+      m_sender(getSenderFromPreviousTransfer(previousTransfer)) {
+  if (previousTransfer)
     m_signatureOfPreviousTransfer = previousTransfer->m_signature;
-    m_sender = previousTransfer->m_receiver;
-  } else {
-    m_sender = UserWithSigningAuthority::weakGovernment();
-  }
 
   m_signature = Signature{"unsigned"s};
 }

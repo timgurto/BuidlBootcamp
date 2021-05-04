@@ -8,7 +8,8 @@
 class Transfer {
  public:
   Transfer() = delete;
-  Transfer(PublicKey sender, PublicKey receiver);
+  Transfer(const Transfer* previousTransfer, PublicKey receiver);
+  static Transfer ReadFrom(std::istream& input);
 
   bool operator==(const Transfer& rhs) const;
   bool operator!=(const Transfer& rhs) const { return !(*this == rhs); }
@@ -17,10 +18,9 @@ class Transfer {
 
   using Message = std::string;
   Message generateMessage() const;
-
-  static Transfer ReadFrom(std::istream& input);
-
-  PublicKey m_sender;
+  PublicKey m_sender;  // Fetched from previous transaction in c'tor.  Required
+                       // to verify the signature.
+  Signature m_signatureOfPreviousTransfer;
   PublicKey m_receiver;
   Signature m_signature;
 

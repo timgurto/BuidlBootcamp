@@ -22,8 +22,7 @@ Coin::Coin(const std::string &serialisedCoin) {
 }
 
 Coin::Coin(const PublicKey &issuee) {
-  auto issuanceTransaction =
-      Transfer(UserWithSigningAuthority::weakGovernment(), issuee);
+  auto issuanceTransaction = Transfer(nullptr, issuee);
   UserWithSigningAuthority::authGovernment().sign(issuanceTransaction);
   addTransaction(issuanceTransaction);
 }
@@ -74,3 +73,5 @@ bool Coin::eachSpenderWasTheOwner() const {
 
   return true;
 }
+
+const Transfer *Coin::getLastTransfer() const { return &m_transfers.back(); }

@@ -15,6 +15,8 @@ Transfer::Transfer(const Transfer* previousTransfer, PublicKey receiver)
       m_sender(getSenderFromPreviousTransfer(previousTransfer)) {
   if (previousTransfer)
     m_signatureOfPreviousTransfer = previousTransfer->m_signature;
+  else
+    m_signatureOfPreviousTransfer = Signature{"no-previous-transfer"s};
 
   m_signature = Signature{"unsigned"s};
 }

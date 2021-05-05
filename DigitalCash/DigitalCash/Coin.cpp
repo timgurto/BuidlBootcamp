@@ -44,6 +44,8 @@ std::string Coin::serialise() const {
   return oss.str();
 }
 
+PublicKey Coin::currentOwner() const { return PublicKey::ToBeReadInto(); }
+
 bool Coin::isValid() const {
   return coinWasIssuedByTheGovernment() &&
          allTransactionsHaveValidSignatures() && eachSpenderWasTheOwner();

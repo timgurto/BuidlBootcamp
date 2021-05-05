@@ -279,7 +279,9 @@ TEST_CASE_METHOD(SampleUsers, "Querying a coin's current owner") {
   GIVEN("a coin issued to Alice") {
     auto coin = Coin::CreateByIssuingTo(alice);
 
-    THEN("its current owner can be queried") { coin.currentOwner(); }
+    THEN("its current owner can be queried and is a public key") {
+      coin.currentOwner() == alice;
+    }
   }
 
   SECTION("function is const") {

@@ -18,6 +18,8 @@ class Coin {
 
   void appendTransfer(const Transfer &txn) { m_transfers.push_back(txn); }
 
+  void currentOwner() {}
+
   bool isValid() const;
   /**/ bool coinWasIssuedByTheGovernment() const;
   /**/ bool allTransactionsHaveValidSignatures() const;

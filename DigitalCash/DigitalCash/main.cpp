@@ -275,6 +275,10 @@ TEST_CASE_METHOD(SampleUsers,
   }
 }
 
-// TODO
-// Message = previous signature and next recipient (public key)
-// Function to get current owner of coin
+TEST_CASE_METHOD(SampleUsers, "Querying a coin's current owner") {
+  GIVEN("a coin issued to Alice") {
+    auto coin = Coin::CreateByIssuingTo(alice);
+
+    THEN("the current owner can be queried") { coin.currentOwner(); }
+  }
+}

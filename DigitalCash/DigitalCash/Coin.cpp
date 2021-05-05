@@ -45,8 +45,8 @@ std::string Coin::serialise() const {
 }
 
 PublicKey Coin::currentOwner() const {
-  const auto firstTransfer = m_transfers.front();
-  return firstTransfer.m_receiver;
+  const auto lastTransfer = m_transfers.back();
+  return lastTransfer.m_receiver;
 }
 
 bool Coin::isValid() const {

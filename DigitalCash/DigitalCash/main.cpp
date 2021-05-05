@@ -280,6 +280,12 @@ TEST_CASE_METHOD(SampleUsers, "Querying a coin's current owner") {
     auto coin = Coin::CreateByIssuingTo(alice);
 
     THEN("it is owned by Alice") { CHECK(coin.currentOwner() == alice); }
+
+    WHEN("Alice gives it to Bob") {
+      coin.appendTransfer({coin.getLastTransfer(), bob});
+
+      THEN("it is owned by Bob") { CHECK(coin.currentOwner() == bob); }
+    }
   }
 
   SECTION("function is const") {

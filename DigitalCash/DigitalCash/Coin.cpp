@@ -44,7 +44,10 @@ std::string Coin::serialise() const {
   return oss.str();
 }
 
-PublicKey Coin::currentOwner() const { return PublicKey::ToBeReadInto(); }
+PublicKey Coin::currentOwner() const {
+  const auto firstTransfer = m_transfers.front();
+  return firstTransfer.m_receiver;
+}
 
 bool Coin::isValid() const {
   return coinWasIssuedByTheGovernment() &&

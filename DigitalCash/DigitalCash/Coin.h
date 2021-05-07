@@ -15,6 +15,7 @@ class Coin {
 
   bool operator==(const Coin &rhs) const;
   bool operator!=(const Coin &rhs) const { return !(*this == rhs); }
+  bool operator<(const Coin &rhs) const { return this < &rhs; }
 
   void appendTransfer(const Transfer &txn) { m_transfers.push_back(txn); }
 

@@ -1,5 +1,6 @@
 #define CATCH_CONFIG_MAIN
 
+#include "Bank.h"
 #include "Coin.h"
 #include "Transfer.h"
 #include "UserWithSigningAuthority.h"
@@ -296,3 +297,27 @@ TEST_CASE_METHOD(SampleUsers, "Querying a coin's current owner") {
     }
   }
 }
+
+TEST_CASE_METHOD(SampleUsers, "Bank control") {
+  GIVEN("a bank") {
+    auto bank = Bank{};
+
+    AND_GIVEN("it issues a coin to Alice") {
+      bank.issueTo(alice);
+
+      THEN("she has a coin") {
+        auto alicesCoins = bank.coinsOwnedBy(alice);
+        REQUIRE(alicesCoins.size() == 1);
+
+        AND_THEN("it is valid") {
+          const auto coin = *alicesCoins.begin();
+          CHECK(coin.isValid());
+        }
+      }
+    }
+  }
+}
+
+// Bank::issueTo(key)
+// Bank::coinsOwnedBy(key): return list
+// Bank::observe(coin): update official version

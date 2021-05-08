@@ -7,10 +7,8 @@
 
 class Bank {
  public:
-  void issueTo(PublicKey receiver) {
-    m_coins = {Coin::CreateEmptyForTesting()};
-  }
-  std::set<Coin> coinsOwnedBy(PublicKey owner) const { return {m_coins}; }
+  void issueTo(PublicKey receiver);
+  std::set<Coin> coinsOwnedBy(PublicKey owner) const;
 
  private:
   std::set<Coin> m_coins;

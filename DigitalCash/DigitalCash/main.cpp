@@ -321,6 +321,11 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
       }
     }
   }
+
+  SECTION("const-ness ") {
+    const auto constBank = Bank{};
+    constBank.coinsOwnedBy(alice);
+  }
 }
 
 // Bank::issueTo(key)

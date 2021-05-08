@@ -302,6 +302,11 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
   GIVEN("a bank") {
     auto bank = Bank{};
 
+    THEN("Alice has no coins") {
+      auto alicesCoins = bank.coinsOwnedBy(alice);
+      REQUIRE(alicesCoins.empty());
+    }
+
     AND_GIVEN("it issues a coin to Alice") {
       bank.issueTo(alice);
 

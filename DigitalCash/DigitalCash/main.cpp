@@ -320,12 +320,25 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
         }
       }
 
-      AND_WHEN("it issues a coin to Bob") {
-        bank.issueTo(bob);
+      SECTION("Multiple owners") {
+        AND_WHEN("it issues a coin to Bob") {
+          bank.issueTo(bob);
 
-        THEN("Alice still has a coin") {
-          auto alicesCoins = bank.coinsOwnedBy(alice);
-          REQUIRE(alicesCoins.size() == 1);
+          THEN("Alice still has a coin") {
+            auto alicesCoins = bank.coinsOwnedBy(alice);
+            REQUIRE(alicesCoins.size() == 1);
+          }
+        }
+      }
+
+      SECTION("Multiple coins per owner") {
+        AND_WHEN("it issues another coin to Alice") {
+          bank.issueTo(alice);
+
+          THEN("Alice has two coins") {
+            auto alicesCoins = bank.coinsOwnedBy(alice);
+            REQUIRE(alicesCoins.size() == 2);
+          }
         }
       }
     }

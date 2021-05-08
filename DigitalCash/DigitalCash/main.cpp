@@ -310,7 +310,7 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
     AND_GIVEN("it issues a coin to Alice") {
       bank.issueTo(alice);
 
-      THEN("she has a coin") {
+      THEN("Alice has a coin") {
         auto alicesCoins = bank.coinsOwnedBy(alice);
         REQUIRE(alicesCoins.size() == 1);
 
@@ -318,6 +318,15 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
           const auto coin = *alicesCoins.begin();
           CHECK(coin.isValid());
         }
+      }
+    }
+
+    AND_GIVEN("it issues a coin to Bob") {
+      bank.issueTo(bob);
+
+      THEN("Alice has coins") {
+        auto alicesCoins = bank.coinsOwnedBy(alice);
+        REQUIRE(alicesCoins.empty());
       }
     }
   }

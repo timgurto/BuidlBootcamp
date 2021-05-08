@@ -307,7 +307,7 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
       REQUIRE(alicesCoins.empty());
     }
 
-    AND_GIVEN("it issues a coin to Alice") {
+    WHEN("it issues a coin to Alice") {
       bank.issueTo(alice);
 
       THEN("Alice has a coin") {
@@ -319,9 +319,18 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
           CHECK(coin.isValid());
         }
       }
+
+      AND_WHEN("it issues a coin to Bob") {
+        bank.issueTo(bob);
+
+        THEN("Alice still has a coin") {
+          auto alicesCoins = bank.coinsOwnedBy(alice);
+          REQUIRE(alicesCoins.size() == 1);
+        }
+      }
     }
 
-    AND_GIVEN("it issues a coin to Bob") {
+    WHEN("it issues a coin to Bob") {
       bank.issueTo(bob);
 
       THEN("Alice has coins") {

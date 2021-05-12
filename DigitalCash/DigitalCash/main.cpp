@@ -318,6 +318,23 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
           const auto coin = *alicesCoins.begin();
           CHECK(coin.isValid());
         }
+
+        AND_WHEN("Alice appends a transfer to Bob") {
+          auto alicesCopy = *alicesCoins.begin();
+
+          auto newTransfer = Transfer{alicesCopy.getLastTransfer(), bob};
+          authAlice.sign(newTransfer);
+          alicesCopy.appendTransfer(newTransfer);
+
+          AND_WHEN("the bank observes this new coin") {
+            bank.observe(alicesCopy);
+
+            THEN("Bob has a coin") {
+              auto bobsCoins = bank.coinsOwnedBy(bob);
+              REQUIRE(bobsCoins.size() == 1);
+            }
+          }
+        }
       }
 
       SECTION("Multiple owners") {
@@ -346,7 +363,7 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
     WHEN("it issues a coin to Bob") {
       bank.issueTo(bob);
 
-      THEN("Alice has coins") {
+      THEN("Alice has no coins") {
         auto alicesCoins = bank.coinsOwnedBy(alice);
         REQUIRE(alicesCoins.empty());
       }
@@ -359,6 +376,4 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
   }
 }
 
-// Bank::issueTo(key)
-// Bank::coinsOwnedBy(key): return list
-// Bank::observe(coin): update official version
+// Try observing a coin that has an unsigned transfer

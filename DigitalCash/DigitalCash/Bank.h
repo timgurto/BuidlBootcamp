@@ -9,6 +9,7 @@ class Bank {
  public:
   void issueTo(PublicKey receiver);
   std::set<Coin> coinsOwnedBy(PublicKey owner) const;
+  void observe(Coin toBeUpdated);
 
  private:
   std::set<Coin> m_coins;

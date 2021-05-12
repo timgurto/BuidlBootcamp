@@ -13,5 +13,6 @@ std::set<Coin> Bank::coinsOwnedBy(PublicKey owner) const {
 }
 
 void Bank::observe(Coin toBeUpdated) {
-  m_coins.insert({Coin::CreateByIssuingTo(toBeUpdated.currentOwner())});
+  m_coins.erase(toBeUpdated);
+  m_coins.insert(toBeUpdated);
 }

@@ -4,6 +4,8 @@
 
 #include "UserWithSigningAuthority.h"
 
+int Coin::nextSerialToBeIssued;
+
 bool Coin::operator==(const Coin &rhs) const {
   return m_transfers == rhs.m_transfers;
 }
@@ -25,6 +27,8 @@ Coin::Coin(const PublicKey &issuee) {
   auto issuanceTransaction = Transfer(nullptr, issuee);
   UserWithSigningAuthority::authGovernment().sign(issuanceTransaction);
   appendTransfer(issuanceTransaction);
+
+  m_serial = nextSerialToBeIssued++;
 }
 
 Coin Coin::CreateByIssuingTo(const PublicKey &issuee) { return {issuee}; }

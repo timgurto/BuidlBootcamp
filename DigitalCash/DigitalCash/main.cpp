@@ -333,6 +333,15 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
               auto bobsCoins = bank.coinsOwnedBy(bob);
               REQUIRE(bobsCoins.size() == 1);
             }
+
+            AND_WHEN("the bank observes this same coin again") {
+              bank.observe(alicesCopy);
+
+              THEN("Bob still has only one coin") {
+                auto bobsCoins = bank.coinsOwnedBy(bob);
+                REQUIRE(bobsCoins.size() == 1);
+              }
+            }
           }
         }
       }
@@ -377,3 +386,5 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
 }
 
 // Try observing a coin that has an unsigned transfer
+// Equality should include serial numbers
+// Serialise serial numbers

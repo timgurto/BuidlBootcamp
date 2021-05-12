@@ -15,7 +15,7 @@ class Coin {
 
   bool operator==(const Coin &rhs) const;
   bool operator!=(const Coin &rhs) const { return !(*this == rhs); }
-  bool operator<(const Coin &rhs) const { return this < &rhs; }
+  bool operator<(const Coin &rhs) const { return m_serial < rhs.m_serial; }
 
   void appendTransfer(const Transfer &txn) { m_transfers.push_back(txn); }
 
@@ -30,6 +30,9 @@ class Coin {
 
  private:
   std::vector<Transfer> m_transfers;
+
+  int m_serial;
+  static int nextSerialToBeIssued;
 
   Coin() = default;                         // CreateEmptyForTesting
   Coin(const std::string &serialisedCoin);  // CreateByDeserialising

@@ -344,6 +344,22 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
             }
           }
         }
+
+        AND_WHEN("Alice appends an unsigned transfer to Bob") {
+          auto alicesCopy = *alicesCoins.begin();
+
+          auto newTransfer = Transfer{alicesCopy.getLastTransfer(), bob};
+          alicesCopy.appendTransfer(newTransfer);
+
+          AND_WHEN("the bank observes this new coin") {
+            bank.observe(alicesCopy);
+
+            THEN("Bob still has no coins") {
+              auto bobsCoins = bank.coinsOwnedBy(bob);
+              REQUIRE(bobsCoins.size() == 0);
+            }
+          }
+        }
       }
 
       SECTION("Multiple owners") {
@@ -385,6 +401,5 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
   }
 }
 
-// Try observing a coin that has an unsigned transfer
 // Equality should include serial numbers
 // Serialise serial numbers

@@ -416,26 +416,19 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
   }
 }
 
-/*TEST_CASE_METHOD(SampleUsers, "Serial numbers are serialised") {
-  GIVEN("a bank issues a coin to Alice") {
+TEST_CASE_METHOD(SampleUsers, "Serial numbers are serialised") {
+  GIVEN("two coins issued by a bank to Alice") {
     auto bank = Bank{};
-    bank.issueTo(alice);
-    const auto coin = *bank.coinsOwnedBy(alice).begin();
+    auto coin1 = Coin::CreateByIssuing(Transfer::Issuance(bank, alice));
+    auto coin2 = Coin::CreateByIssuing(Transfer::Issuance(bank, alice));
 
-    AND_GIVEN("a copy is made by serialising and deserialising it") {
-      auto serialised = coin.serialise();
-      auto copy = Coin::CreateByDeserialising(serialised);
+    WHEN("they are serialised and deserialised") {
+      auto coin1Processed = Coin::CreateByDeserialising(coin1.serialise());
+      auto coin2Processed = Coin::CreateByDeserialising(coin2.serialise());
 
-      WHEN("the bank observes this copied coin") {
-        bank.observe(copy);
-
-        THEN("alice still owns only one coin") {
-          auto alicesCoins = bank.coinsOwnedBy(alice);
-          REQUIRE(alicesCoins.size() == 1);
-        }
-      }
+      THEN("they are unequal") { CHECK(coin1Processed != coin2Processed); }
     }
   }
-}*/
+}
 
 // Transfer senders are serialised

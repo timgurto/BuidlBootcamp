@@ -7,6 +7,7 @@
 int Coin::nextSerialToBeIssued;
 
 bool Coin::operator==(const Coin &rhs) const {
+  if (m_serial != rhs.m_serial) return false;
   return m_transfers == rhs.m_transfers;
 }
 
@@ -18,7 +19,7 @@ Coin::Coin(const std::string &serialisedCoin) {
   auto numTransactions = 0;
 
   auto iss = std::istringstream{serialisedCoin};
-  iss >> numTransactions;
+  iss >> m_serial >> numTransactions;
 
   for (auto i = 0; i != numTransactions; ++i) readAndAddTransaction(iss);
 }
@@ -39,7 +40,7 @@ void Coin::readAndAddTransaction(std::istringstream &serialisedCoin) {
 std::string Coin::serialise() const {
   auto oss = std::ostringstream{};
 
-  oss << m_transfers.size() << std::endl;
+  oss << m_serial << std::endl << m_transfers.size() << std::endl;
 
   for (const auto &transaction : m_transfers) oss << transaction << std::endl;
 

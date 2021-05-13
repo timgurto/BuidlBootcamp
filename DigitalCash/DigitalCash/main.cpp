@@ -24,7 +24,7 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
     auto bank = Bank{};
     bank.issueTo(alice);
     auto newCoin = *bank.coinsOwnedBy(alice).begin();
-    const auto *lastTransfer = newCoin.getLastTransfer();
+    const auto &lastTransfer = newCoin.getLastTransfer();
 
     THEN("the coin is valid") { CHECK(bank.isCoinValid(newCoin)); }
 
@@ -91,14 +91,14 @@ TEST_CASE_METHOD(SampleUsers, "Coin equality") {
     auto b = a;
 
     WHEN("one has a transfer to Bob") {
-      a.appendTransfer({&issuanceTransfer, bob});
+      a.appendTransfer({issuanceTransfer, bob});
 
       THEN("they are unequal") {
         CHECK(a != b);
 
         SECTION("the transfers are compared, not just counted") {
           AND_WHEN("the other has a transfer to Charlie") {
-            b.appendTransfer({&issuanceTransfer, charlie});
+            b.appendTransfer({issuanceTransfer, charlie});
 
             THEN("they are still unequal") { CHECK(a != b); }
           }
@@ -229,7 +229,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
       WHEN("it has two transfers") {
         const auto firstTransfer = Transfer::Issuance(Bank{}, alice);
         coin.appendTransfer(firstTransfer);
-        coin.appendTransfer({&firstTransfer, bob});
+        coin.appendTransfer({firstTransfer, bob});
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
@@ -237,7 +237,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
       WHEN("it has two transfers with a different sender for the second") {
         const auto firstTransfer = Transfer::Issuance(Bank{}, charlie);
         coin.appendTransfer(firstTransfer);
-        coin.appendTransfer({&firstTransfer, bob});
+        coin.appendTransfer({firstTransfer, bob});
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
@@ -262,8 +262,8 @@ TEST_CASE_METHOD(SampleUsers,
     auto toAlice = Transfer::Issuance(bank, alice);
     auto toBob = Transfer::Issuance(bank, bob);
 
-    auto fromAlice = Transfer{&toAlice, charlie};
-    auto fromBob = Transfer{&toBob, charlie};
+    auto fromAlice = Transfer{toAlice, charlie};
+    auto fromBob = Transfer{toBob, charlie};
 
     WHEN("Alice signs both") {
       authAlice.sign(fromAlice);

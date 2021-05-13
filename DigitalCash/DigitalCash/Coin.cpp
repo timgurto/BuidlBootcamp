@@ -76,4 +76,4 @@ bool Coin::eachSpenderWasTheOwner() const {
   return true;
 }
 
-const Transfer *Coin::getLastTransfer() const { return &m_transfers.back(); }
+const Transfer &Coin::getLastTransfer() const { return m_transfers.back(); }

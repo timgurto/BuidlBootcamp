@@ -6,20 +6,15 @@
 using namespace std::string_literals;
 
 static PublicKey getSenderFromPreviousTransfer(
-    const Transfer* previousTransfer) {
-  return previousTransfer->m_receiver;
+    const Transfer& previousTransfer) {
+  return previousTransfer.m_receiver;
 }
 
-Transfer::Transfer(const Transfer* previousTransfer, PublicKey receiver)
+Transfer::Transfer(const Transfer& previousTransfer, PublicKey receiver)
     : m_receiver(receiver),
-      m_sender(getSenderFromPreviousTransfer(previousTransfer)) {
-  if (previousTransfer)
-    m_signatureOfPreviousTransfer = previousTransfer->m_signature;
-  else
-    m_signatureOfPreviousTransfer = Signature{"no-previous-transfer"s};
-
-  m_signature = Signature{"unsigned"s};
-}
+      m_sender(getSenderFromPreviousTransfer(previousTransfer)),
+      m_signatureOfPreviousTransfer(previousTransfer.m_signature),
+      m_signature(Signature{"unsigned"s}) {}
 
 Transfer Transfer::ReadFrom(std::istream& input) { return {input}; }
 

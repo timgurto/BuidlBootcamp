@@ -10,7 +10,7 @@ class Bank;
 class Transfer {
  public:
   Transfer() = delete;
-  Transfer(const Transfer* previousTransfer, PublicKey receiver);
+  Transfer(const Transfer& previousTransfer, PublicKey receiver);
 
   static Transfer ReadFrom(std::istream& input);
   static Transfer Issuance(const Bank& bank, PublicKey receiver);

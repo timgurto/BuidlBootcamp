@@ -26,7 +26,7 @@ class Coin {
   bool allTransactionsHaveValidSignatures() const;
   bool eachSpenderWasTheOwner() const;
 
-  const Transfer *getLastTransfer() const;
+  const Transfer &getLastTransfer() const;
 
  private:
   std::vector<Transfer> m_transfers;

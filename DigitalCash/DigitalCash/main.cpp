@@ -20,25 +20,25 @@ struct SampleUsers {
 };
 
 TEST_CASE_METHOD(SampleUsers, "Coin validity") {
-  auto newCoin = Coin::CreateEmptyForTesting();
-
   GIVEN("a freshly issued coin from the government to Alice") {
-    newCoin = Coin::CreateByIssuingTo(alice);
+    auto bank = Bank{};
+    bank.issueTo(alice);
+    auto newCoin = *bank.coinsOwnedBy(alice).begin();
     const auto *lastTransfer = newCoin.getLastTransfer();
 
-    THEN("the coin is valid") { CHECK(newCoin.isValid()); }
+    THEN("the coin is valid") { CHECK(bank.isCoinValid(newCoin)); }
 
     WHEN("Alice then passes it to Bob with her signature") {
-      auto aliceToBob = Transfer{lastTransfer, bob};
+      auto aliceToBob = Transfer{newCoin.getLastTransfer(), bob};
       authAlice.sign(aliceToBob);
       newCoin.appendTransfer(aliceToBob);
 
-      THEN("the coin is valid") { CHECK(newCoin.isValid()); }
+      THEN("the coin is valid") { CHECK(bank.isCoinValid(newCoin)); }
     }
 
     WHEN("Alice then passes it to Bob without signing it") {
       newCoin.appendTransfer({lastTransfer, bob});
-      THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
+      THEN("the coin is not valid") { CHECK_FALSE(bank.isCoinValid(newCoin)); }
     }
 
     SECTION("Each sender is the previous receiver") {
@@ -49,29 +49,34 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
         authBob.sign(bobToCharlie);
         newCoin.appendTransfer(bobToCharlie);
 
-        THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
+        THEN("the coin is not valid") {
+          CHECK_FALSE(bank.isCoinValid(newCoin));
+        }
       }
     }
   }
 
   GIVEN("a coin issued from someone other than Government") {
+    auto newCoin = Coin::CreateEmptyForTesting();
     newCoin.appendTransfer(Transfer{nullptr, bob});
-    THEN("the coin is invalid") { CHECK_FALSE(newCoin.isValid()); }
+    THEN("the coin is invalid") { CHECK_FALSE(Bank{}.isCoinValid(newCoin)); }
   }
 
   GIVEN("an invalidly signed issuance") {
+    auto newCoin = Coin::CreateEmptyForTesting();
     newCoin.appendTransfer({nullptr, alice});
 
-    THEN("the coin is not valid") { CHECK_FALSE(newCoin.isValid()); }
+    THEN("the coin is not valid") { CHECK_FALSE(Bank{}.isCoinValid(newCoin)); }
   }
 
   SECTION("An empty coin doesn't crash, and is valid") {
-    CHECK(newCoin.isValid());
+    auto newCoin = Coin::CreateEmptyForTesting();
+    CHECK(Bank{}.isCoinValid(newCoin));
   }
 
   SECTION("Coin validation is a const operation") {
     const auto constCoin = Coin::CreateEmptyForTesting();
-    constCoin.isValid();
+    CHECK(Bank{}.isCoinValid(constCoin));
   }
 }
 
@@ -316,7 +321,7 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
 
         AND_THEN("it is valid") {
           const auto coin = *alicesCoins.begin();
-          CHECK(coin.isValid());
+          CHECK(bank.isCoinValid(coin));
         }
 
         AND_WHEN("Alice appends a transfer to Bob") {
@@ -401,5 +406,24 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
   }
 }
 
-// Equality should include serial numbers
-// Serialise serial numbers
+/*TEST_CASE_METHOD(SampleUsers, "Serial numbers are serialised") {
+  GIVEN("a bank issues a coin to Alice") {
+    auto bank = Bank{};
+    bank.issueTo(alice);
+    const auto coin = *bank.coinsOwnedBy(alice).begin();
+
+    AND_GIVEN("a copy is made by serialising and deserialising it") {
+      auto serialised = coin.serialise();
+      auto copy = Coin::CreateByDeserialising(serialised);
+
+      WHEN("the bank observes this copied coin") {
+        bank.observe(copy);
+
+        THEN("alice still owns only one coin") {
+          auto alicesCoins = bank.coinsOwnedBy(alice);
+          REQUIRE(alicesCoins.size() == 1);
+        }
+      }
+    }
+  }
+}*/

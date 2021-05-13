@@ -53,17 +53,10 @@ PublicKey Coin::currentOwner() const {
   return lastTransfer.m_receiver;
 }
 
-bool Coin::isValid() const {
-  return coinWasIssuedByTheGovernment() &&
-         allTransactionsHaveValidSignatures() && eachSpenderWasTheOwner();
-}
+PublicKey Coin::issuer() const {
+  if (m_transfers.empty()) return PublicKey::ToBeReadInto();
 
-bool Coin::coinWasIssuedByTheGovernment() const {
-  if (m_transfers.empty()) return true;
-
-  const auto issuer = m_transfers.front().m_sender;
-  const auto expectedIssuer = UserWithSigningAuthority::weakGovernment();
-  return issuer == expectedIssuer;
+  return m_transfers.front().m_sender;
 }
 
 bool Coin::allTransactionsHaveValidSignatures() const {

@@ -10,6 +10,8 @@ class Bank {
   void issueTo(PublicKey receiver);
   std::set<Coin> coinsOwnedBy(PublicKey owner) const;
   void observe(Coin toBeUpdated);
+  bool isCoinValid(Coin coin) const;
+  /**/ bool coinWasIssuedByTheGovernment(Coin coin) const;
 
  private:
   std::set<Coin> m_coins;

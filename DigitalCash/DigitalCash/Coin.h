@@ -21,10 +21,10 @@ class Coin {
 
   PublicKey currentOwner() const;
 
-  bool isValid() const;
-  /**/ bool coinWasIssuedByTheGovernment() const;
-  /**/ bool allTransactionsHaveValidSignatures() const;
-  /**/ bool eachSpenderWasTheOwner() const;
+  bool isEmpty() const { return m_transfers.empty(); }
+  PublicKey issuer() const;
+  bool allTransactionsHaveValidSignatures() const;
+  bool eachSpenderWasTheOwner() const;
 
   const Transfer *getLastTransfer() const;
 

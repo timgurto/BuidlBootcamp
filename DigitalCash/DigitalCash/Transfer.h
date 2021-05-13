@@ -5,11 +5,15 @@
 
 #include "PublicKey.h"
 
+class Bank;
+
 class Transfer {
  public:
   Transfer() = delete;
   Transfer(const Transfer* previousTransfer, PublicKey receiver);
+
   static Transfer ReadFrom(std::istream& input);
+  static Transfer Issuance(const Bank& bank, PublicKey receiver);
 
   bool operator==(const Transfer& rhs) const;
   bool operator!=(const Transfer& rhs) const { return !(*this == rhs); }
@@ -25,7 +29,8 @@ class Transfer {
   Signature m_signature;
 
  private:
-  Transfer(std::istream& input);  // Used by ReadFrom()
+  Transfer(std::istream& input);                   // Used by ReadFrom()
+  Transfer(const Bank& bank, PublicKey receiver);  // Issuance()
 };
 
 std::istream& operator>>(std::istream& lhs, Transfer& rhs);

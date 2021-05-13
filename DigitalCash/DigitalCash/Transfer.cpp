@@ -1,12 +1,12 @@
 #include "Transfer.h"
 
+#include "Bank.h"
 #include "UserWithSigningAuthority.h"
 
 using namespace std::string_literals;
 
 static PublicKey getSenderFromPreviousTransfer(
     const Transfer* previousTransfer) {
-  if (!previousTransfer) return UserWithSigningAuthority::weakGovernment();
   return previousTransfer->m_receiver;
 }
 
@@ -28,6 +28,16 @@ Transfer::Transfer(std::istream& input)
       m_sender(PublicKey::ToBeReadInto()) {
   input >> *this;
 }
+
+Transfer Transfer::Issuance(const Bank& bank, PublicKey receiver) {
+  return {bank, receiver};
+}
+
+Transfer::Transfer(const Bank& bank, PublicKey receiver)
+    : m_receiver(receiver),
+      m_sender(bank.getPublicKey()),
+      m_signatureOfPreviousTransfer(Signature{"no-previous-transfer"s}),
+      m_signature(Signature{"unsigned"s}) {}
 
 bool Transfer::operator==(const Transfer& rhs) const {
   if (m_signatureOfPreviousTransfer != rhs.m_signatureOfPreviousTransfer)

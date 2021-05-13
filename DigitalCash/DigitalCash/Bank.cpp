@@ -3,7 +3,10 @@
 #include "UserWithSigningAuthority.h"
 
 void Bank::issueTo(PublicKey receiver) {
-  m_coins.insert({Coin::CreateByIssuingTo(receiver)});
+  auto transfer = Transfer::Issuance(*this, receiver);
+  m_keys.sign(transfer);
+  auto newCoin = Coin::CreateByIssuing(transfer);
+  m_coins.insert(newCoin);
 }
 
 std::set<Coin> Bank::coinsOwnedBy(PublicKey owner) const {
@@ -24,12 +27,12 @@ void Bank::observe(Coin toBeUpdated) {
 bool Bank::isCoinValid(Coin coin) const {
   if (coin.isEmpty()) return true;
 
-  return coinWasIssuedByTheGovernment(coin) &&
+  return coinWasIssuedByThisBank(coin) &&
          coin.allTransactionsHaveValidSignatures() &&
          coin.eachSpenderWasTheOwner();
 }
 
-bool Bank::coinWasIssuedByTheGovernment(Coin coin) const {
-  const auto expectedIssuer = UserWithSigningAuthority::weakGovernment();
-  return coin.issuer() == expectedIssuer;
+bool Bank::coinWasIssuedByThisBank(Coin coin) const {
+  const auto bankPublicKey = m_keys.getWeakVersion();
+  return coin.issuer() == bankPublicKey;
 }

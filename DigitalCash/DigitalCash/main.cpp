@@ -56,15 +56,10 @@ TEST_CASE_METHOD(SampleUsers, "Coin validity") {
     }
   }
 
-  GIVEN("a coin issued from someone other than Government") {
-    auto newCoin = Coin::CreateEmptyForTesting();
-    newCoin.appendTransfer(Transfer{nullptr, bob});
-    THEN("the coin is invalid") { CHECK_FALSE(Bank{}.isCoinValid(newCoin)); }
-  }
-
   GIVEN("an invalidly signed issuance") {
-    auto newCoin = Coin::CreateEmptyForTesting();
-    newCoin.appendTransfer({nullptr, alice});
+    auto bank = Bank{};
+    const auto unsignedIssuance = Transfer::Issuance(bank, alice);
+    auto newCoin = Coin::CreateByIssuing(unsignedIssuance);
 
     THEN("the coin is not valid") { CHECK_FALSE(Bank{}.isCoinValid(newCoin)); }
   }
@@ -88,37 +83,48 @@ TEST_CASE_METHOD(SampleUsers, "Coin equality") {
       CHECK(a == b);
       CHECK_FALSE(a != b);
     }
+  }
 
-    WHEN("one has a transaction from Alice to Bob") {
-      auto firstTransfer = Transfer{nullptr, bob};
-      a.appendTransfer(firstTransfer);
+  GIVEN("a coin issued to Alice, and a copy of it") {
+    const auto issuanceTransfer = Transfer::Issuance(Bank{}, alice);
+    auto a = Coin::CreateByIssuing(issuanceTransfer);
+    auto b = a;
 
-      THEN("they are unequal") { CHECK(a != b); }
+    WHEN("one has a transfer to Bob") {
+      a.appendTransfer({&issuanceTransfer, bob});
 
-      AND_WHEN("the other has a transaction from Bob to Alice") {
-        b.appendTransfer({&firstTransfer, alice});
+      THEN("they are unequal") {
+        CHECK(a != b);
 
-        THEN("they are unequal") { CHECK(a != b); }
+        SECTION("the transfers are compared, not just counted") {
+          AND_WHEN("the other has a transfer to Charlie") {
+            b.appendTransfer({&issuanceTransfer, charlie});
+
+            THEN("they are still unequal") { CHECK(a != b); }
+          }
+        }
       }
     }
   }
 }
 
 TEST_CASE_METHOD(SampleUsers, "Transaction equality") {
+  auto bank = Bank{};
+
   SECTION("Equality operators") {
-    CHECK(Transfer{nullptr, bob} == Transfer{nullptr, bob});
-    CHECK_FALSE(Transfer{nullptr, bob} != Transfer{nullptr, bob});
+    CHECK(Transfer::Issuance(bank, bob) == Transfer::Issuance(bank, bob));
+    CHECK_FALSE(Transfer::Issuance(bank, bob) != Transfer::Issuance(bank, bob));
   }
 
   SECTION("Receivers are compared") {
-    CHECK(Transfer{nullptr, bob} != Transfer{nullptr, charlie});
+    CHECK(Transfer::Issuance(bank, bob) != Transfer::Issuance(bank, charlie));
   }
 
   SECTION("Signatures are compared") {
-    auto transactionSignedByAlice = Transfer{nullptr, bob};
+    auto transactionSignedByAlice = Transfer::Issuance(bank, bob);
     authAlice.sign(transactionSignedByAlice);
 
-    auto transactionSignedByBob = Transfer{nullptr, bob};
+    auto transactionSignedByBob = Transfer::Issuance(bank, bob);
     authBob.sign(transactionSignedByBob);
 
     CHECK(transactionSignedByAlice != transactionSignedByBob);
@@ -152,7 +158,7 @@ TEST_CASE("Public key streaming") {
 
 TEST_CASE_METHOD(SampleUsers, "Signature streaming") {
   GIVEN("a signed transaction") {
-    auto signedTransaction = Transfer{nullptr, bob};
+    auto signedTransaction = Transfer::Issuance(Bank{}, bob);
     authAlice.sign(signedTransaction);
     const auto originalSignature = signedTransaction.m_signature;
 
@@ -189,7 +195,6 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
   SECTION("Coins match after both conversions") {
     GIVEN("a coin") {
       auto coin = Coin::CreateEmptyForTesting();
-      const auto government = UserWithSigningAuthority::weakGovernment();
 
       auto THEN_theCoinSerialisesAndDeserialisesCorrectly = [&coin]() {
         THEN("the coin matches after being serialised and deserialised") {
@@ -202,19 +207,19 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
       };
 
       WHEN("it has a simple transaction") {
-        coin.appendTransfer({nullptr, alice});
+        coin.appendTransfer(Transfer::Issuance(Bank{}, alice));
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has a transaction with a different receiver") {
-        coin.appendTransfer({nullptr, bob});
+        coin.appendTransfer(Transfer::Issuance(Bank{}, alice));
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
       WHEN("it has a transaction with a different signature") {
-        auto signedTransaction = Transfer{nullptr, alice};
+        auto signedTransaction = Transfer::Issuance(Bank{}, alice);
         authAlice.sign(signedTransaction);
         coin.appendTransfer(signedTransaction);
 
@@ -222,7 +227,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
       }
 
       WHEN("it has two transactions") {
-        const auto firstTransfer = Transfer{nullptr, alice};
+        const auto firstTransfer = Transfer::Issuance(Bank{}, alice);
         coin.appendTransfer(firstTransfer);
         coin.appendTransfer({&firstTransfer, bob});
 
@@ -230,7 +235,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
       }
 
       WHEN("it has two transactions with a different sender for the second") {
-        const auto firstTransfer = Transfer{nullptr, charlie};
+        const auto firstTransfer = Transfer::Issuance(Bank{}, charlie);
         coin.appendTransfer(firstTransfer);
         coin.appendTransfer({&firstTransfer, bob});
 
@@ -238,9 +243,10 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
       }
 
       WHEN("it has three transactions") {
-        coin.appendTransfer({nullptr, alice});
-        coin.appendTransfer({nullptr, alice});
-        coin.appendTransfer({nullptr, alice});
+        const auto transfer = Transfer::Issuance(Bank{}, alice);
+        coin.appendTransfer(transfer);
+        coin.appendTransfer(transfer);
+        coin.appendTransfer(transfer);
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
@@ -250,9 +256,11 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
 
 TEST_CASE_METHOD(SampleUsers,
                  "Signatures are based on the underlying transaction") {
+  auto bank = Bank{};
+
   GIVEN("Two transactions with different senders") {
-    const auto toAlice = Transfer{nullptr, alice};
-    const auto toBob = Transfer{nullptr, bob};
+    auto toAlice = Transfer::Issuance(bank, alice);
+    auto toBob = Transfer::Issuance(bank, bob);
 
     auto fromAlice = Transfer{&toAlice, charlie};
     auto fromBob = Transfer{&toBob, charlie};
@@ -267,8 +275,8 @@ TEST_CASE_METHOD(SampleUsers,
     }
   }
   GIVEN("Two transactions with different recipients") {
-    auto toAlice = Transfer{nullptr, alice};
-    auto toBob = Transfer{nullptr, bob};
+    auto toAlice = Transfer::Issuance(bank, alice);
+    auto toBob = Transfer::Issuance(bank, bob);
 
     WHEN("Alice signs both") {
       authAlice.sign(toAlice);
@@ -283,7 +291,9 @@ TEST_CASE_METHOD(SampleUsers,
 
 TEST_CASE_METHOD(SampleUsers, "Querying a coin's current owner") {
   GIVEN("a coin issued to Alice") {
-    auto coin = Coin::CreateByIssuingTo(alice);
+    auto bank = Bank{};
+    bank.issueTo(alice);
+    auto coin = *bank.coinsOwnedBy(alice).begin();
 
     THEN("it is owned by Alice") { CHECK(coin.currentOwner() == alice); }
 
@@ -292,13 +302,13 @@ TEST_CASE_METHOD(SampleUsers, "Querying a coin's current owner") {
 
       THEN("it is owned by Bob") { CHECK(coin.currentOwner() == bob); }
     }
-  }
 
-  SECTION("function is const") {
-    GIVEN("a const coin") {
-      const auto coin = Coin::CreateByIssuingTo(alice);
+    SECTION("function is const") {
+      GIVEN("a const reference to that coin") {
+        const auto &constCoin = coin;
 
-      THEN("its current owner can be queried") { coin.currentOwner(); }
+        THEN("its current owner can be queried") { constCoin.currentOwner(); }
+      }
     }
   }
 }
@@ -427,3 +437,5 @@ TEST_CASE_METHOD(SampleUsers, "Bank control") {
     }
   }
 }*/
+
+// Transfer senders are serialised

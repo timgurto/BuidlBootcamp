@@ -23,15 +23,13 @@ Coin::Coin(const std::string &serialisedCoin) {
   for (auto i = 0; i != numTransactions; ++i) readAndAddTransaction(iss);
 }
 
-Coin::Coin(const PublicKey &issuee) {
-  auto issuanceTransaction = Transfer(nullptr, issuee);
-  UserWithSigningAuthority::authGovernment().sign(issuanceTransaction);
-  appendTransfer(issuanceTransaction);
+Coin::Coin(const Transfer &issuance) {
+  appendTransfer(issuance);
 
   m_serial = nextSerialToBeIssued++;
 }
 
-Coin Coin::CreateByIssuingTo(const PublicKey &issuee) { return {issuee}; }
+Coin Coin::CreateByIssuing(const Transfer &issuance) { return {issuance}; }
 
 void Coin::readAndAddTransaction(std::istringstream &serialisedCoin) {
   auto nextTransaction = Transfer::ReadFrom(serialisedCoin);
@@ -66,11 +64,13 @@ bool Coin::allTransactionsHaveValidSignatures() const {
 }
 
 bool Coin::eachSpenderWasTheOwner() const {
-  auto ownerAtThatPoint = UserWithSigningAuthority::weakGovernment();
+  const auto issuee = m_transfers.front().m_receiver;
 
-  for (const auto &txn : m_transfers) {
-    if (txn.m_sender != ownerAtThatPoint) return false;
-    ownerAtThatPoint = txn.m_receiver;
+  auto ownerAtThatPoint = issuee;
+  for (auto i = 1; i < m_transfers.size(); ++i) {
+    const auto &transfer = m_transfers[i];
+    if (transfer.m_sender != ownerAtThatPoint) return false;
+    ownerAtThatPoint = transfer.m_receiver;
   }
 
   return true;

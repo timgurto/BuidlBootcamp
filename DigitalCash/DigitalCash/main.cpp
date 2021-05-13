@@ -108,7 +108,7 @@ TEST_CASE_METHOD(SampleUsers, "Coin equality") {
   }
 }
 
-TEST_CASE_METHOD(SampleUsers, "Transaction equality") {
+TEST_CASE_METHOD(SampleUsers, "Transfer equality") {
   auto bank = Bank{};
 
   SECTION("Equality operators") {
@@ -121,13 +121,13 @@ TEST_CASE_METHOD(SampleUsers, "Transaction equality") {
   }
 
   SECTION("Signatures are compared") {
-    auto transactionSignedByAlice = Transfer::Issuance(bank, bob);
-    authAlice.sign(transactionSignedByAlice);
+    auto transferSignedByAlice = Transfer::Issuance(bank, bob);
+    authAlice.sign(transferSignedByAlice);
 
-    auto transactionSignedByBob = Transfer::Issuance(bank, bob);
-    authBob.sign(transactionSignedByBob);
+    auto transferSignedByBob = Transfer::Issuance(bank, bob);
+    authBob.sign(transferSignedByBob);
 
-    CHECK(transactionSignedByAlice != transactionSignedByBob);
+    CHECK(transferSignedByAlice != transferSignedByBob);
   }
 }
 
@@ -157,10 +157,10 @@ TEST_CASE("Public key streaming") {
 }
 
 TEST_CASE_METHOD(SampleUsers, "Signature streaming") {
-  GIVEN("a signed transaction") {
-    auto signedTransaction = Transfer::Issuance(Bank{}, bob);
-    authAlice.sign(signedTransaction);
-    const auto originalSignature = signedTransaction.m_signature;
+  GIVEN("a signed transfer") {
+    auto signedTransfer = Transfer::Issuance(Bank{}, bob);
+    authAlice.sign(signedTransfer);
+    const auto originalSignature = signedTransfer.m_signature;
 
     WHEN("the signature is streamed out") {
       auto output = std::ostringstream{};
@@ -206,27 +206,27 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
         }
       };
 
-      WHEN("it has a simple transaction") {
+      WHEN("it has a simple transfer") {
         coin.appendTransfer(Transfer::Issuance(Bank{}, alice));
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
-      WHEN("it has a transaction with a different receiver") {
+      WHEN("it has a transfer with a different receiver") {
         coin.appendTransfer(Transfer::Issuance(Bank{}, alice));
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
-      WHEN("it has a transaction with a different signature") {
-        auto signedTransaction = Transfer::Issuance(Bank{}, alice);
-        authAlice.sign(signedTransaction);
-        coin.appendTransfer(signedTransaction);
+      WHEN("it has a transfers with a different signature") {
+        auto signedTransfer = Transfer::Issuance(Bank{}, alice);
+        authAlice.sign(signedTransfer);
+        coin.appendTransfer(signedTransfer);
 
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
-      WHEN("it has two transactions") {
+      WHEN("it has two transfers") {
         const auto firstTransfer = Transfer::Issuance(Bank{}, alice);
         coin.appendTransfer(firstTransfer);
         coin.appendTransfer({&firstTransfer, bob});
@@ -234,7 +234,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
-      WHEN("it has two transactions with a different sender for the second") {
+      WHEN("it has two transfers with a different sender for the second") {
         const auto firstTransfer = Transfer::Issuance(Bank{}, charlie);
         coin.appendTransfer(firstTransfer);
         coin.appendTransfer({&firstTransfer, bob});
@@ -242,7 +242,7 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
         THEN_theCoinSerialisesAndDeserialisesCorrectly();
       }
 
-      WHEN("it has three transactions") {
+      WHEN("it has three transfers") {
         const auto transfer = Transfer::Issuance(Bank{}, alice);
         coin.appendTransfer(transfer);
         coin.appendTransfer(transfer);
@@ -255,10 +255,10 @@ TEST_CASE_METHOD(SampleUsers, "Serialising coins") {
 }
 
 TEST_CASE_METHOD(SampleUsers,
-                 "Signatures are based on the underlying transaction") {
+                 "Signatures are based on the underlying transfer") {
   auto bank = Bank{};
 
-  GIVEN("Two transactions with different senders") {
+  GIVEN("Two transfers with different senders") {
     auto toAlice = Transfer::Issuance(bank, alice);
     auto toBob = Transfer::Issuance(bank, bob);
 
@@ -274,7 +274,7 @@ TEST_CASE_METHOD(SampleUsers,
       }
     }
   }
-  GIVEN("Two transactions with different recipients") {
+  GIVEN("Two transfers with different recipients") {
     auto toAlice = Transfer::Issuance(bank, alice);
     auto toBob = Transfer::Issuance(bank, bob);
 

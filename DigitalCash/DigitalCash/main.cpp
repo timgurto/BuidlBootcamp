@@ -436,22 +436,64 @@ TEST_CASE_METHOD(SampleUsers, "New coins must extend old coins") {
     auto bank = Bank{};
     bank.issueTo(alice);
 
-    AND_GIVEN("a copy of that coin is then given to Bob") {
-      auto oldVersion = *bank.coinsOwnedBy(alice).begin();
-      auto newVersion = oldVersion;
-      auto newTransfer = Transfer{newVersion.getLastTransfer(), bob};
-      authAlice.sign(newTransfer);
-      newVersion.appendTransfer(newTransfer);
+    SECTION("The new coins needs more transfers") {
+      AND_GIVEN("a copy of that coin is then given to Bob") {
+        auto oldVersion = *bank.coinsOwnedBy(alice).begin();
+        auto newVersion = oldVersion;
+        auto newTransfer = Transfer{newVersion.getLastTransfer(), bob};
+        authAlice.sign(newTransfer);
+        newVersion.appendTransfer(newTransfer);
 
-      AND_GIVEN("that copy is observed by the bank") {
-        bank.observe(newVersion);
+        AND_GIVEN("that copy is observed by the bank") {
+          bank.observe(newVersion);
 
-        WHEN("the original (old version) is observed by the bank") {
-          bank.observe(oldVersion);
+          WHEN("the original (old version) is observed by the bank") {
+            bank.observe(oldVersion);
 
-          THEN("the coin is owned by Bob") {
-            auto bobsCoins = bank.coinsOwnedBy(bob);
-            REQUIRE_FALSE(bobsCoins.empty());
+            THEN("the coin is owned by Bob") {
+              auto bobsCoins = bank.coinsOwnedBy(bob);
+              REQUIRE_FALSE(bobsCoins.empty());
+            }
+          }
+        }
+      }
+    }
+
+    SECTION("The early transfers must match") {
+      AND_GIVEN("one version of the coin is given to Bob") {
+        auto shortVersion = *bank.coinsOwnedBy(alice).begin();
+
+        auto transferToBob = Transfer{shortVersion.getLastTransfer(), bob};
+        authAlice.sign(transferToBob);
+        shortVersion.appendTransfer(transferToBob);
+
+        AND_GIVEN(
+            "another version of the coin is incompatible but with more "
+            "transfers (given to Charlie, then Alice)") {
+          auto longVersion = *bank.coinsOwnedBy(alice).begin();
+
+          auto transferToCharlie =
+              Transfer{longVersion.getLastTransfer(), charlie};
+          authAlice.sign(transferToCharlie);
+          longVersion.appendTransfer(transferToCharlie);
+
+          auto transferToAlice = Transfer{longVersion.getLastTransfer(), alice};
+          authCharlie.sign(transferToAlice);
+          longVersion.appendTransfer(transferToAlice);
+
+          AND_GIVEN("the short version is observed") {
+            bank.observe(shortVersion);
+
+            WHEN("the long version is observed") {
+              bank.observe(longVersion);
+
+              THEN(
+                  "the coin still belongs to Bob, the owner of the short "
+                  "version") {
+                auto bobsCoins = bank.coinsOwnedBy(bob);
+                REQUIRE_FALSE(bobsCoins.empty());
+              }
+            }
           }
         }
       }

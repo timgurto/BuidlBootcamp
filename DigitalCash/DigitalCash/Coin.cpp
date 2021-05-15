@@ -78,7 +78,14 @@ bool Coin::eachSpenderWasTheOwner() const {
 }
 
 bool Coin::isValidExtensionOf(const Coin &oldVersion) const {
-  return m_transfers.size() > oldVersion.m_transfers.size();
+  auto newVersionIsLonger = m_transfers.size() > oldVersion.m_transfers.size();
+  if (!newVersionIsLonger) return false;
+
+  for (auto i = 0; i != oldVersion.m_transfers.size(); ++i) {
+    if (m_transfers[i] != oldVersion.m_transfers[i]) return false;
+  }
+
+  return true;
 }
 
 const Transfer &Coin::getLastTransfer() const { return m_transfers.back(); }

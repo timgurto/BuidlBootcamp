@@ -68,7 +68,7 @@ bool Coin::eachSpenderWasTheOwner() const {
   const auto issuee = m_transfers.front().m_receiver;
 
   auto ownerAtThatPoint = issuee;
-  for (auto i = 1; i < m_transfers.size(); ++i) {
+  for (auto i = 1u; i < m_transfers.size(); ++i) {
     const auto &transfer = m_transfers[i];
     if (transfer.m_sender != ownerAtThatPoint) return false;
     ownerAtThatPoint = transfer.m_receiver;

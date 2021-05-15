@@ -77,4 +77,6 @@ bool Coin::eachSpenderWasTheOwner() const {
   return true;
 }
 
+bool Coin::isValidExtensionOf(const Coin &oldVersion) const { return true; }
+
 const Transfer &Coin::getLastTransfer() const { return m_transfers.back(); }

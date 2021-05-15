@@ -25,6 +25,7 @@ class Coin {
   PublicKey issuer() const;
   bool allTransactionsHaveValidSignatures() const;
   bool eachSpenderWasTheOwner() const;
+  bool isValidExtensionOf(const Coin &oldVersion) const;
 
   const Transfer &getLastTransfer() const;
 

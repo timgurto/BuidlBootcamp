@@ -17,11 +17,17 @@ std::set<Coin> Bank::coinsOwnedBy(PublicKey owner) const {
   return coins;
 }
 
-void Bank::observe(Coin toBeUpdated) {
-  if (!isCoinValid(toBeUpdated)) return;
+void Bank::observe(Coin newVersion) {
+  if (!isCoinValid(newVersion)) return;
 
-  m_coins.erase(toBeUpdated);
-  m_coins.insert(toBeUpdated);
+  auto oldVersion = m_coins.find(newVersion);
+  if (oldVersion != m_coins.end()) {
+    if (!newVersion.isValidExtensionOf(*oldVersion)) return;
+
+    m_coins.erase(oldVersion);
+  }
+
+  m_coins.insert(newVersion);
 }
 
 bool Bank::isCoinValid(Coin coin) const {

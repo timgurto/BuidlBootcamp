@@ -431,4 +431,30 @@ TEST_CASE_METHOD(SampleUsers, "Serial numbers are serialised") {
   }
 }
 
-// Transfer senders are serialised
+TEST_CASE_METHOD(SampleUsers, "New coins must extend old coins") {
+  GIVEN("a bank issues a coin to Alice") {
+    auto bank = Bank{};
+    bank.issueTo(alice);
+
+    AND_GIVEN("a copy of that coin is then given to Bob") {
+      auto oldVersion = *bank.coinsOwnedBy(alice).begin();
+      auto newVersion = oldVersion;
+      auto newTransfer = Transfer{newVersion.getLastTransfer(), bob};
+      authAlice.sign(newTransfer);
+      newVersion.appendTransfer(newTransfer);
+
+      AND_GIVEN("that copy is observed by the bank") {
+        bank.observe(newVersion);
+
+        WHEN("the original (old version) is observed by the bank") {
+          bank.observe(oldVersion);
+
+          THEN("the coin is owned by Bob") {
+            auto bobsCoins = bank.coinsOwnedBy(bob);
+            REQUIRE_FALSE(bobsCoins.empty());
+          }
+        }
+      }
+    }
+  }
+}

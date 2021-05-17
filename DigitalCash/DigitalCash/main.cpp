@@ -42,7 +42,10 @@ TEST_CASE("Public key streaming") {
   }
 }
 
-TEST_CASE_METHOD(SampleUsers, "Standard use case") { auto bank = Bank{}; }
+TEST_CASE_METHOD(SampleUsers, "Standard use case") {
+  auto bank = Bank{};
+  bank.issue(1000, alice);
+}
 
 /*
 auto coinbase = bank.issue(1000, alice);

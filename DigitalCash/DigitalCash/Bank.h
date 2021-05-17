@@ -1,3 +1,8 @@
 #pragma once
 
-class Bank {};
+#include "PublicKey.h"
+
+class Bank {
+ public:
+  void issue(int, PublicKey);
+};

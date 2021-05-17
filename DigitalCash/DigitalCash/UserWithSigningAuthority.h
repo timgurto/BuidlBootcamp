@@ -9,7 +9,6 @@
 class UserWithSigningAuthority {
  public:
   UserWithSigningAuthority();
-  void sign(class Transfer& transaction) const;
   PublicKey getWeakVersion() const;
 
  private:

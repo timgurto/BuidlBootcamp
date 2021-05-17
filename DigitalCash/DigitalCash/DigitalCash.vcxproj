@@ -315,13 +315,10 @@
     <ClCompile Include="..\third-party\cryptopp\zdeflate.cpp" />
     <ClCompile Include="..\third-party\cryptopp\zinflate.cpp" />
     <ClCompile Include="..\third-party\cryptopp\zlib.cpp" />
-    <ClCompile Include="Bank.cpp" />
-    <ClCompile Include="Coin.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PrivateKey.cpp" />
     <ClCompile Include="PublicKey.cpp" />
     <ClCompile Include="Signature.cpp" />
-    <ClCompile Include="Transfer.cpp" />
     <ClCompile Include="UserWithSigningAuthority.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -516,12 +513,9 @@
     <ClInclude Include="..\third-party\cryptopp\zdeflate.h" />
     <ClInclude Include="..\third-party\cryptopp\zinflate.h" />
     <ClInclude Include="..\third-party\cryptopp\zlib.h" />
-    <ClInclude Include="Bank.h" />
-    <ClInclude Include="Coin.h" />
     <ClInclude Include="PrivateKey.h" />
     <ClInclude Include="PublicKey.h" />
     <ClInclude Include="Signature.h" />
-    <ClInclude Include="Transfer.h" />
     <ClInclude Include="UserWithSigningAuthority.h" />
   </ItemGroup>
   <ItemGroup>

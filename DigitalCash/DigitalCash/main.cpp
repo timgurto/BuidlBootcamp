@@ -43,8 +43,12 @@ TEST_CASE("Public key streaming") {
 }
 
 TEST_CASE_METHOD(SampleUsers, "Standard use case") {
-  auto bank = Bank{};
-  bank.issue(1000, alice);
+  GIVEN("the bank issues 1000 coins to Alice") {
+    auto bank = Bank{};
+    bank.issue(1000, alice);
+
+    THEN("Alice has 1000 coins") { CHECK(bank.checkBalance(alice) == 1000); }
+  }
 }
 
 /*

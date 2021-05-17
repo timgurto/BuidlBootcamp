@@ -5,4 +5,6 @@
 class Bank {
  public:
   void issue(int, PublicKey);
+
+  int checkBalance(PublicKey);
 };

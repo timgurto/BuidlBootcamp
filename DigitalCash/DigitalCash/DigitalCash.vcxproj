@@ -513,6 +513,7 @@
     <ClInclude Include="..\third-party\cryptopp\zdeflate.h" />
     <ClInclude Include="..\third-party\cryptopp\zinflate.h" />
     <ClInclude Include="..\third-party\cryptopp\zlib.h" />
+    <ClInclude Include="Bank.h" />
     <ClInclude Include="PrivateKey.h" />
     <ClInclude Include="PublicKey.h" />
     <ClInclude Include="Signature.h" />

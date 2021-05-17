@@ -1208,6 +1208,9 @@
     <ClInclude Include="Signature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Bank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\third-party\cryptopp\cryptlib.lib" />

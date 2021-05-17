@@ -1,5 +1,6 @@
 #define CATCH_CONFIG_MAIN
 
+#include "Bank.h"
 #include "UserWithSigningAuthority.h"
 #include "catch.hpp"
 
@@ -40,6 +41,8 @@ TEST_CASE("Public key streaming") {
     }
   }
 }
+
+TEST_CASE_METHOD(SampleUsers, "Standard use case") { auto bank = Bank{}; }
 
 /*
 auto coinbase = bank.issue(1000, alice);

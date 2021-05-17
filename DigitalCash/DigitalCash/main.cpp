@@ -46,7 +46,9 @@ TEST_CASE_METHOD(SampleUsers, "Standard use case") {
   GIVEN("a bank") {
     auto bank = Bank{};
 
-    THEN("Alice has 0 coins") { CHECK(bank.checkBalance(alice) == 0); }
+    SECTION("coins don't exist until issue()") {
+      THEN("Alice has 0 coins") { CHECK(bank.checkBalance(alice) == 0); }
+    }
 
     WHEN("it issues 1000 coins to Alice") {
       bank.issue(1000, alice);
@@ -54,10 +56,12 @@ TEST_CASE_METHOD(SampleUsers, "Standard use case") {
       THEN("Alice has 1000 coins") { CHECK(bank.checkBalance(alice) == 1000); }
     }
 
-    WHEN("it issues 50 coins to Alice") {
-      bank.issue(50, alice);
+    SECTION("the specified number of coins are issued") {
+      WHEN("it issues 50 coins to Alice") {
+        bank.issue(50, alice);
 
-      THEN("Alice has 50 coins") { CHECK(bank.checkBalance(alice) == 50); }
+        THEN("Alice has 50 coins") { CHECK(bank.checkBalance(alice) == 50); }
+      }
     }
   }
 }

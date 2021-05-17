@@ -53,6 +53,12 @@ TEST_CASE_METHOD(SampleUsers, "Standard use case") {
 
       THEN("Alice has 1000 coins") { CHECK(bank.checkBalance(alice) == 1000); }
     }
+
+    WHEN("it issues 50 coins to Alice") {
+      bank.issue(50, alice);
+
+      THEN("Alice has 50 coins") { CHECK(bank.checkBalance(alice) == 50); }
+    }
   }
 }
 

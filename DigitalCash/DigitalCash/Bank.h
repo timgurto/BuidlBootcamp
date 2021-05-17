@@ -4,7 +4,7 @@
 
 class Bank {
  public:
-  void issue(int, PublicKey);
+  void issue(int amount, PublicKey);
 
   int checkBalance(PublicKey);
 

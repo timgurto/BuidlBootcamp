@@ -1,5 +1,5 @@
 #include "Bank.h"
 
-void Bank::issue(int amount, PublicKey) { m_AlicesBalance = amount; }
+void Bank::issue(Currency amount, PublicKey) { m_AlicesBalance = amount; }
 
-int Bank::checkBalance(PublicKey) { return m_AlicesBalance; }
+Currency Bank::checkBalance(PublicKey) { return m_AlicesBalance; }

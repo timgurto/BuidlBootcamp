@@ -2,12 +2,14 @@
 
 #include "PublicKey.h"
 
+using Currency = unsigned;
+
 class Bank {
  public:
-  void issue(int amount, PublicKey);
+  void issue(Currency amount, PublicKey);
 
-  int checkBalance(PublicKey);
+  Currency checkBalance(PublicKey);
 
  private:
-  int m_AlicesBalance{0};
+  Currency m_AlicesBalance{0};
 };

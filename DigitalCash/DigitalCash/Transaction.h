@@ -14,5 +14,5 @@ struct TxOutput {};
 struct Transaction {
   TxID id;
 
-  static void generateID() {}
+  static TxID generateID() { return {}; }
 };

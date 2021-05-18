@@ -79,7 +79,9 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
       auto aliceToBob = Transaction{txID, {input0}, {output0}};
 
       WHEN("the bank handles the transaction") {
-        THEN("alice has 0 coins") {}
+        bank.handleTransaction(aliceToBob);
+
+        THEN("alice has 0 coins") { CHECK(bank.checkBalance(alice) == 0); }
       }
     }
   }
@@ -100,19 +102,4 @@ authAlice.signInput(aliceToBob, 0);
 bank.handleTransaction(aliceToBob)
 CHECK(bank.checkBalance(alice)==990);
 CHECK(bank.checkBalance(bob)==10);
-
- Transaction
-- input[]
-- output[]
-
- TxIn
-- transaction ID
-- index within transaction inputs
-- signature
-
- TxOut
-- transaction ID
-- index within transaction outputs
-- amount
-- public key
 */

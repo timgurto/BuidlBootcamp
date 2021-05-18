@@ -1,6 +1,6 @@
 #include "Bank.h"
 
-int Bank::issue(Currency amount, PublicKey) {
+Transaction Bank::issue(Currency amount, PublicKey) {
   m_AlicesBalance = amount;
   return {};
 }

@@ -74,6 +74,7 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
 
     AND_GIVEN("a transaction of 100 coins from Alice to Bob") {
       auto inputs = std::vector<TxInput>{};
+      issuance.id;
     }
   }
 }

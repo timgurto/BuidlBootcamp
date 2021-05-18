@@ -88,6 +88,7 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
         bank.handleTransaction(aliceToBob);
 
         THEN("alice has 0 coins") { CHECK(bank.checkBalance(alice) == 0); }
+        THEN("bob has 100 coins") { CHECK(bank.checkBalance(bob) == 100); }
       }
     }
   }

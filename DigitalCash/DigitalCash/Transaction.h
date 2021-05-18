@@ -1,7 +1,11 @@
 #pragma once
 
+#include "PublicKey.h"
+#include "Signature.h"
+
 using TxID = unsigned;
 using Index = unsigned;
+using Currency = unsigned;
 
 struct TxInput {
   TxID transactionThatOutputThis;
@@ -9,7 +13,12 @@ struct TxInput {
   Signature signature;
 };
 
-struct TxOutput {};
+struct TxOutput {
+  TxID owningTx;
+  Index whichOutput;
+  Currency amount;
+  PublicKey recipient;
+};
 
 struct Transaction {
   TxID id;

@@ -3,8 +3,6 @@
 #include "PublicKey.h"
 #include "Transaction.h"
 
-using Currency = unsigned;
-
 class Bank {
  public:
   Transaction issue(Currency amount, PublicKey);

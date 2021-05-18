@@ -70,7 +70,7 @@ TEST_CASE_METHOD(SampleUsers, "Issuing coins") {
 TEST_CASE_METHOD(SampleUsers, "Transactions") {
   GIVEN("Alice is issued 100 coins") {
     auto bank = Bank{};
-    bank.issue(100, alice);
+    auto issuance = bank.issue(100, alice);
 
     AND_GIVEN("a transaction of 100 coins from Alice to Bob") {
       auto inputs = std::vector<TxInput>{};

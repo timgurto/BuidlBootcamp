@@ -6,7 +6,7 @@ using Currency = unsigned;
 
 class Bank {
  public:
-  void issue(Currency amount, PublicKey);
+  int issue(Currency amount, PublicKey);
 
   Currency checkBalance(PublicKey);
 

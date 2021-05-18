@@ -11,6 +11,12 @@ PublicKey::PublicKey(const ECDSA::PublicKey &rawPublicKey)
 
 PublicKey PublicKey::ToBeReadInto() { return {}; }
 
+bool PublicKey::operator<(const PublicKey &rhs) const {
+  const auto lhsHex = toHexString();
+  const auto rhsHex = rhs.toHexString();
+  return lhsHex.compare(rhsHex) < 0;
+}
+
 bool PublicKey::operator==(const PublicKey &rhs) const {
   if (m_isEmpty != rhs.m_isEmpty) return false;
   if (m_isEmpty) return true;  // Both are empty

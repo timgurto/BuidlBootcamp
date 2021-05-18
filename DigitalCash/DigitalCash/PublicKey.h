@@ -16,6 +16,7 @@ class PublicKey {
 
   bool operator==(const PublicKey &rhs) const;
   bool operator!=(const PublicKey &rhs) const;
+  bool operator<(const PublicKey &rhs) const;
   friend std::ostream &operator<<(std::ostream &lhs, const PublicKey &rhs);
   friend std::istream &operator>>(std::istream &lhs, PublicKey &rhs);
 

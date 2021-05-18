@@ -18,7 +18,7 @@ struct SampleUsers {
   PublicKey alice, bob, charlie;
 };
 
-TEST_CASE("Public key streaming") {
+TEST_CASE("Public-key streaming") {
   GIVEN("a public key") {
     const auto originalKey = UserWithSigningAuthority{}.getWeakVersion();
 
@@ -41,6 +41,10 @@ TEST_CASE("Public key streaming") {
       }
     }
   }
+}
+
+TEST_CASE_METHOD(SampleUsers, "Public-key comparisons") {
+  CHECK((alice < bob) != (bob < alice));
 }
 
 TEST_CASE_METHOD(SampleUsers, "Issuing coins") {

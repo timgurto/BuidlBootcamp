@@ -9,3 +9,5 @@ UserWithSigningAuthority::UserWithSigningAuthority()
 PublicKey UserWithSigningAuthority::getWeakVersion() const {
   return m_keys.getPublicKey();
 }
+
+void UserWithSigningAuthority::signInput(const Transaction& tx, Index) {}

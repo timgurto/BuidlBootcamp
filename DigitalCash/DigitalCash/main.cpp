@@ -82,6 +82,7 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
       auto txID = Transaction::generateID();
       auto output0 = TxOutput{txID, 0, 100, bob};
       auto aliceToBob = Transaction{txID, {input0}, {output0}};
+      authAlice.signInput(aliceToBob, 0);
 
       WHEN("the bank handles the transaction") {
         bank.handleTransaction(aliceToBob);

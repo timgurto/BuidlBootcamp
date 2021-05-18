@@ -73,8 +73,7 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
     auto issuance = bank.issue(100, alice);
 
     AND_GIVEN("a transaction of 100 coins from Alice to Bob") {
-      auto inputs = std::vector<TxInput>{};
-      issuance.id;
+      auto input0 = TxInput{issuance.id, 0, Signature{}};
     }
   }
 }

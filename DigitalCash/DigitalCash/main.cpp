@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 
 #include "Bank.h"
+#include "Transaction.h"
 #include "UserWithSigningAuthority.h"
 #include "catch.hpp"
 
@@ -42,7 +43,7 @@ TEST_CASE("Public key streaming") {
   }
 }
 
-TEST_CASE_METHOD(SampleUsers, "Standard use case") {
+TEST_CASE_METHOD(SampleUsers, "Issuing coins") {
   GIVEN("a bank") {
     auto bank = Bank{};
 
@@ -66,6 +67,17 @@ TEST_CASE_METHOD(SampleUsers, "Standard use case") {
   }
 }
 
+TEST_CASE_METHOD(SampleUsers, "Transactions") {
+  GIVEN("Alice is issued 100 coins") {
+    auto bank = Bank{};
+    bank.issue(100, alice);
+
+    AND_GIVEN("a transaction of 100 coins from Alice to Bob") {
+      auto inputs = std::vector<TxInput>{};
+    }
+  }
+}
+
 /*
 auto coinbase = bank.issue(1000, alice);
 txIns = {
@@ -78,6 +90,7 @@ txOuts = {
 }
 aliceToBob = Tx{txID, txIns, txOuts};
 authAlice.signInput(aliceToBob, 0);
+bank.handleTransaction(aliceToBob)
 CHECK(bank.checkBalance(alice)==990);
 CHECK(bank.checkBalance(bob)==10);
 

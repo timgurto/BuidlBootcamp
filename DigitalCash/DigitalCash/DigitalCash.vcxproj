@@ -518,6 +518,7 @@
     <ClInclude Include="PrivateKey.h" />
     <ClInclude Include="PublicKey.h" />
     <ClInclude Include="Signature.h" />
+    <ClInclude Include="Transaction.h" />
     <ClInclude Include="UserWithSigningAuthority.h" />
   </ItemGroup>
   <ItemGroup>

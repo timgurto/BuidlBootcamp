@@ -9,6 +9,8 @@ struct TxInput {
   Signature signature;
 };
 
+struct TxOutput {};
+
 struct Transaction {
   TxID id;
 };

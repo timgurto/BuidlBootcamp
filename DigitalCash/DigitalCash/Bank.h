@@ -5,12 +5,13 @@
 
 class Bank {
  public:
-  Transaction issue(Currency amount, PublicKey);
+  Transaction issue(Currency amount, PublicKey recipient);
 
-  Currency checkBalance(PublicKey);
+  Currency checkBalance(PublicKey account);
 
   void handleTransaction(const Transaction& tx);
 
  private:
-  Currency m_AlicesBalance{0};
+  std::map<PublicKey, Currency> m_balances;
+  std::map<TxID, Transaction> m_transactions;
 };

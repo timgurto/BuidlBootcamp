@@ -59,6 +59,7 @@ TEST_CASE_METHOD(SampleUsers, "Issuing coins") {
       bank.issue(1000, alice);
 
       THEN("Alice has 1000 coins") { CHECK(bank.checkBalance(alice) == 1000); }
+      THEN("Bob has 0 coins") { CHECK(bank.checkBalance(bob) == 0); }
     }
 
     SECTION("the specified number of coins are issued") {

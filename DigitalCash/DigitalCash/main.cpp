@@ -74,6 +74,7 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
 
     AND_GIVEN("a transaction of 100 coins from Alice to Bob") {
       auto input0 = TxInput{issuance.id, 0, Signature{}};
+      Transaction::generateID();
       auto output0 = TxOutput{};
     }
   }

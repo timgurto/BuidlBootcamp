@@ -9,6 +9,8 @@ class Bank {
 
   Currency checkBalance(PublicKey);
 
+  void handleTransaction(const Transaction& tx);
+
  private:
   Currency m_AlicesBalance{0};
 };

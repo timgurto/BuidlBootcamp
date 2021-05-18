@@ -6,3 +6,5 @@ Transaction Bank::issue(Currency amount, PublicKey) {
 }
 
 Currency Bank::checkBalance(PublicKey) { return m_AlicesBalance; }
+
+void Bank::handleTransaction(const Transaction& tx) {}

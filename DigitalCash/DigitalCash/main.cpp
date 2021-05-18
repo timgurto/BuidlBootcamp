@@ -76,6 +76,10 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
       auto input0 = TxInput{issuance.id, 0, Signature{}};
       auto txID = Transaction::generateID();
       auto output0 = TxOutput{txID, 0, 100, bob};
+
+      WHEN("the bank handles the transaction") {
+        THEN("alice has 0 coins") {}
+      }
     }
   }
 }

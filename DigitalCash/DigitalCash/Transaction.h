@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "PublicKey.h"
 #include "Signature.h"
 
@@ -22,6 +23,8 @@ struct TxOutput {
 
 struct Transaction {
   TxID id;
+  std::vector<TxInput> input;
+  std::vector<TxOutput> output;
 
   static TxID generateID() { return {}; }
 };

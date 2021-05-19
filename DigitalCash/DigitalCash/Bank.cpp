@@ -2,7 +2,7 @@
 
 Transaction Bank::issue(Currency amount, PublicKey recipient) {
   auto txID = Transaction::generateID();
-  auto output = TxOutput{txID, 0, 0, recipient};
+  auto output = TxOutput{txID, 0, amount, recipient};
   auto issuance = Transaction{txID, {}, {output}};
 
   m_balances[recipient] = amount;

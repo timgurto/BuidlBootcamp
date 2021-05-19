@@ -69,6 +69,23 @@ TEST_CASE_METHOD(SampleUsers, "Issuing coins") {
         THEN("Alice has 50 coins") { CHECK(bank.checkBalance(alice) == 50); }
       }
     }
+
+    SECTION("Return value") {
+      WHEN("the bank issues 100 coins") {
+        auto result = bank.issue(100, alice);
+
+        THEN("the resulting transaction has a 100-coin output") {
+          CHECK(result.output[0].amount == 100);
+        }
+      }
+      WHEN("the bank issues 50 coins") {
+        auto result = bank.issue(50, alice);
+
+        THEN("the resulting transaction has a 50-coin output") {
+          CHECK(result.output[0].amount == 50);
+        }
+      }
+    }
   }
 }
 
@@ -94,19 +111,11 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
   }
 }
 
-/*
-auto coinbase = bank.issue(1000, alice);
-txIns = {
-  TxIn{txID=coinbase.id, index=0, signature=none}
-}
-txID = generateID();
-txOuts = {
-  TxOut{txID, index=0, amount=10, bob},
-  TxOut{txID, index=1, amount=990, alice}
-}
-aliceToBob = Tx{txID, txIns, txOuts};
-authAlice.signInput(aliceToBob, 0);
-bank.handleTransaction(aliceToBob)
-CHECK(bank.checkBalance(alice)==990);
-CHECK(bank.checkBalance(bob)==10);
-*/
+// TxID generation
+// Multiple senders
+// Multiple receivers
+// Recipient balance when amount != 100
+// Issuance is unsigned
+// UserWithSigningAuthority::signInput()
+// Bank should check that inputs are signed
+// Make sure inputs and outputs are equal

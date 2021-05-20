@@ -3,6 +3,10 @@
 #include "Bank.h"
 #include "Transaction.h"
 #include "UserWithSigningAuthority.h"
+
+// These are defined by Windows headers, but Catch requires its own definitions
+#undef min
+#undef max
 #include "catch.hpp"
 
 using namespace std::string_literals;
@@ -96,7 +100,7 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
 
     AND_GIVEN("a transaction of 100 coins from Alice to Bob") {
       auto input0 = TxInput{issuance.id, 0, Signature{}};
-      auto txID = Transaction::generateID();
+      auto txID = generateTxID();
       auto output0 = TxOutput{txID, 0, 100, bob};
       auto aliceToBob = Transaction{txID, {input0}, {output0}};
       authAlice.signInput(aliceToBob, 0);
@@ -108,6 +112,15 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
         THEN("bob has 100 coins") { CHECK(bank.checkBalance(bob) == 100); }
       }
     }
+  }
+}
+
+TEST_CASE("TxIDs are unique") {
+  WHEN("Two TxIDs are generated") {
+    auto id1 = generateTxID();
+    auto id2 = generateTxID();
+
+    THEN("they are different") { CHECK(id1 != id2); }
   }
 }
 

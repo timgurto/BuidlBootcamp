@@ -14,4 +14,6 @@ class Bank {
  private:
   std::map<PublicKey, Currency> m_balances;
   std::map<TxID, Transaction> m_transactions;
+
+  PublicKey getTransactionSender(const Transaction& tx);
 };

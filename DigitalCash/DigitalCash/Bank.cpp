@@ -19,12 +19,12 @@ void Bank::handleTransaction(const Transaction& tx) {
 
 void Bank::clearCoinsFromInputs(const Transaction& tx) {
   for (const auto& input : tx.inputs) {
-    const auto sender = getTransactionSender(input);
+    const auto sender = currentOwnerOfInput(input);
     m_balances[sender] = 0;
   }
 }
 
-PublicKey Bank::getTransactionSender(const TxInput& input) {
+PublicKey Bank::currentOwnerOfInput(const TxInput& input) {
   const auto parentTxID = input.transactionThatOutputThis;
   const auto parentTx = m_transactions[parentTxID];
   return parentTx.outputs[0].recipient;

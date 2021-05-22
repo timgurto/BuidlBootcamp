@@ -13,9 +13,9 @@ Transaction Bank::issue(Currency amount, PublicKey recipient) {
 Currency Bank::checkBalance(PublicKey account) { return m_balances[account]; }
 
 void Bank::handleTransaction(const Transaction& tx) {
-  const auto sender = getTransactionSender(tx);
+  const auto sender0 = getTransactionSender(tx, 0);
+  m_balances[sender0] = 0;
 
-  m_balances[sender] = 0;
 
   for (const auto& output : tx.output) distributeOutput(output);
 }
@@ -24,8 +24,8 @@ void Bank::distributeOutput(const TxOutput& output) {
   m_balances[output.recipient] = output.amount;
 }
 
-PublicKey Bank::getTransactionSender(const Transaction& tx) {
-  const auto parentTxID = tx.input[0].transactionThatOutputThis;
+PublicKey Bank::getTransactionSender(const Transaction& tx, Index whichInput) {
+  const auto parentTxID = tx.input[whichInput].transactionThatOutputThis;
   const auto parentTx = m_transactions[parentTxID];
   return parentTx.output[0].recipient;
 }

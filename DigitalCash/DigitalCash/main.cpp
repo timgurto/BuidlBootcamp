@@ -176,7 +176,6 @@ TEST_CASE("TxIDs are unique") {
   }
 }
 
-// Multiple receivers
 // Issuance is unsigned
 // UserWithSigningAuthority::signInput()
 // Bank should check that inputs are signed

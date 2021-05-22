@@ -237,6 +237,21 @@ TEST_CASE_METHOD(SampleUsers,
         bank.handleTransaction(aliceToBob2);
 
         THEN("Bob has two coins") { CHECK(bank.checkBalance(bob) == 2); }
+
+        SECTION("Spending one doesn't remove the other") {
+          AND_WHEN("Bob spends one of them") {
+            auto input0 = TxInput{aliceToBob2.id, 0, Signature{}};
+            auto txID = generateTxID();
+            auto output0 = TxOutput{txID, 0, 1, alice};
+            auto bobToAlice = Transaction{txID, {input0}, {output0}};
+            authBob.signInput(bobToAlice, 0);
+            bank.handleTransaction(bobToAlice);
+
+            THEN("he still has one coin") {
+              CHECK(bank.checkBalance(bob) == 1);
+            }
+          }
+        }
       }
     }
   }
@@ -254,4 +269,3 @@ TEST_CASE("TxIDs are unique") {
 // Issuance is unsigned
 // UserWithSigningAuthority::signInput()
 // Bank should check that inputs are signed
-// Owner of two UTXOs spends one, should still have the other in balance

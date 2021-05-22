@@ -21,6 +21,7 @@ class Bank {
 
   void clearCoinsFromInputs(const Transaction& tx);
   /**/ PublicKey currentOwnerOfInput(const TxInput& input) const;
+  /**/ Currency Bank::inputAmount(const TxInput& input) const;
 
   void distributeCoinsToOutputs(const Transaction::Outputs& outputs);
   /**/ void giveOutputToItsRecipient(const TxOutput& output);

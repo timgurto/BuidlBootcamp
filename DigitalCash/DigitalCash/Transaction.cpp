@@ -13,5 +13,5 @@ bool operator<(const TxID& lhs, const TxID& rhs) {
   for (auto i = 0; i != 8; ++i) {
     if (lhs.Data4[i] != rhs.Data4[i]) return lhs.Data4[i] < rhs.Data4[i];
   }
-  return false;
+  return false;  // UUIDs are equal
 }

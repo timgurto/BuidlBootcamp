@@ -79,14 +79,14 @@ TEST_CASE_METHOD(SampleUsers, "Issuing coins") {
         auto result = bank.issue(100, alice);
 
         THEN("the resulting transaction has a 100-coin output") {
-          CHECK(result.output[0].amount == 100);
+          CHECK(result.outputs[0].amount == 100);
         }
       }
       WHEN("the bank issues 50 coins") {
         auto result = bank.issue(50, alice);
 
         THEN("the resulting transaction has a 50-coin output") {
-          CHECK(result.output[0].amount == 50);
+          CHECK(result.outputs[0].amount == 50);
         }
       }
     }
@@ -181,3 +181,4 @@ TEST_CASE("TxIDs are unique") {
 // UserWithSigningAuthority::signInput()
 // Bank should check that inputs are signed
 // Make sure inputs and outputs are equal
+// Output1 is spent: check that new balance is 0

@@ -27,6 +27,8 @@ struct TxOutput {
 
 struct Transaction {
   TxID id;
-  std::vector<TxInput> input;
-  std::vector<TxOutput> output;
+  using Inputs = std::vector<TxInput>;
+  using Outputs = std::vector<TxOutput>;
+  Inputs inputs;
+  Outputs outputs;
 };

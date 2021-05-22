@@ -16,12 +16,12 @@ void Bank::handleTransaction(const Transaction& tx) {
   const auto sender0 = getTransactionSender(tx, 0);
   m_balances[sender0] = 0;
 
-  if (tx.input.size() > 1) {
+  if (tx.inputs.size() > 1) {
     const auto sender1 = getTransactionSender(tx, 1);
     m_balances[sender1] = 0;
   }
 
-  for (const auto& output : tx.output) distributeOutput(output);
+  for (const auto& output : tx.outputs) distributeOutput(output);
 }
 
 void Bank::distributeOutput(const TxOutput& output) {
@@ -29,7 +29,7 @@ void Bank::distributeOutput(const TxOutput& output) {
 }
 
 PublicKey Bank::getTransactionSender(const Transaction& tx, Index whichInput) {
-  const auto parentTxID = tx.input[whichInput].transactionThatOutputThis;
+  const auto parentTxID = tx.inputs[whichInput].transactionThatOutputThis;
   const auto parentTx = m_transactions[parentTxID];
-  return parentTx.output[0].recipient;
+  return parentTx.outputs[0].recipient;
 }

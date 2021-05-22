@@ -1,9 +1,9 @@
 #include "Bank.h"
 
 Transaction Bank::issue(Currency amount, PublicKey recipient) {
-  auto txID = generateTxID();
-  auto output = TxOutput{txID, 0, amount, recipient};
-  auto issuance = Transaction{txID, {}, {output}};
+  const auto txID = generateTxID();
+  const auto output = TxOutput{txID, 0, amount, recipient};
+  const auto issuance = Transaction{txID, {}, {output}};
 
   m_balances[recipient] = amount;
   m_transactions[txID] = issuance;

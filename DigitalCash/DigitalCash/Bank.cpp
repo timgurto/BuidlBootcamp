@@ -13,15 +13,20 @@ Transaction Bank::issue(Currency amount, PublicKey recipient) {
 Currency Bank::checkBalance(PublicKey account) { return m_balances[account]; }
 
 void Bank::handleTransaction(const Transaction& tx) {
+  if (!inputsMatchOutputs(tx)) return;
+
+  clearCoinsFromInputs(tx);
+  distributeCoinsToOutputs(tx.outputs);
+}
+
+bool Bank::inputsMatchOutputs(const Transaction& tx) {
   auto totalInputs = 0;
   for (const auto& input : tx.inputs)
     totalInputs += m_balances[currentOwnerOfInput(input)];
   auto totalOutputs = 0;
   for (const auto& output : tx.outputs) totalOutputs += output.amount;
-  if (totalInputs != totalOutputs) return;
 
-  clearCoinsFromInputs(tx);
-  distributeCoinsToOutputs(tx.outputs);
+  return totalInputs == totalOutputs;
 }
 
 void Bank::clearCoinsFromInputs(const Transaction& tx) {

@@ -17,10 +17,11 @@ void Bank::handleTransaction(const Transaction& tx) {
 
   m_balances[sender] = 0;
 
-  for (const auto& output : tx.output) {
-    const auto receiver = output.recipient;
-    m_balances[receiver] = output.amount;
-  }
+  for (const auto& output : tx.output) distributeOutput(output);
+}
+
+void Bank::distributeOutput(const TxOutput& output) {
+  m_balances[output.recipient] = output.amount;
 }
 
 PublicKey Bank::getTransactionSender(const Transaction& tx) {

@@ -164,6 +164,24 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
         }
       }
     }
+
+    SECTION("Unequal inputs/outputs: transaction is ignored") {
+      AND_GIVEN("a transaction of 50 coins from Alice to Bob") {
+        auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
+        auto txID = generateTxID();
+        auto output0 = TxOutput{txID, 0, 50, bob};
+        auto aliceToBob = Transaction{txID, {input0}, {output0}};
+        authAlice.signInput(aliceToBob, 0);
+
+        WHEN("the bank handles the transaction") {
+          bank.handleTransaction(aliceToBob);
+
+          THEN("Alice still has 100 coins") {
+            CHECK(bank.checkBalance(alice) == 100);
+          }
+        }
+      }
+    }
   }
 }
 
@@ -179,5 +197,4 @@ TEST_CASE("TxIDs are unique") {
 // Issuance is unsigned
 // UserWithSigningAuthority::signInput()
 // Bank should check that inputs are signed
-// Make sure inputs and outputs are equal
 // Output1 is spent: check that new balance is 0

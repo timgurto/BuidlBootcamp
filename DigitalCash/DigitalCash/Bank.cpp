@@ -6,6 +6,7 @@ Transaction Bank::issue(Currency amount, PublicKey recipient) {
   const auto issuance = Transaction{txID, {}, {output}};
 
   m_balances[recipient] = amount;
+  registerTransaction(issuance);
   m_transactions[txID] = issuance;
   return issuance;
 }
@@ -22,6 +23,12 @@ void Bank::handleTransaction(const Transaction& tx) {
   removeCoinsFromInputs(tx);
   addCoinsToOutputs(tx.outputs);
 
+  registerTransaction(tx);
+}
+
+void Bank::registerTransaction(const Transaction& tx)
+
+{
   m_transactions[tx.id] = tx;
 }
 

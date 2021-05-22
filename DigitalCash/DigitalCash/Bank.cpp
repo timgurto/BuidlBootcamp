@@ -18,10 +18,14 @@ void Bank::handleTransaction(const Transaction& tx) {
     m_balances[sender] = 0;
   }
 
-  for (const auto& output : tx.outputs) distributeOutput(output);
+  distributeOutputs(tx.outputs);
 }
 
-void Bank::distributeOutput(const TxOutput& output) {
+void Bank::distributeOutputs(const Transaction::Outputs& outputs) {
+  for (const auto& output : outputs) giveOutputToItsRecipient(output);
+}
+
+void Bank::giveOutputToItsRecipient(const TxOutput& output) {
   m_balances[output.recipient] = output.amount;
 }
 

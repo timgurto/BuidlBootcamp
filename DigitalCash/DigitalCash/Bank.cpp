@@ -32,7 +32,8 @@ bool Bank::inputsMatchOutputs(const Transaction& tx) const {
 Currency Bank::total(const Transaction::Inputs& inputs) const {
   auto total = Currency{0};
   for (const auto& input : inputs) {
-    total += inputAmount(input);
+    const auto inputAmount = correspondingUTXO(input).amount;
+    total += inputAmount;
   }
   return total;
 }
@@ -45,21 +46,17 @@ Currency Bank::total(const Transaction::Outputs& outputs) {
 
 void Bank::clearCoinsFromInputs(const Transaction& tx) {
   for (const auto& input : tx.inputs) {
-    const auto sender = currentOwnerOfInput(input);
-    m_balances[sender] -= inputAmount(input);
+    const auto& asUTXO = correspondingUTXO(input);
+    const auto sender = asUTXO.recipient;
+    const auto amount = asUTXO.amount;
+    m_balances[sender] -= amount;
   }
 }
 
-PublicKey Bank::currentOwnerOfInput(const TxInput& input) const {
+const TxOutput& Bank::correspondingUTXO(const TxInput& input) const {
   const auto parentTxID = input.transactionThatOutputThis;
   const auto parentTx = m_transactions.find(parentTxID);
-  return parentTx->second.outputs[input.whichOutputWasThis].recipient;
-}
-
-Currency Bank::inputAmount(const TxInput& input) const {
-  const auto parentTxID = input.transactionThatOutputThis;
-  const auto parentTx = m_transactions.find(parentTxID);
-  return parentTx->second.outputs[input.whichOutputWasThis].amount;
+  return parentTx->second.outputs[input.whichOutputWasThis];
 }
 
 void Bank::distributeCoinsToOutputs(const Transaction::Outputs& outputs) {

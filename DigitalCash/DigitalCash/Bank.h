@@ -20,8 +20,7 @@ class Bank {
   /**/ static Currency total(const Transaction::Outputs& outputs);
 
   void clearCoinsFromInputs(const Transaction& tx);
-  /**/ PublicKey currentOwnerOfInput(const TxInput& input) const;
-  /**/ Currency Bank::inputAmount(const TxInput& input) const;
+  /**/ const TxOutput& correspondingUTXO(const TxInput& input) const;
 
   void distributeCoinsToOutputs(const Transaction::Outputs& outputs);
   /**/ void giveOutputToItsRecipient(const TxOutput& output);

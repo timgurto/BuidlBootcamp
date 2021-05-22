@@ -14,14 +14,15 @@ Currency Bank::checkBalance(PublicKey account) { return m_balances[account]; }
 
 void Bank::handleTransaction(const Transaction& tx) {
   const auto sender = getTransactionSender(tx);
-  const auto receiver = tx.output[0].recipient;
+
+  m_balances[sender] = 0;
+
+  const auto receiver0 = tx.output[0].recipient;
+  m_balances[receiver0] = tx.output[0].amount;
 
   if (tx.output.size() > 1) {
-    m_balances[sender] = 50;
-    m_balances[receiver] = 50;
-  } else {
-    m_balances[sender] = 0;
-    m_balances[receiver] = 100;
+    const auto receiver1 = tx.output[1].recipient;
+    m_balances[receiver1] = tx.output[1].amount;
   }
 }
 

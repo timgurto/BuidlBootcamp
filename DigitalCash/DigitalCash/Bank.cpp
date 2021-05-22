@@ -20,13 +20,20 @@ void Bank::handleTransaction(const Transaction& tx) {
 }
 
 bool Bank::inputsMatchOutputs(const Transaction& tx) {
-  auto totalInputs = 0;
-  for (const auto& input : tx.inputs)
-    totalInputs += m_balances[currentOwnerOfInput(input)];
-  auto totalOutputs = 0;
-  for (const auto& output : tx.outputs) totalOutputs += output.amount;
+  return total(tx.inputs) == total(tx.outputs);
+}
 
-  return totalInputs == totalOutputs;
+Currency Bank::total(const Transaction::Inputs& inputs) {
+  auto total = Currency{0};
+  for (const auto& input : inputs)
+    total += m_balances[currentOwnerOfInput(input)];
+  return total;
+}
+
+Currency Bank::total(const Transaction::Outputs& outputs) {
+  auto total = Currency{0};
+  for (const auto& output : outputs) total += output.amount;
+  return total;
 }
 
 void Bank::clearCoinsFromInputs(const Transaction& tx) {

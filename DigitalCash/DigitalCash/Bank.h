@@ -16,6 +16,8 @@ class Bank {
   std::map<TxID, Transaction> m_transactions;
 
   bool inputsMatchOutputs(const Transaction& tx);
+  /**/ Currency total(const Transaction::Inputs& inputs);
+  /**/ Currency total(const Transaction::Outputs& outputs);
 
   void clearCoinsFromInputs(const Transaction& tx);
   /**/ PublicKey currentOwnerOfInput(const TxInput& input);

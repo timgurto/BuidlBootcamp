@@ -13,12 +13,15 @@ Transaction Bank::issue(Currency amount, PublicKey recipient) {
 Currency Bank::checkBalance(PublicKey account) { return m_balances[account]; }
 
 void Bank::handleTransaction(const Transaction& tx) {
+  clearCoinsFromInputs(tx);
+  distributeOutputs(tx.outputs);
+}
+
+void Bank::clearCoinsFromInputs(const Transaction& tx) {
   for (auto input = 0; input != tx.inputs.size(); ++input) {
     const auto sender = getTransactionSender(tx, input);
     m_balances[sender] = 0;
   }
-
-  distributeOutputs(tx.outputs);
 }
 
 void Bank::distributeOutputs(const Transaction::Outputs& outputs) {

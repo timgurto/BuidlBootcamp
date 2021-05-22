@@ -152,7 +152,7 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
 
         AND_GIVEN("Alice and Bob give all 200 coins to Charlie") {
           auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
-          auto input1 = TxInput{issuanceToBob.id, 1, Signature{}};
+          auto input1 = TxInput{issuanceToBob.id, 0, Signature{}};
           auto txID = generateTxID();
           auto output0 = TxOutput{txID, 0, 200, charlie};
           auto allToCharlie = Transaction{txID, {input0, input1}, {output0}};
@@ -200,10 +200,10 @@ TEST_CASE_METHOD(SampleUsers, "Using an output[1] as input") {
       bank.handleTransaction(aliceToBob);
 
       WHEN("Bob then spends his coin (what was output[1])") {
-        auto input0 = TxInput{aliceToBob.id, 0, Signature{}};
+        auto input0 = TxInput{aliceToBob.id, 1, Signature{}};
         auto txID = generateTxID();
         auto output0 = TxOutput{txID, 0, 1, charlie};
-        auto bobToCharlie = Transaction{txID, {input0}, {output0, output1}};
+        auto bobToCharlie = Transaction{txID, {input0}, {output0}};
         authBob.signInput(bobToCharlie, 0);
         bank.handleTransaction(bobToCharlie);
       }
@@ -224,3 +224,4 @@ TEST_CASE("TxIDs are unique") {
 // UserWithSigningAuthority::signInput()
 // Bank should check that inputs are signed
 // Output1 is spent: check that new balance is 0
+// Senders must have enough money

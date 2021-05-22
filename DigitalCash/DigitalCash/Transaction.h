@@ -14,7 +14,7 @@ bool operator<(const TxID& lhs, const TxID& rhs);
 
 struct TxInput {
   TxID transactionThatOutputThis;
-  Index whichInput;
+  Index whichOutputWasThis;
   Signature signature;
 };
 

@@ -16,7 +16,8 @@ class Bank {
   std::map<TxID, Transaction> m_transactions;
 
   void clearCoinsFromInputs(const Transaction& tx);
+  /**/ PublicKey getTransactionSender(const Transaction& tx, Index whichInput);
+
   void distributeCoinsToOutputs(const Transaction::Outputs& outputs);
   /**/ void giveOutputToItsRecipient(const TxOutput& output);
-  PublicKey getTransactionSender(const Transaction& tx, Index whichInput);
 };

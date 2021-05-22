@@ -24,16 +24,16 @@ void Bank::clearCoinsFromInputs(const Transaction& tx) {
   }
 }
 
+PublicKey Bank::getTransactionSender(const Transaction& tx, Index whichInput) {
+  const auto parentTxID = tx.inputs[whichInput].transactionThatOutputThis;
+  const auto parentTx = m_transactions[parentTxID];
+  return parentTx.outputs[0].recipient;
+}
+
 void Bank::distributeCoinsToOutputs(const Transaction::Outputs& outputs) {
   for (const auto& output : outputs) giveOutputToItsRecipient(output);
 }
 
 void Bank::giveOutputToItsRecipient(const TxOutput& output) {
   m_balances[output.recipient] = output.amount;
-}
-
-PublicKey Bank::getTransactionSender(const Transaction& tx, Index whichInput) {
-  const auto parentTxID = tx.inputs[whichInput].transactionThatOutputThis;
-  const auto parentTx = m_transactions[parentTxID];
-  return parentTx.outputs[0].recipient;
 }

@@ -62,5 +62,5 @@ void Bank::distributeCoinsToOutputs(const Transaction::Outputs& outputs) {
 }
 
 void Bank::giveOutputToItsRecipient(const TxOutput& output) {
-  m_balances[output.recipient] = output.amount;
+  m_balances[output.recipient] += output.amount;
 }

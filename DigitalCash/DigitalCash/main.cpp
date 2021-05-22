@@ -213,6 +213,35 @@ TEST_CASE_METHOD(SampleUsers, "Using an output[1] as input") {
   }
 }
 
+TEST_CASE_METHOD(SampleUsers,
+                 "Balance includes all UTXOs, not just the most recent") {
+  GIVEN("Alice has two coins") {
+    auto bank = Bank{};
+    auto issuanceToAlice = bank.issue(2, alice);
+
+    WHEN("she gives one to Bob") {
+      auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
+      auto txID = generateTxID();
+      auto output0 = TxOutput{txID, 0, 1, bob};
+      auto output1 = TxOutput{txID, 1, 1, alice};  // Change
+      auto aliceToBob1 = Transaction{txID, {input0}, {output0, output1}};
+      authAlice.signInput(aliceToBob1, 0);
+      bank.handleTransaction(aliceToBob1);
+
+      AND_WHEN("she gives another to Bob") {
+        auto input0 = TxInput{aliceToBob1.id, 1, Signature{}};
+        auto txID = generateTxID();
+        auto output1 = TxOutput{txID, 0, 1, bob};
+        auto aliceToBob2 = Transaction{txID, {input0}, {output0}};
+        authAlice.signInput(aliceToBob2, 0);
+        bank.handleTransaction(aliceToBob2);
+
+        THEN("Bob has two coins") { CHECK(bank.checkBalance(bob) == 2); }
+      }
+    }
+  }
+}
+
 TEST_CASE("TxIDs are unique") {
   WHEN("Two TxIDs are generated") {
     auto id1 = generateTxID();
@@ -225,5 +254,4 @@ TEST_CASE("TxIDs are unique") {
 // Issuance is unsigned
 // UserWithSigningAuthority::signInput()
 // Bank should check that inputs are signed
-// Output1 is spent: check that new balance is 0
-// Senders must have enough money
+// Owner of two UTXOs spends one, should still have the other in balance

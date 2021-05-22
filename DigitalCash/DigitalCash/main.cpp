@@ -185,6 +185,32 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
   }
 }
 
+TEST_CASE_METHOD(SampleUsers, "Using an output[1] as input") {
+  GIVEN("Alice has two coins") {
+    auto bank = Bank{};
+    auto issuanceToAlice = bank.issue(2, alice);
+
+    AND_GIVEN("Bob receives one coin as output[1]") {
+      auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
+      auto txID = generateTxID();
+      auto output0 = TxOutput{txID, 0, 1, alice};
+      auto output1 = TxOutput{txID, 1, 1, bob};
+      auto aliceToBob = Transaction{txID, {input0}, {output0, output1}};
+      authAlice.signInput(aliceToBob, 0);
+      bank.handleTransaction(aliceToBob);
+
+      WHEN("Bob then spends his coin (what was output[1])") {
+        auto input0 = TxInput{aliceToBob.id, 0, Signature{}};
+        auto txID = generateTxID();
+        auto output0 = TxOutput{txID, 0, 1, charlie};
+        auto bobToCharlie = Transaction{txID, {input0}, {output0, output1}};
+        authBob.signInput(bobToCharlie, 0);
+        bank.handleTransaction(bobToCharlie);
+      }
+    }
+  }
+}
+
 TEST_CASE("TxIDs are unique") {
   WHEN("Two TxIDs are generated") {
     auto id1 = generateTxID();

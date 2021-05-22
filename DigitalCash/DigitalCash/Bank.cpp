@@ -21,6 +21,8 @@ void Bank::handleTransaction(const Transaction& tx) {
 
   clearCoinsFromInputs(tx);
   distributeCoinsToOutputs(tx.outputs);
+
+  m_transactions[tx.id] = tx;
 }
 
 bool Bank::inputsMatchOutputs(const Transaction& tx) const {

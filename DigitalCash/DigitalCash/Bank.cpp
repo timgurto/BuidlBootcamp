@@ -17,12 +17,9 @@ void Bank::handleTransaction(const Transaction& tx) {
 
   m_balances[sender] = 0;
 
-  const auto receiver0 = tx.output[0].recipient;
-  m_balances[receiver0] = tx.output[0].amount;
-
-  if (tx.output.size() > 1) {
-    const auto receiver1 = tx.output[1].recipient;
-    m_balances[receiver1] = tx.output[1].amount;
+  for (const auto& output : tx.output) {
+    const auto receiver = output.recipient;
+    m_balances[receiver] = output.amount;
   }
 }
 

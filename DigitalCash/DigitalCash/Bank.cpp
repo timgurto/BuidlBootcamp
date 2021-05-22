@@ -25,8 +25,10 @@ bool Bank::inputsMatchOutputs(const Transaction& tx) {
 
 Currency Bank::total(const Transaction::Inputs& inputs) {
   auto total = Currency{0};
-  for (const auto& input : inputs)
-    total += m_balances[currentOwnerOfInput(input)];
+  for (const auto& input : inputs) {
+    const auto sender = currentOwnerOfInput(input);
+    total += m_balances[sender];
+  }
   return total;
 }
 

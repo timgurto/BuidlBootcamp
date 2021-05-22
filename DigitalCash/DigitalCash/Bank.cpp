@@ -14,7 +14,7 @@ Currency Bank::checkBalance(PublicKey account) { return m_balances[account]; }
 
 void Bank::handleTransaction(const Transaction& tx) {
   clearCoinsFromInputs(tx);
-  distributeOutputs(tx.outputs);
+  distributeCoinsToOutputs(tx.outputs);
 }
 
 void Bank::clearCoinsFromInputs(const Transaction& tx) {
@@ -24,7 +24,7 @@ void Bank::clearCoinsFromInputs(const Transaction& tx) {
   }
 }
 
-void Bank::distributeOutputs(const Transaction::Outputs& outputs) {
+void Bank::distributeCoinsToOutputs(const Transaction::Outputs& outputs) {
   for (const auto& output : outputs) giveOutputToItsRecipient(output);
 }
 

@@ -145,6 +145,25 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
         }
       }
     }
+
+    SECTION("Multiple inputs") {
+      AND_GIVEN("Bob is issued 100 coins") {
+        auto issuanceToBob = bank.issue(100, bob);
+
+        AND_GIVEN("Alice and Bob give all 200 coins to Charlie") {
+          auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
+          auto input1 = TxInput{issuanceToBob.id, 1, Signature{}};
+          auto txID = generateTxID();
+          auto output0 = TxOutput{txID, 0, 200, charlie};
+          auto allToCharlie = Transaction{txID, {input0, input1}, {output0}};
+          authAlice.signInput(allToCharlie, 0);
+          authBob.signInput(allToCharlie, 1);
+          bank.handleTransaction(allToCharlie);
+
+          THEN("Bob has 0 coins") { CHECK(bank.checkBalance(bob) == 0); }
+        }
+      }
+    }
   }
 }
 

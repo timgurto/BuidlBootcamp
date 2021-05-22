@@ -10,7 +10,7 @@ Transaction Bank::issue(Currency amount, PublicKey recipient) {
   return issuance;
 }
 
-Currency Bank::checkBalance(PublicKey account) {
+Currency Bank::checkBalance(PublicKey account) const {
   const auto it = m_balances.find(account);
   if (it == m_balances.end()) return 0;
   return it->second;
@@ -23,11 +23,11 @@ void Bank::handleTransaction(const Transaction& tx) {
   distributeCoinsToOutputs(tx.outputs);
 }
 
-bool Bank::inputsMatchOutputs(const Transaction& tx) {
+bool Bank::inputsMatchOutputs(const Transaction& tx) const {
   return total(tx.inputs) == total(tx.outputs);
 }
 
-Currency Bank::total(const Transaction::Inputs& inputs) {
+Currency Bank::total(const Transaction::Inputs& inputs) const {
   auto total = Currency{0};
   for (const auto& input : inputs) {
     const auto sender = currentOwnerOfInput(input);
@@ -49,7 +49,7 @@ void Bank::clearCoinsFromInputs(const Transaction& tx) {
   }
 }
 
-PublicKey Bank::currentOwnerOfInput(const TxInput& input) {
+PublicKey Bank::currentOwnerOfInput(const TxInput& input) const {
   const auto parentTxID = input.transactionThatOutputThis;
   const auto parentTx = m_transactions.find(parentTxID);
   return parentTx->second.outputs[0].recipient;

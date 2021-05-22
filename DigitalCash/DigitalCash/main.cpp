@@ -112,6 +112,24 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
         THEN("bob has 100 coins") { CHECK(bank.checkBalance(bob) == 100); }
       }
     }
+
+    SECTION("Multiple outputs") {
+      AND_GIVEN("a transaction of 50 coins from Alice to Bob, and 50 change") {
+        auto input0 = TxInput{issuance.id, 0, Signature{}};
+        auto txID = generateTxID();
+        auto output0 = TxOutput{txID, 0, 50, bob};
+        auto output1 = TxOutput{txID, 0, 50, alice};
+        auto aliceToBob = Transaction{txID, {input0}, {output0, output1}};
+        authAlice.signInput(aliceToBob, 0);
+
+        WHEN("the bank handles the transaction") {
+          bank.handleTransaction(aliceToBob);
+
+          THEN("alice has 50 coins") { CHECK(bank.checkBalance(alice) == 50); }
+          THEN("bob has 50 coins") { CHECK(bank.checkBalance(bob) == 50); }
+        }
+      }
+    }
   }
 }
 
@@ -124,7 +142,6 @@ TEST_CASE("TxIDs are unique") {
   }
 }
 
-// TxID generation
 // Multiple senders
 // Multiple receivers
 // Recipient balance when amount != 100

@@ -19,8 +19,8 @@ Currency Bank::checkBalance(PublicKey account) const {
 void Bank::handleTransaction(const Transaction& tx) {
   if (!inputsMatchOutputs(tx)) return;
 
-  clearCoinsFromInputs(tx);
-  distributeCoinsToOutputs(tx.outputs);
+  removeCoinsFromInputs(tx);
+  addCoinsToOutputs(tx.outputs);
 
   m_transactions[tx.id] = tx;
 }
@@ -44,7 +44,7 @@ Currency Bank::total(const Transaction::Outputs& outputs) {
   return total;
 }
 
-void Bank::clearCoinsFromInputs(const Transaction& tx) {
+void Bank::removeCoinsFromInputs(const Transaction& tx) {
   for (const auto& input : tx.inputs) {
     const auto& asUTXO = correspondingUTXO(input);
     const auto sender = asUTXO.recipient;
@@ -59,7 +59,7 @@ const TxOutput& Bank::correspondingUTXO(const TxInput& input) const {
   return parentTx->second.outputs[input.whichOutputWasThis];
 }
 
-void Bank::distributeCoinsToOutputs(const Transaction::Outputs& outputs) {
+void Bank::addCoinsToOutputs(const Transaction::Outputs& outputs) {
   for (const auto& output : outputs) giveOutputToItsRecipient(output);
 }
 

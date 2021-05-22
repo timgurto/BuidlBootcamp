@@ -19,9 +19,9 @@ class Bank {
   /**/ Currency total(const Transaction::Inputs& inputs) const;
   /**/ static Currency total(const Transaction::Outputs& outputs);
 
-  void clearCoinsFromInputs(const Transaction& tx);
+  void removeCoinsFromInputs(const Transaction& tx);
   /**/ const TxOutput& correspondingUTXO(const TxInput& input) const;
 
-  void distributeCoinsToOutputs(const Transaction::Outputs& outputs);
+  void addCoinsToOutputs(const Transaction::Outputs& outputs);
   /**/ void giveOutputToItsRecipient(const TxOutput& output);
 };

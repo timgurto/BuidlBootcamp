@@ -206,6 +206,8 @@ TEST_CASE_METHOD(SampleUsers, "Using an output[1] as input") {
         auto bobToCharlie = Transaction{txID, {input0}, {output0}};
         authBob.signInput(bobToCharlie, 0);
         bank.handleTransaction(bobToCharlie);
+
+        THEN("he has no coins") { CHECK(bank.checkBalance(bob) == 0); }
       }
     }
   }

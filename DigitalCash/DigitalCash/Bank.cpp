@@ -54,7 +54,7 @@ void Bank::clearCoinsFromInputs(const Transaction& tx) {
 PublicKey Bank::currentOwnerOfInput(const TxInput& input) const {
   const auto parentTxID = input.transactionThatOutputThis;
   const auto parentTx = m_transactions.find(parentTxID);
-  return parentTx->second.outputs[0].recipient;
+  return parentTx->second.outputs[input.whichOutputWasThis].recipient;
 }
 
 void Bank::distributeCoinsToOutputs(const Transaction::Outputs& outputs) {

@@ -1,7 +1,11 @@
 # DigitalCash
-This repository follows my implementation of the "Digital Cash" course from mooniversity.io.
+This repository follows my implementation of the "Digital Cash" course from [mooniversity.io](https://mooniversity.io/).
 The most notable difference is that I am implementing it in C++.
 It is broken into a number of distinct iterations, each of which adds more functionality that is present in Bitcoin.
+
+I use the following third-party libraries:
+- Crypto++ (for keys and signing/verifying)
+- Windows Rpc.h (for transaction UUIDs)
 
 The best way to understand the functionality of each iteration is to view its tests.
 

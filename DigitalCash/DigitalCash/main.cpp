@@ -266,6 +266,26 @@ TEST_CASE("TxIDs are unique") {
   }
 }
 
-// Issuance is unsigned
+TEST_CASE_METHOD(SampleUsers, "Signatures") {
+  GIVEN("Alice has a coin") {
+    auto bank = Bank{};
+    auto issuanceToAlice = bank.issue(1, alice);
+
+    AND_GIVEN("An unsigned transaction giving the coin to Bob") {
+      auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
+      auto txID = generateTxID();
+      auto output0 = TxOutput{txID, 0, 1, bob};
+      auto aliceToBob = Transaction{txID, {input0}, {output0}};
+
+      WHEN("the bank observes it") {
+        bank.handleTransaction(aliceToBob);
+
+        THEN("Alice still has the coin") {
+          CHECK(bank.checkBalance(alice) == 1);
+        }
+      }
+    }
+  }
+}
+
 // UserWithSigningAuthority::signInput()
-// Bank should check that inputs are signed

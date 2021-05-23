@@ -2,9 +2,11 @@
 
 #include <string>
 
+using namespace std::string_literals;
+
 class Signature {
  public:
-  explicit Signature(const std::string &sig = {});
+  explicit Signature(const std::string &sig = "unsigned"s);
   bool operator==(const Signature &rhs) const;
   bool operator!=(const Signature &rhs) const;
 

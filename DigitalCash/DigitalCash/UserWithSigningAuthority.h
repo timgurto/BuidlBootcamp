@@ -11,7 +11,7 @@ class UserWithSigningAuthority {
  public:
   UserWithSigningAuthority();
   PublicKey getWeakVersion() const;
-  void signInput(const Transaction& tx, Index);
+  void signInput(Transaction& tx, Index);
 
  private:
   PrivateKey m_keys;

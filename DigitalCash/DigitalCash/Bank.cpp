@@ -20,6 +20,8 @@ Currency Bank::checkBalance(PublicKey account) const {
 void Bank::handleTransaction(const Transaction& tx) {
   if (!inputsMatchOutputs(tx)) return;
 
+  if (!tx.inputs[0].signature.exists()) return;
+
   removeCoinsFromInputs(tx);
   addCoinsToOutputs(tx.outputs);
 

@@ -2,8 +2,6 @@
 
 #include <hex.h>
 
-using namespace std::string_literals;
-
 Signature::Signature(const std::string &sig) : m_signature(sig) {}
 
 bool Signature::operator==(const Signature &rhs) const {

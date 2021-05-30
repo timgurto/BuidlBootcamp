@@ -26,6 +26,8 @@ void Bank::handleTransaction(const Transaction& tx) {
 
   if (tx.inputs.size() > 1) {
     if (!tx.inputs[1].signature.exists()) return;
+    const auto sender = correspondingUTXO(tx.inputs[1]).recipient;
+    if (!sender.verifySignatureForMessage(tx.inputs[1].signature, {})) return;
   }
 
   removeCoinsFromInputs(tx);

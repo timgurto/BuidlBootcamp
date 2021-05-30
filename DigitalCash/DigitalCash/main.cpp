@@ -318,11 +318,28 @@ TEST_CASE_METHOD(SampleUsers, "Signatures on inputs") {
         AND_GIVEN("only Alice's input is signed") {
           authAlice.signInput(bothToCharlie, 0);
 
-          WHEN("the bank observes the transaction") {
-            bank.handleTransaction(bothToCharlie);
+          SECTION("Unsigned") {
+            WHEN("the bank observes the transaction") {
+              bank.handleTransaction(bothToCharlie);
 
-            THEN("the transaction failed (Charlie still has no coins)") {
-              CHECK(bank.checkBalance(charlie) == 0);
+              THEN("the transaction failed (Charlie still has no coins)") {
+                CHECK(bank.checkBalance(charlie) == 0);
+              }
+            }
+          }
+
+          SECTION("Signed by the wrong person") {
+            WHEN("Bob's input is signed by someone other than Bob") {
+              const auto stranger = UserWithSigningAuthority{};
+              stranger.signInput(bothToCharlie, 1);
+
+              AND_WHEN("the bank observes the transaction") {
+                bank.handleTransaction(bothToCharlie);
+
+                THEN("the transaction failed (Charlie still has no coins)") {
+                  CHECK(bank.checkBalance(charlie) == 0);
+                }
+              }
             }
           }
         }

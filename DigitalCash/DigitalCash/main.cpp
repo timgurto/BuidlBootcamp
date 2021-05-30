@@ -286,6 +286,23 @@ TEST_CASE_METHOD(SampleUsers, "Signatures on inputs") {
           }
         }
       }
+
+      SECTION("Signed by the wrong person") {
+        WHEN("Charlie signs it") {
+          authCharlie.signInput(aliceToBob, 0);
+
+          AND_WHEN("the bank observes it") {
+            bank.handleTransaction(aliceToBob);
+
+            THEN("the transaction failed (Alice still has the coin)") {
+              CHECK(bank.checkBalance(alice) == 1);
+            }
+          }
+        }
+      }
     }
   }
 }
+
+// Verify signature on input[1]
+// Signature should change with ?

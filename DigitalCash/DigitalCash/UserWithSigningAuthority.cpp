@@ -10,6 +10,6 @@ PublicKey UserWithSigningAuthority::getWeakVersion() const {
   return m_keys.getPublicKey();
 }
 
-void UserWithSigningAuthority::signInput(Transaction& tx, Index) {
-  tx.inputs[0].signature = Signature{""s};
+void UserWithSigningAuthority::signInput(Transaction& tx, Index i) {
+  tx.inputs[i].signature = m_keys.sign({});
 }

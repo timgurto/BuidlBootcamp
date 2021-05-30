@@ -20,14 +20,10 @@ Currency Bank::checkBalance(PublicKey account) const {
 void Bank::handleTransaction(const Transaction& tx) {
   if (!inputsMatchOutputs(tx)) return;
 
-  if (!tx.inputs[0].signature.exists()) return;
-  const auto sender = correspondingUTXO(tx.inputs[0]).recipient;
-  if (!sender.verifySignatureForMessage(tx.inputs[0].signature, {})) return;
-
-  if (tx.inputs.size() > 1) {
-    if (!tx.inputs[1].signature.exists()) return;
-    const auto sender = correspondingUTXO(tx.inputs[1]).recipient;
-    if (!sender.verifySignatureForMessage(tx.inputs[1].signature, {})) return;
+  for (const auto& input : tx.inputs) {
+    if (!input.signature.exists()) return;
+    const auto sender = correspondingUTXO(input).recipient;
+    if (!sender.verifySignatureForMessage(input.signature, {})) return;
   }
 
   removeCoinsFromInputs(tx);

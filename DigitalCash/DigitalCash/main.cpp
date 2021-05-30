@@ -348,5 +348,4 @@ TEST_CASE_METHOD(SampleUsers, "Signatures on inputs") {
   }
 }
 
-// Verify signature on input[1]
 // Signature should change with ?

@@ -271,7 +271,7 @@ TEST_CASE_METHOD(SampleUsers, "Signatures on inputs") {
     auto bank = Bank{};
     auto issuanceToAlice = bank.issue(1, alice);
 
-    AND_GIVEN("An unsigned transaction giving the coin to Bob") {
+    AND_GIVEN("an unsigned transaction giving the coin to Bob") {
       auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
       auto txID = generateTxID();
       auto output0 = TxOutput{txID, 0, 1, bob};
@@ -296,6 +296,33 @@ TEST_CASE_METHOD(SampleUsers, "Signatures on inputs") {
 
             THEN("the transaction failed (Alice still has the coin)") {
               CHECK(bank.checkBalance(alice) == 1);
+            }
+          }
+        }
+      }
+    }
+  }
+  SECTION("All inputs are signed, not just first") {
+    GIVEN("Alice and Bob each have a coin") {
+      auto bank = Bank{};
+      auto issuanceToAlice = bank.issue(1, alice);
+      auto issuanceToBob = bank.issue(1, bob);
+
+      AND_GIVEN("a transaction from Alice and Bob to Charlie") {
+        auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
+        auto input1 = TxInput{issuanceToBob.id, 0, Signature{}};
+        auto txID = generateTxID();
+        auto output0 = TxOutput{txID, 0, 2, charlie};
+        auto bothToCharlie = Transaction{txID, {input0, input1}, {output0}};
+
+        AND_GIVEN("only Alice's input is signed") {
+          authAlice.signInput(bothToCharlie, 0);
+
+          WHEN("the bank observes the transaction") {
+            bank.handleTransaction(bothToCharlie);
+
+            THEN("the transaction failed (Charlie still has no coins)") {
+              CHECK(bank.checkBalance(charlie) == 0);
             }
           }
         }

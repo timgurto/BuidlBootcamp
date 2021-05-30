@@ -20,7 +20,7 @@ Currency Bank::checkBalance(PublicKey account) const {
 void Bank::handleTransaction(const Transaction& tx) {
   if (!transactionIsValid(tx)) return;
 
-  takeCoinsFromInputs(tx);
+  takeCoinsFromInputs(tx.inputs);
   giveCoinsToOutputs(tx.outputs);
 
   registerTransaction(tx);
@@ -33,15 +33,15 @@ void Bank::registerTransaction(const Transaction& tx)
 }
 
 bool Bank::transactionIsValid(const Transaction& tx) const {
-  return inputsMatchOutputs(tx) && inputsAreSigned(tx);
+  return inputsMatchOutputs(tx) && inputsAreSigned(tx.inputs);
 }
 
 bool Bank::inputsMatchOutputs(const Transaction& tx) const {
   return total(tx.inputs) == total(tx.outputs);
 }
 
-bool Bank::inputsAreSigned(const Transaction& tx) const {
-  for (const auto& input : tx.inputs) {
+bool Bank::inputsAreSigned(const Transaction::Inputs& inputs) const {
+  for (const auto& input : inputs) {
     if (!input.signature.exists()) return false;
     const auto sender = correspondingUTXO(input).recipient;
     if (!sender.verifySignatureForMessage(input.signature, {})) return false;
@@ -65,8 +65,8 @@ Currency Bank::total(const Transaction::Outputs& outputs) {
   return total;
 }
 
-void Bank::takeCoinsFromInputs(const Transaction& tx) {
-  for (const auto& input : tx.inputs) {
+void Bank::takeCoinsFromInputs(const Transaction::Inputs& inputs) {
+  for (const auto& input : inputs) {
     const auto& asUTXO = correspondingUTXO(input);
     const auto sender = asUTXO.recipient;
     const auto amount = asUTXO.amount;

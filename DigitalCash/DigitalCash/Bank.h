@@ -23,9 +23,9 @@ class Bank {
   /******/ static Currency total(const Transaction::Outputs& outputs);
   /**/ bool inputsAreSigned(const Transaction& tx) const;
 
-  void removeCoinsFromInputs(const Transaction& tx);
+  void takeCoinsFromInputs(const Transaction& tx);
   /**/ const TxOutput& correspondingUTXO(const TxInput& input) const;
 
-  void addCoinsToOutputs(const Transaction::Outputs& outputs);
+  void giveCoinsToOutputs(const Transaction::Outputs& outputs);
   /**/ void giveOutputToItsRecipient(const TxOutput& output);
 };

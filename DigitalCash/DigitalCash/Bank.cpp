@@ -18,8 +18,7 @@ Currency Bank::checkBalance(PublicKey account) const {
 }
 
 void Bank::handleTransaction(const Transaction& tx) {
-  if (!inputsMatchOutputs(tx)) return;
-  if (!inputsAreSigned(tx)) return;
+  if (!transactionIsValid(tx)) return;
 
   removeCoinsFromInputs(tx);
   addCoinsToOutputs(tx.outputs);
@@ -31,6 +30,10 @@ void Bank::registerTransaction(const Transaction& tx)
 
 {
   m_transactions[tx.id] = tx;
+}
+
+bool Bank::transactionIsValid(const Transaction& tx) const {
+  return inputsMatchOutputs(tx) && inputsAreSigned(tx);
 }
 
 bool Bank::inputsMatchOutputs(const Transaction& tx) const {

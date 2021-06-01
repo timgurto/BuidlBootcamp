@@ -351,7 +351,7 @@ TEST_CASE_METHOD(SampleUsers, "Signatures on inputs") {
 TEST_CASE_METHOD(SampleUsers, "Double spending is prevented") {
   GIVEN("Alice has plenty of coins") {
     auto bank = Bank{};
-    bank.issue(10, alice);
+    const auto firstIssuance = bank.issue(10, alice);
 
     AND_GIVEN("Alice has an output of 1 coin") {
       const auto issuance = bank.issue(1, alice);
@@ -373,6 +373,25 @@ TEST_CASE_METHOD(SampleUsers, "Double spending is prevented") {
 
           THEN("the transaction fails (Charlie still has no coins)") {
             CHECK(bank.checkBalance(charlie) == 0);
+          }
+        }
+
+        SECTION("double-spending as input[1]") {
+          AND_WHEN(
+              "she tries also sending it to Charlie as the second input "
+              "(bundled together with her other coins)") {
+            const auto input0 = TxInput{firstIssuance.id, 0, Signature{}};
+            const auto input1 = TxInput{issuance.id, 0, Signature{}};
+            const auto txID = generateTxID();
+            const auto output = TxOutput{txID, 0, 11, charlie};
+            auto toCharlie = Transaction{txID, {input0, input1}, {output}};
+            authAlice.signInput(toCharlie, 0);
+            authAlice.signInput(toCharlie, 1);
+            bank.handleTransaction(toCharlie);
+
+            THEN("the transaction fails (Charlie still has no coins)") {
+              CHECK(bank.checkBalance(charlie) == 0);
+            }
           }
         }
       }

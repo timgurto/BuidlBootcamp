@@ -38,7 +38,11 @@ bool Bank::transactionIsValid(const Transaction& tx) const {
 }
 
 bool Bank::inputsAreUnspent(const Transaction::Inputs& inputs) const {
-  return m_spentOutputs.count(inputs[0].previousOutput) == 0;
+  for (const auto& input : inputs) {
+    const auto inputWasSpent = m_spentOutputs.count(input.previousOutput) == 1;
+    if (inputWasSpent) return false;
+  }
+  return true;
 }
 
 bool Bank::inputsMatchOutputs(const Transaction& tx) const {

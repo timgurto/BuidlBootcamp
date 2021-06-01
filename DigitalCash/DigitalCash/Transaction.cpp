@@ -1,4 +1,5 @@
 #include "Transaction.h"
+#include <sstream>
 
 TxID generateTxID() {
   TxID newID;
@@ -16,6 +17,16 @@ bool operator<(const TxID& lhs, const TxID& rhs) {
   return false;  // UUIDs are equal
 }
 
+std::ostream& operator<<(std::ostream& lhs, const TxID& rhs) {
+  auto asCString = RPC_CSTR{nullptr};
+  if (UuidToStringA(&rhs, &asCString) == RPC_S_OK) {
+    lhs << asCString;
+    RpcStringFreeA(&asCString);
+  }
+
+  return lhs;
+}
+
 bool TxOutputID::operator<(const TxOutputID& rhs) const {
   if (transaction < rhs.transaction) return true;
   if (rhs.transaction < transaction) return false;
@@ -25,7 +36,8 @@ bool TxOutputID::operator<(const TxOutputID& rhs) const {
 std::string Transaction::getMessageForInput(Index whichInput) const {
   auto oss = std::ostringstream{};
 
-  oss << "asdf";
+  const auto& input = inputs[whichInput];
+  oss << input.previousOutput.transaction;
 
   return oss.str();
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ostream>
 #include <vector>
 #include "PublicKey.h"
 #include "Rpc.h"
@@ -11,6 +12,7 @@ using TxID = UUID;
 
 TxID generateTxID();
 bool operator<(const TxID& lhs, const TxID& rhs);
+std::ostream& operator<<(std::ostream& lhs, const TxID& rhs);
 
 struct TxOutputID {
   TxID transaction;

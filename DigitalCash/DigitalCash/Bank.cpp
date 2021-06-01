@@ -33,6 +33,9 @@ void Bank::registerTransaction(const Transaction& tx)
 }
 
 bool Bank::transactionIsValid(const Transaction& tx) const {
+  auto input = std::make_pair(tx.inputs[0].transactionThatOutputThis,
+                              tx.inputs[0].whichOutputWasThis);
+  if (m_spentOutputs.count(input) == 1) return false;
   return inputsMatchOutputs(tx) && inputsAreSigned(tx.inputs);
 }
 
@@ -71,6 +74,8 @@ void Bank::takeCoinsFromInputs(const Transaction::Inputs& inputs) {
     const auto sender = asUTXO.recipient;
     const auto amount = asUTXO.amount;
     m_balances[sender] -= amount;
+
+    m_spentOutputs.insert(std::make_pair(asUTXO.owningTx, asUTXO.whichOutput));
   }
 }
 

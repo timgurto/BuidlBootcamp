@@ -336,7 +336,7 @@ TEST_CASE_METHOD(SampleUsers, "Signatures on inputs") {
               AND_WHEN("the bank observes the transaction") {
                 bank.handleTransaction(bothToCharlie);
 
-                THEN("the transaction failed (Charlie still has no coins)") {
+                THEN("the transaction fails (Charlie still has no coins)") {
                   CHECK(bank.checkBalance(charlie) == 0);
                 }
               }
@@ -348,4 +348,34 @@ TEST_CASE_METHOD(SampleUsers, "Signatures on inputs") {
   }
 }
 
-// Signature should change with ?
+TEST_CASE_METHOD(SampleUsers, "Double spending is prevented") {
+  GIVEN("Alice has plenty of coins") {
+    auto bank = Bank{};
+    bank.issue(10, alice);
+
+    AND_GIVEN("Alice has an output of 1 coin") {
+      const auto issuance = bank.issue(1, alice);
+
+      AND_GIVEN("she has sent it to Bob") {
+        const auto input = TxInput{issuance.id, 0, Signature{}};
+        const auto txID = generateTxID();
+        const auto output = TxOutput{txID, 0, 1, bob};
+        auto toBob = Transaction{txID, {input}, {output}};
+        authAlice.signInput(toBob, 0);
+        bank.handleTransaction(toBob);
+
+        AND_WHEN("she tries also sending it to Charlie") {
+          const auto txID = generateTxID();
+          const auto output = TxOutput{txID, 0, 1, charlie};
+          auto toCharlie = Transaction{txID, {input}, {output}};
+          authAlice.signInput(toCharlie, 0);
+          bank.handleTransaction(toCharlie);
+
+          THEN("the transaction fails (Charlie still has no coins)") {
+            CHECK(bank.checkBalance(charlie) == 0);
+          }
+        }
+      }
+    }
+  }
+}

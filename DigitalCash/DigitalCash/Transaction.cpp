@@ -37,7 +37,8 @@ std::string Transaction::getMessageForInput(Index whichInput) const {
   auto oss = std::ostringstream{};
 
   const auto& input = inputs[whichInput];
-  oss << input.previousOutput.transaction;
+  oss << input.previousOutput.transaction << std::endl;
+  oss << input.previousOutput.outputIndex << std::endl;
 
   return oss.str();
 }

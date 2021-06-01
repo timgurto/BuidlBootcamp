@@ -40,5 +40,10 @@ std::string Transaction::getMessageForInput(Index whichInput) const {
   oss << input.previousOutput.transaction << std::endl;
   oss << input.previousOutput.outputIndex << std::endl;
 
+  for (const auto& output : outputs) {
+    oss << output.recipient << std::endl;
+    oss << output.amount << std::endl;
+  }
+
   return oss.str();
 }

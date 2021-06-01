@@ -34,7 +34,7 @@ void Bank::registerTransaction(const Transaction& tx)
 
 bool Bank::transactionIsValid(const Transaction& tx) const {
   return inputsAreUnspent(tx.inputs) && inputsMatchOutputs(tx) &&
-         inputsAreSigned(tx.inputs);
+         inputsAreSigned(tx);
 }
 
 bool Bank::inputsAreUnspent(const Transaction::Inputs& inputs) const {
@@ -57,11 +57,13 @@ bool Bank::inputsMatchOutputs(const Transaction& tx) const {
   return total(tx.inputs) == total(tx.outputs);
 }
 
-bool Bank::inputsAreSigned(const Transaction::Inputs& inputs) const {
-  for (const auto& input : inputs) {
-    if (!input.signature.exists()) return false;
-    const auto sender = correspondingUTXO(input).recipient;
-    if (!sender.verifySignatureForMessage(input.signature, {})) return false;
+bool Bank::inputsAreSigned(const Transaction& tx) const {
+  for (auto index = 0; index != tx.inputs.size(); ++index) {
+    if (!tx.inputs[index].signature.exists()) return false;
+    const auto sender = correspondingUTXO(tx.inputs[index]).recipient;
+    const auto message = tx.getMessageForInput(index);
+    if (!sender.verifySignatureForMessage(tx.inputs[index].signature, message))
+      return false;
   }
 
   return true;

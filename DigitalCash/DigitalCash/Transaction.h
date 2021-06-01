@@ -35,4 +35,6 @@ struct Transaction {
   using Outputs = std::vector<TxOutput>;
   Inputs inputs;
   Outputs outputs;
+
+  std::string getMessageForInput(Index whichInput) const;
 };

@@ -11,5 +11,6 @@ PublicKey UserWithSigningAuthority::getWeakVersion() const {
 }
 
 void UserWithSigningAuthority::signInput(Transaction& tx, Index i) const {
-  tx.inputs[i].signature = m_keys.sign({});
+  const auto message = tx.getMessageForInput(i);
+  tx.inputs[i].signature = m_keys.sign(message);
 }

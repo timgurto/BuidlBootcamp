@@ -21,3 +21,11 @@ bool TxOutputID::operator<(const TxOutputID& rhs) const {
   if (rhs.transaction < transaction) return false;
   return outputIndex < rhs.outputIndex;
 }
+
+std::string Transaction::getMessageForInput(Index whichInput) const {
+  auto oss = std::ostringstream{};
+
+  oss << "asdf";
+
+  return oss.str();
+}

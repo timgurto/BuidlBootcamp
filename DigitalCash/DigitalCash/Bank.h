@@ -24,7 +24,7 @@ class Bank {
   /**/ bool inputsMatchOutputs(const Transaction& tx) const;
   /******/ Currency total(const Transaction::Inputs& inputs) const;
   /******/ static Currency total(const Transaction::Outputs& outputs);
-  /**/ bool inputsAreSigned(const Transaction::Inputs& inputs) const;
+  /**/ bool inputsAreSigned(const Transaction& tx) const;
 
   void takeCoinsFromInputs(const Transaction::Inputs& inputs);
   /**/ const TxOutput& correspondingUTXO(const TxInput& input) const;

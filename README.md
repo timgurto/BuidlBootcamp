@@ -43,3 +43,10 @@ Thus, BankCoin cannot be double-spent.
 [Implementation](https://github.com/timgurto/DigitalCash/tree/eda74a89e9d2eadf5ff9ddeb1e3556abe103e970/DigitalCash/DigitalCash)
 
 
+## Iteration 4: DivisiCoin
+Each transaction consists of inputs and outputs, and purhcasing power depends on controlling (being able to sign) unspent outputs.
+In this way, chains of outputs define a "coin", and there is no longer a `Coin` class.
+
+[Tests](https://github.com/timgurto/DigitalCash/tree/0615a3f436e5424d3a6f07d3e97f079e7a283b20/DigitalCash/DigitalCash/main.cpp)
+•
+[Implementation](https://github.com/timgurto/DigitalCash/tree/0615a3f436e5424d3a6f07d3e97f079e7a283b20/DigitalCash/DigitalCash)

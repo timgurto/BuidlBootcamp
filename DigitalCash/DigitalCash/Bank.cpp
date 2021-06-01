@@ -38,10 +38,18 @@ bool Bank::transactionIsValid(const Transaction& tx) const {
 }
 
 bool Bank::inputsAreUnspent(const Transaction::Inputs& inputs) const {
+  auto toBeSpentInThisTransaction = std::set<TxOutputID>{};
   for (const auto& input : inputs) {
-    const auto inputWasSpent = m_spentOutputs.count(input.previousOutput) == 1;
-    if (inputWasSpent) return false;
+    const auto alreadyIncludedInThisTransaction =
+        toBeSpentInThisTransaction.count(input.previousOutput) == 1;
+    if (alreadyIncludedInThisTransaction) return false;
+
+    const auto spentInAPreviousTransaction =
+        m_spentOutputs.count(input.previousOutput) == 1;
+    if (spentInAPreviousTransaction) return false;
+    toBeSpentInThisTransaction.insert(input.previousOutput);
   }
+
   return true;
 }
 

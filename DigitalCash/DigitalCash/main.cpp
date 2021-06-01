@@ -395,6 +395,21 @@ TEST_CASE_METHOD(SampleUsers, "Double spending is prevented") {
           }
         }
       }
+
+      WHEN("she tries to include it twice in a single transaction to Bob") {
+        const auto input0 = TxInput{issuance.id, 0, Signature{}};
+        const auto input1 = TxInput{issuance.id, 0, Signature{}};
+        const auto txID = generateTxID();
+        const auto output = TxOutput{txID, 0, 2, bob};
+        auto toBob = Transaction{txID, {input0, input1}, {output}};
+        authAlice.signInput(toBob, 0);
+        authAlice.signInput(toBob, 1);
+        bank.handleTransaction(toBob);
+
+        THEN("the transaction fails (Bob still has no coins)") {
+          CHECK(bank.checkBalance(bob) == 0);
+        }
+      }
     }
   }
 }

@@ -348,9 +348,6 @@ TEST_CASE_METHOD(SampleUsers, "Signatures on inputs") {
   }
 }
 
-// Input's TxID/index
-// Each output's amount/pubkey
-
 TEST_CASE_METHOD(SampleUsers, "Double spending is prevented") {
   GIVEN("Alice has plenty of coins") {
     auto bank = Bank{};

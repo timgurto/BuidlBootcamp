@@ -39,4 +39,6 @@ struct Transaction {
   Outputs outputs;
 
   std::string getMessageForInput(Index whichInput) const;
+  /**/ void specifyInput(std::ostream& os, Index whichInput) const;
+  /**/ void specifyHowOutputsWillBeSpent(std::ostream& os) const;
 };

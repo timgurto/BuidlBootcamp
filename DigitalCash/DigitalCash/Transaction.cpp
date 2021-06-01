@@ -36,14 +36,21 @@ bool TxOutputID::operator<(const TxOutputID& rhs) const {
 std::string Transaction::getMessageForInput(Index whichInput) const {
   auto oss = std::ostringstream{};
 
-  const auto& input = inputs[whichInput];
-  oss << input.previousOutput.transaction << std::endl;
-  oss << input.previousOutput.outputIndex << std::endl;
-
-  for (const auto& output : outputs) {
-    oss << output.recipient << std::endl;
-    oss << output.amount << std::endl;
-  }
+  specifyInput(oss, whichInput);
+  specifyHowOutputsWillBeSpent(oss);
 
   return oss.str();
+}
+
+void Transaction::specifyInput(std::ostream& os, Index whichInput) const {
+  const auto& input = inputs[whichInput];
+  os << input.previousOutput.transaction << std::endl;
+  os << input.previousOutput.outputIndex << std::endl;
+}
+
+void Transaction::specifyHowOutputsWillBeSpent(std::ostream& os) const {
+  for (const auto& output : outputs) {
+    os << output.recipient << std::endl;
+    os << output.amount << std::endl;
+  }
 }

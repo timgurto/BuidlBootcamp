@@ -33,8 +33,12 @@ void Bank::registerTransaction(const Transaction& tx)
 }
 
 bool Bank::transactionIsValid(const Transaction& tx) const {
-  if (m_spentOutputs.count(tx.inputs[0].previousOutput) == 1) return false;
-  return inputsMatchOutputs(tx) && inputsAreSigned(tx.inputs);
+  return inputsAreUnspent(tx.inputs) && inputsMatchOutputs(tx) &&
+         inputsAreSigned(tx.inputs);
+}
+
+bool Bank::inputsAreUnspent(const Transaction::Inputs& inputs) const {
+  return m_spentOutputs.count(inputs[0].previousOutput) == 0;
 }
 
 bool Bank::inputsMatchOutputs(const Transaction& tx) const {

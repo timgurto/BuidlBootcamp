@@ -20,6 +20,7 @@ class Bank {
   void registerTransaction(const Transaction& tx);
 
   bool transactionIsValid(const Transaction& tx) const;
+  /**/ bool inputsAreUnspent(const Transaction::Inputs& inputs) const;
   /**/ bool inputsMatchOutputs(const Transaction& tx) const;
   /******/ Currency total(const Transaction::Inputs& inputs) const;
   /******/ static Currency total(const Transaction::Outputs& outputs);

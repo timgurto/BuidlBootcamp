@@ -12,15 +12,19 @@ using TxID = UUID;
 TxID generateTxID();
 bool operator<(const TxID& lhs, const TxID& rhs);
 
+struct TxOutputID {
+  TxID transaction;
+  Index outputIndex;
+  bool operator<(const TxOutputID& rhs) const;
+};
+
 struct TxInput {
-  TxID transactionThatOutputThis;
-  Index whichOutputWasThis;
+  TxOutputID previousOutput;
   Signature signature;
 };
 
 struct TxOutput {
-  TxID owningTx;
-  Index whichOutput;
+  TxOutputID id;
   Currency amount;
   PublicKey recipient;
 };

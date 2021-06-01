@@ -33,9 +33,7 @@ void Bank::registerTransaction(const Transaction& tx)
 }
 
 bool Bank::transactionIsValid(const Transaction& tx) const {
-  auto input = std::make_pair(tx.inputs[0].transactionThatOutputThis,
-                              tx.inputs[0].whichOutputWasThis);
-  if (m_spentOutputs.count(input) == 1) return false;
+  if (m_spentOutputs.count(tx.inputs[0].previousOutput) == 1) return false;
   return inputsMatchOutputs(tx) && inputsAreSigned(tx.inputs);
 }
 
@@ -75,14 +73,14 @@ void Bank::takeCoinsFromInputs(const Transaction::Inputs& inputs) {
     const auto amount = asUTXO.amount;
     m_balances[sender] -= amount;
 
-    m_spentOutputs.insert(std::make_pair(asUTXO.owningTx, asUTXO.whichOutput));
+    m_spentOutputs.insert(asUTXO.id);
   }
 }
 
 const TxOutput& Bank::correspondingUTXO(const TxInput& input) const {
-  const auto parentTxID = input.transactionThatOutputThis;
-  const auto parentTx = m_transactions.find(parentTxID);
-  return parentTx->second.outputs[input.whichOutputWasThis];
+  const auto outputID = input.previousOutput;
+  const auto parentTx = m_transactions.find(outputID.transaction);
+  return parentTx->second.outputs[outputID.outputIndex];
 }
 
 void Bank::giveCoinsToOutputs(const Transaction::Outputs& outputs) {

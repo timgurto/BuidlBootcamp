@@ -15,3 +15,9 @@ bool operator<(const TxID& lhs, const TxID& rhs) {
   }
   return false;  // UUIDs are equal
 }
+
+bool TxOutputID::operator<(const TxOutputID& rhs) const {
+  if (transaction < rhs.transaction) return true;
+  if (rhs.transaction < transaction) return false;
+  return outputIndex < rhs.outputIndex;
+}

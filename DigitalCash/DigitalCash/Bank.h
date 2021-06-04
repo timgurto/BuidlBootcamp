@@ -25,11 +25,10 @@ class Bank {
   /******/ static Currency sum(const Transaction::Outputs& outputs);
   /**/ bool inputsAreSigned(const Transaction& tx) const;
 
-  void takeCoinsFromInputs(const Transaction::Inputs& inputs);
+  void unclassifyAsUTXOs(const Transaction::Inputs& inputs);
   /**/ const TxOutput& correspondingUTXO(const TxInput& input) const;
 
-  void giveCoinsToOutputs(const Transaction::Outputs& outputs);
-  /**/ void giveOutputToItsRecipient(const TxOutput& output);
+  void classifyAsUTXOs(const Transaction::Outputs& outputs);
 
   // Helpers
   const TxOutput& lookupOutput(const TxOutputID& outputID) const;

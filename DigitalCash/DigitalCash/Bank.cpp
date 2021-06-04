@@ -25,8 +25,8 @@ Currency Bank::checkBalance(PublicKey account) const {
 void Bank::handleTransaction(const Transaction& tx) {
   if (!transactionIsValid(tx)) return;
 
-  takeCoinsFromInputs(tx.inputs);
-  giveCoinsToOutputs(tx.outputs);
+  unclassifyAsUTXOs(tx.inputs);
+  classifyAsUTXOs(tx.outputs);
 
   registerTransaction(tx);
 }
@@ -89,7 +89,7 @@ Currency Bank::sum(const Transaction::Outputs& outputs) {
   return total;
 }
 
-void Bank::takeCoinsFromInputs(const Transaction::Inputs& inputs) {
+void Bank::unclassifyAsUTXOs(const Transaction::Inputs& inputs) {
   for (const auto& input : inputs) {
     m_unspentOutputs.erase(input.previousOutput);
   }
@@ -100,12 +100,10 @@ const TxOutput& Bank::correspondingUTXO(const TxInput& input) const {
   return lookupOutput(outputID);
 }
 
-void Bank::giveCoinsToOutputs(const Transaction::Outputs& outputs) {
-  for (const auto& output : outputs) giveOutputToItsRecipient(output);
-}
-
-void Bank::giveOutputToItsRecipient(const TxOutput& output) {
-  m_unspentOutputs.insert(output.id);
+void Bank::classifyAsUTXOs(const Transaction::Outputs& outputs) {
+  for (const auto& output : outputs) {
+    m_unspentOutputs.insert(output.id);
+  }
 }
 
 const TxOutput& Bank::lookupOutput(const TxOutputID& outputID) const {

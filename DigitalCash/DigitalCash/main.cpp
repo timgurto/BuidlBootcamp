@@ -232,7 +232,7 @@ TEST_CASE_METHOD(SampleUsers,
         auto input0 = TxInput{aliceToBob1.id, 1, Signature{}};
         auto txID = generateTxID();
         auto output1 = TxOutput{txID, 0, 1, bob};
-        auto aliceToBob2 = Transaction{txID, {input0}, {output0}};
+        auto aliceToBob2 = Transaction{txID, {input0}, {output1}};
         authAlice.signInput(aliceToBob2, 0);
         bank.handleTransaction(aliceToBob2);
 

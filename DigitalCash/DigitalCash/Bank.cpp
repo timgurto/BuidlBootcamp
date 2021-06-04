@@ -91,10 +91,6 @@ Currency Bank::sum(const Transaction::Outputs& outputs) {
 
 void Bank::takeCoinsFromInputs(const Transaction::Inputs& inputs) {
   for (const auto& input : inputs) {
-    const auto& asUTXO = correspondingUTXO(input);
-    const auto sender = asUTXO.recipient;
-    const auto amount = asUTXO.amount;
-
     m_unspentOutputs.erase(input.previousOutput);
   }
 }

@@ -8,6 +8,7 @@ Transaction Bank::issue(Currency amount, PublicKey recipient) {
   m_balances[recipient] = amount;
   registerTransaction(issuance);
   m_transactions[txID] = issuance;
+  m_unspentOutputs.insert(output.id);
   return issuance;
 }
 
@@ -44,9 +45,9 @@ bool Bank::inputsAreUnspent(const Transaction::Inputs& inputs) const {
         toBeSpentInThisTransaction.count(input.previousOutput) == 1;
     if (alreadyIncludedInThisTransaction) return false;
 
-    const auto spentInAPreviousTransaction =
-        m_spentOutputs.count(input.previousOutput) == 1;
-    if (spentInAPreviousTransaction) return false;
+    const auto wasSpentBeforeThisTransaction =
+        m_unspentOutputs.count(input.previousOutput) == 0;
+    if (wasSpentBeforeThisTransaction) return false;
     toBeSpentInThisTransaction.insert(input.previousOutput);
   }
 
@@ -91,7 +92,7 @@ void Bank::takeCoinsFromInputs(const Transaction::Inputs& inputs) {
     const auto amount = asUTXO.amount;
     m_balances[sender] -= amount;
 
-    m_spentOutputs.insert(asUTXO.id);
+    m_unspentOutputs.erase(input.previousOutput);
   }
 }
 
@@ -107,4 +108,5 @@ void Bank::giveCoinsToOutputs(const Transaction::Outputs& outputs) {
 
 void Bank::giveOutputToItsRecipient(const TxOutput& output) {
   m_balances[output.recipient] += output.amount;
+  m_unspentOutputs.insert(output.id);
 }

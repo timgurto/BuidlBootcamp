@@ -15,7 +15,7 @@ class Bank {
  private:
   std::map<PublicKey, Currency> m_balances;
   std::map<TxID, Transaction> m_transactions;
-  std::set<TxOutputID> m_spentOutputs;
+  std::set<TxOutputID> m_unspentOutputs;
 
   void registerTransaction(const Transaction& tx);
 

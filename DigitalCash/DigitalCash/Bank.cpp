@@ -31,14 +31,12 @@ void Bank::handleTransaction(const Transaction& tx) {
   registerTransaction(tx);
 }
 
-void Bank::registerTransaction(const Transaction& tx)
-
-{
+void Bank::registerTransaction(const Transaction& tx) {
   m_transactions[tx.id] = tx;
 }
 
 bool Bank::transactionIsValid(const Transaction& tx) const {
-  return inputsAreUnspent(tx.inputs) && inputsMatchOutputs(tx) &&
+  return inputsAreUnspent(tx.inputs) && amountsMatch(tx.inputs, tx.outputs) &&
          inputsAreSigned(tx);
 }
 
@@ -58,8 +56,9 @@ bool Bank::inputsAreUnspent(const Transaction::Inputs& inputs) const {
   return true;
 }
 
-bool Bank::inputsMatchOutputs(const Transaction& tx) const {
-  return sum(tx.inputs) == sum(tx.outputs);
+bool Bank::amountsMatch(const Transaction::Inputs& inputs,
+                        Transaction::Outputs& outputs) const {
+  return sum(inputs) == sum(outputs);
 }
 
 bool Bank::inputsAreSigned(const Transaction& tx) const {

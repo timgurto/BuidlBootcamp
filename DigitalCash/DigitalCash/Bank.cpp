@@ -15,9 +15,7 @@ Currency Bank::checkBalance(PublicKey account) const {
   auto balance = Currency{0};
 
   for (const auto& outputID : m_unspentOutputs) {
-    const auto& transactionIt = m_transactions.find(outputID.transaction);
-    if (transactionIt == m_transactions.end()) continue;
-    const auto& utxo = transactionIt->second.outputs[outputID.outputIndex];
+    const auto& utxo = lookupOutput(outputID);
     if (utxo.recipient == account) balance += utxo.amount;
   }
 
@@ -103,8 +101,7 @@ void Bank::takeCoinsFromInputs(const Transaction::Inputs& inputs) {
 
 const TxOutput& Bank::correspondingUTXO(const TxInput& input) const {
   const auto outputID = input.previousOutput;
-  const auto parentTx = m_transactions.find(outputID.transaction);
-  return parentTx->second.outputs[outputID.outputIndex];
+  return lookupOutput(outputID);
 }
 
 void Bank::giveCoinsToOutputs(const Transaction::Outputs& outputs) {
@@ -113,4 +110,9 @@ void Bank::giveCoinsToOutputs(const Transaction::Outputs& outputs) {
 
 void Bank::giveOutputToItsRecipient(const TxOutput& output) {
   m_unspentOutputs.insert(output.id);
+}
+
+const TxOutput& Bank::lookupOutput(const TxOutputID& outputID) const {
+  const auto parentTx = m_transactions.find(outputID.transaction);
+  return parentTx->second.outputs[outputID.outputIndex];
 }

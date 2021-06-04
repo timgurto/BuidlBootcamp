@@ -30,4 +30,7 @@ class Bank {
 
   void giveCoinsToOutputs(const Transaction::Outputs& outputs);
   /**/ void giveOutputToItsRecipient(const TxOutput& output);
+
+  // Helpers
+  const TxOutput& lookupOutput(const TxOutputID& outputID) const;
 };

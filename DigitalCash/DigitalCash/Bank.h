@@ -13,7 +13,6 @@ class Bank {
   void handleTransaction(const Transaction& tx);
 
  private:
-  std::map<PublicKey, Currency> m_balances;
   std::map<TxID, Transaction> m_transactions;
   std::set<TxOutputID> m_unspentOutputs;
 

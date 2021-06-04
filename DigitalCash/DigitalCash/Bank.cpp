@@ -5,7 +5,6 @@ Transaction Bank::issue(Currency amount, PublicKey recipient) {
   const auto output = TxOutput{txID, 0, amount, recipient};
   const auto issuance = Transaction{txID, {}, {output}};
 
-  m_balances[recipient] = amount;
   registerTransaction(issuance);
   m_transactions[txID] = issuance;
   m_unspentOutputs.insert(output.id);
@@ -13,9 +12,16 @@ Transaction Bank::issue(Currency amount, PublicKey recipient) {
 }
 
 Currency Bank::checkBalance(PublicKey account) const {
-  const auto it = m_balances.find(account);
-  if (it == m_balances.end()) return 0;
-  return it->second;
+  auto balance = Currency{0};
+
+  for (const auto& outputID : m_unspentOutputs) {
+    const auto& transactionIt = m_transactions.find(outputID.transaction);
+    if (transactionIt == m_transactions.end()) continue;
+    const auto& utxo = transactionIt->second.outputs[outputID.outputIndex];
+    if (utxo.recipient == account) balance += utxo.amount;
+  }
+
+  return balance;
 }
 
 void Bank::handleTransaction(const Transaction& tx) {
@@ -90,7 +96,6 @@ void Bank::takeCoinsFromInputs(const Transaction::Inputs& inputs) {
     const auto& asUTXO = correspondingUTXO(input);
     const auto sender = asUTXO.recipient;
     const auto amount = asUTXO.amount;
-    m_balances[sender] -= amount;
 
     m_unspentOutputs.erase(input.previousOutput);
   }
@@ -107,6 +112,5 @@ void Bank::giveCoinsToOutputs(const Transaction::Outputs& outputs) {
 }
 
 void Bank::giveOutputToItsRecipient(const TxOutput& output) {
-  m_balances[output.recipient] += output.amount;
   m_unspentOutputs.insert(output.id);
 }

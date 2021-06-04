@@ -5,9 +5,9 @@ Transaction Bank::issue(Currency amount, PublicKey recipient) {
   const auto output = TxOutput{txID, 0, amount, recipient};
   const auto issuance = Transaction{txID, {}, {output}};
 
+  classifyAsUTXOs({output});
   registerTransaction(issuance);
-  m_transactions[txID] = issuance;
-  m_unspentOutputs.insert(output.id);
+
   return issuance;
 }
 

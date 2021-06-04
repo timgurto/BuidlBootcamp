@@ -61,7 +61,7 @@ bool Bank::inputsAreUnspent(const Transaction::Inputs& inputs) const {
 }
 
 bool Bank::inputsMatchOutputs(const Transaction& tx) const {
-  return total(tx.inputs) == total(tx.outputs);
+  return sum(tx.inputs) == sum(tx.outputs);
 }
 
 bool Bank::inputsAreSigned(const Transaction& tx) const {
@@ -76,7 +76,7 @@ bool Bank::inputsAreSigned(const Transaction& tx) const {
   return true;
 }
 
-Currency Bank::total(const Transaction::Inputs& inputs) const {
+Currency Bank::sum(const Transaction::Inputs& inputs) const {
   auto total = Currency{0};
   for (const auto& input : inputs) {
     const auto inputAmount = correspondingUTXO(input).amount;
@@ -85,7 +85,7 @@ Currency Bank::total(const Transaction::Inputs& inputs) const {
   return total;
 }
 
-Currency Bank::total(const Transaction::Outputs& outputs) {
+Currency Bank::sum(const Transaction::Outputs& outputs) {
   auto total = Currency{0};
   for (const auto& output : outputs) total += output.amount;
   return total;

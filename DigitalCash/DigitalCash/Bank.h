@@ -21,8 +21,8 @@ class Bank {
   bool transactionIsValid(const Transaction& tx) const;
   /**/ bool inputsAreUnspent(const Transaction::Inputs& inputs) const;
   /**/ bool inputsMatchOutputs(const Transaction& tx) const;
-  /******/ Currency total(const Transaction::Inputs& inputs) const;
-  /******/ static Currency total(const Transaction::Outputs& outputs);
+  /******/ Currency sum(const Transaction::Inputs& inputs) const;
+  /******/ static Currency sum(const Transaction::Outputs& outputs);
   /**/ bool inputsAreSigned(const Transaction& tx) const;
 
   void takeCoinsFromInputs(const Transaction::Inputs& inputs);

@@ -118,7 +118,7 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
         auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
         auto txID = generateTxID();
         auto output0 = TxOutput{txID, 0, 50, bob};
-        auto output1 = TxOutput{txID, 0, 50, alice};
+        auto output1 = TxOutput{txID, 1, 50, alice};
         auto aliceToBob = Transaction{txID, {input0}, {output0, output1}};
         authAlice.signInput(aliceToBob, 0);
 
@@ -133,15 +133,15 @@ TEST_CASE_METHOD(SampleUsers, "Transactions") {
         auto input0 = TxInput{issuanceToAlice.id, 0, Signature{}};
         auto txID = generateTxID();
         auto output0 = TxOutput{txID, 0, 10, bob};
-        auto output1 = TxOutput{txID, 0, 90, alice};
+        auto output1 = TxOutput{txID, 1, 90, alice};
         auto aliceToBob = Transaction{txID, {input0}, {output0, output1}};
         authAlice.signInput(aliceToBob, 0);
 
         WHEN("the bank handles the transaction") {
           bank.handleTransaction(aliceToBob);
 
-          THEN("Alice has 50 coins") { CHECK(bank.checkBalance(alice) == 90); }
-          THEN("Bob has 50 coins") { CHECK(bank.checkBalance(bob) == 10); }
+          THEN("Alice has 90 coins") { CHECK(bank.checkBalance(alice) == 90); }
+          THEN("Bob has 10 coins") { CHECK(bank.checkBalance(bob) == 10); }
         }
       }
     }
